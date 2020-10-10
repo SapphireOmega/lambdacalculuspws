@@ -81,8 +81,51 @@ We could use our previous definition of \(I\) and write:
 \[Ix=x\]
 We have now covered identifiers too.
 
+But if this is all there is, how can this possibly be Turing complete? How do
+we do boolean logic, or algebra? How can we do things with only unary anonymous
+functions? What are \(a\) and \(x\) supposed to represent? If there is no
+concept of value, how do we even use this meaningfully?
+
+Well, the key is this: a function can return any expression, so even other
+functions, not just a single symbol. We can start composing these simple
+functions into more complex functions. Let's say that we wanted to have a
+function that takes two arguments, and then applies the first argument to the
+second one. You are probably asking yourself a few questions. For example, what
+does it mean for one argument to be applied to another. Well, as I said, these
+arguments are expressions and can thus be functions themselves. But the biggest
+question you are probably asking yourself is: how can you have a function that
+takes two arguments?
+
+Well, we actually can't, but what we can do is to have a function that takes
+one argument and returns another function that takes one argument. We can
+define the function as follows:
+\[\lambda a.\lambda b.ab\]
+We currently have a function definition inside the body of another function. If
+we now apply this function to a symbol like \(x\), we get this:
+\[(\lambda a.\lambda b.ab)x=\lambda b.xb\]
+We get a new function that takes an argument and applies x to it. If we now
+apply this function to a symbol like \(y\), we get this:
+\[(\lambda b.xb)y=xy\]
+Alternatively, we could write it all on one line:
+\[(\lambda a.\lambda b.ab)xy=(\lambda b.xb)y=xy\]
+
+\(xy\) in this case is what we would call the \emph{\(\beta\)-reduced} form of the
+preceding expressions. That just means that it is in the simpelest form and
+isn't able to be evaluated any further.
+
+You can start to see how we can compose unary anonymous functions to create
+more complex functions. In this example we used two nested unary functions to
+get the same result you would with a binary function. You now know the very
+basics of lambda calculus. You may still not see how this is Turing complete or
+how this can be useful and meaningful, but we'll get to that. If you get this,
+everything will make sense.
+
+% beta reduction
+
 \subsection{Combinatory logic}
 
 % Something about combinatory logic and how it translates to lambda calculus
+% To mock a mockingbird
+% Moses Schönfinkel
 
 \end{document}
