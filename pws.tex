@@ -61,7 +61,7 @@ nothing.
 
 But how do we use this function? Well, just like defining a function, it is
 quite simple. If you want to apply this function to a symbol, you just put it
-parentheses behind the symbol. Something like this:
+in parentheses behind the symbol. Something like this:
 \[x(\lambda a.a)\]
 Which evaluates to:
 \[x\]
@@ -71,9 +71,13 @@ simple. I have explained abstraction (the functions), application (applying a
 function to a symbol), and grouping (the parentheses), which is basically all
 we need. You can also give names to expressions. We could name our identity
 function \(I\) as follows: \[I:=\lambda a.a\] But this isn't really part of the
-core lambda calculus anymore, just some syntactic sugar. This way, instead
-of constantly having to write \(\lambda a.a\), we can just write \(I\). We have
-now covered identifiers too.
+core lambda calculus anymore, just some syntactic sugar. This way, instead of
+constantly having to write \(\lambda a.a\), we can just write \(I\). So instead
+of writing:
+\[x (\lambda a.a)=x\]
+We could use our previous definition of \(I\) and write:
+\[Ix=x\]
+We have now covered identifiers too.
 
 \subsection{Combinatory logic}
 
