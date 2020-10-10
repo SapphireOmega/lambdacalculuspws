@@ -65,6 +65,8 @@ in parentheses in from of the symbol. Something like this:
 \[(\lambda a.a)x\]
 Which evaluates to:
 \[x\]
+The reason for the parentheses is that otherwise \(x\) would be considered part
+of the function's return exrpession, which it isn't.
 
 I have now basically explained the entire lambda calculus, it is really that
 simple. I have explained abstraction (the functions), application (applying a
