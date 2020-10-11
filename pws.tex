@@ -1,13 +1,19 @@
 \documentclass[a4paper]{article}
 
+\usepackage[backend=biber, style=authoryear-icomp]{biblatex}
+\addbibresource{bibliography.bib}
+
 \title{Lambda Calculus and its Impact on Computer Science}
 \author{Joris Klaasse Bos\\ Zaanlands Lyceum}
 
 \begin{document}
 
 \maketitle
+\newpage
+\tableofcontents
+\newpage
 
-\section{Prologue}
+\section{Foreword}
 
 The reason I chose this subject is that it combines two things I enjoy:
 abstract maths and computer science. I have been programming for about five to
@@ -26,6 +32,12 @@ paper. 
 
 \section{Introduction}
 
+% Something about functional programming and lambda calculus
+
+WIP
+
+\section{Introduction to lambda calculus}
+
 Lambda calculus is, as its name suggests, a calculus. A calculus is a system of
 manipulating symbols, which by themselves don't have any semantic meaning, in a
 way that is somehow meaningful. We all know algebra. Algebra itself doesn't
@@ -38,6 +50,8 @@ booleans. Another such example is lambda calculus.
 \subsection{A short history}
 
 % Something about church and turing and turing machines
+
+WIP
 
 \subsection{The syntax}
 
@@ -116,47 +130,48 @@ isn't able to be evaluated any further. Reducing an lambda expression to the
 You can start to see how we can compose unary anonymous functions to create
 more complex functions. In this example we used two nested unary functions to
 get the same result you would with a binary function. Such a nested function is
-often called a \emph{Curry'd function}.
+often called a \emph{curry'd function}.
 
-You might think that to yourself that having this many nested functions can be
-quite convoluted and not very readable, and you're quite right. That's why
-people often use a shorthand notation. They would basically write it as if it
-is a single binary function (or any n-ary function). They would write the
+You might think to yourself that having this many nested functions can be quite
+convoluted and not very readable, and you're quite right. That's why people
+often use a shorthand notation. They would basically write it as if it is a
+single binary function (as with any n-ary function). They would write the
 example function above as:
 \[\lambda ab.ab\]
-Do keep in mind that even though this looks and, for the most part, acts as if
-it is a single binary function, but it really isn't. It still is a Curry'd
-function that feeds in the arguments one-by-one, but this way the expression
-becomes more readable and easier to think about conceptually.
+Do keep in mind, that even though this looks and, for the most part, acts as if
+it is a single binary function, it really isn't. It still is a curry'd function
+that feeds in the arguments one-by-one, but this way the expression becomes
+more readable and easier to think about conceptually.
 
 Congratulations, you now know the very basics of lambda calculus. You may still
 not see how this is Turing complete or how this can be useful and meaningful.
 You might also already see some of the intrigues of lambda calculus; how simple
 it is, how it doesn't have a concept of value or data, how everything is an
-expression, etc. But we'll get to all of that eventually. If you get this,
-everything else will follow naturally (mostly).
+expression, how it is stateless, etc. But we'll get to all of that eventually.
+If you get this, everything else will follow naturally (mostly).
 
 \subsection{Combinatory logic}
 
-% Note to self: add references to Wikipedia, Schönfinkel, and Curry
+% Note to self: add references to Wikipedia
 
 Combinatory logic is a notation to eliminate the need for quantified variables
 in mathematical logic. That basically means a form of logic without values,
 just like in lambda calculus, but just pure logical expressions, using so
-called \emph{combinators}. The idea of combinators first came from Schönfinkel,
-and was later rediscovered by Curry. Combinators are just symbols, in this case
-letters, that perform operations on symbols that succeed it. We have actually
-looked at one of these combinators already.
+called \emph{combinators}. The idea of combinators first came from
+\textcite{schonfinkel1924}, and was later rediscovered by \textcite{curry1930}.
+Combinators are just symbols, in this case letters, that perform operations on
+symbols that succeed it. We have actually looked at one of these combinators
+already.
 
 \subsubsection{Identity}
 
 The first combinator we'll cover is \(I\). It does exactly the same thing as
 our \(I\) function we defined in lambda calculus in the previous subsection.
 In fact, all combinators can be defined in lambda calculus. This combinator may
-seem quite useless, but it is actually quite usefull when composing
-combinators, which we'll come to soon.
+seem quite useless, but it is actually quite useful when composing combinators,
+which we'll come to soon.
 
-\subsubsection{The mockingbird}
+\subsubsection{The omega combinator}
 
 The next combinator we'll cover is \(M\). All it does is repeat its one
 argument twice. It can be defined in lambda calculus as follows:
@@ -172,14 +187,31 @@ What happens if you apply \(M\) to \(M\)? You get:
 \[M M = M M = M M = ...\]
 and so on to infinity. Or in lambda calculus:
 \[(\lambda f.ff)\lambda f.ff=(\lambda f.ff)\lambda f.ff=(\lambda f.ff)\lambda f.ff=...\]
+
 This expression cannot be evaluated. We say that it doesn't have a
 \(\beta\)-normal form. In lambda calculus and combinatory logic not every
-expression is reducable. As Turing found out, there is no single algorithm to
-decide wether a lambda expression has a \(\beta\)-normal form. This is called
-the \emph{halt-problem}.
+expression is reducable. As \textcite{turing1936} found out, there is no single
+algorithm to decide wether a lambda expression has a \(\beta\)-normal form.
+This is called the \emph{halting problem}\footnote{This is not a formal
+definition of the halting problem. A more formal definition is: ``In
+computability theory, the halting problem is the problem of determining, from a
+description of an arbitrary computer program and an input, whether the program
+will finish running, or continue to run forever.'' But it directly translates
+to lambda calculus, because it is turing complete.}.
 
-% Note to self: add reference to Turings proof of the halt-problem
+\(M M\) is sometimes called the \(\Omega\) combinator. Omega, because it is the
+end of the Greek alphabet. The \(M\) combinator is sometimes called the
+\(\omega\) combinator because of this. These combinators often have many
+different names. Sometimes because scientists discovered them seperatly,
+unaware of eachother, sometimes because scientists like to give them pet names.
+
+% Note to self: reference to wikipedia definition
+
+% Omega combinator
 
 % To mock a mockingbird
+
+\newpage
+\printbibliography
 
 \end{document}
