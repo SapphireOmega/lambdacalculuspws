@@ -1,6 +1,9 @@
-\documentclass[a4paper]{article}
+\documentclass[11pt]{article}
 
+\usepackage[a4paper, margin=1in]{geometry}
+\usepackage[british]{babel}
 \usepackage[backend=biber, style=authoryear-icomp]{biblatex}
+
 \addbibresource{bibliography.bib}
 
 \title{Lambda Calculus and its Impact on Computer Science}
@@ -13,7 +16,11 @@
 \tableofcontents
 \newpage
 
-\section{Foreword}
+% I still need to decide wether I need a preface and afterword
+
+\section{Preface}
+
+% TODO: Something about PWS
 
 The reason I chose this subject is that it combines two things I enjoy:
 abstract maths and computer science. I have been programming for about five to
@@ -32,9 +39,13 @@ paper. 
 
 \section{Introduction}
 
-% Something about functional programming and lambda calculus
-
-WIP
+With the decline of OOP, many other paradigms are gaining in popularity. One
+increasingly popular paradigm is functional programming. Functional programming
+is fundamentally based on lambda calculus and it has been seeping into other
+paradigms and into mainstream languages. Most of the popular languages now
+implement lambda functions and have ways to write in a more declarative style
+of programming. In this paper I will look at all the ways lambda calculus is
+being used in computer science and how it may be used in the future.
 
 \section{Introduction to lambda calculus}
 
@@ -49,17 +60,18 @@ booleans. Another such example is lambda calculus.
 
 \subsection{A short history}
 
-% Something about church and turing and turing machines
-
-WIP
+% TODO: Something about church, turing, church-turing hypothesis and formal
+% equivalency
 
 \subsection{The syntax}
 
-Lambda calculus is all about unary anonymous functions. Such a function has no
-name to identify it, takes only one input, and returns a single expression that
-is only dependent on the input, so it doesn't have any outside state. A simple
-function definition in lambda calculus looks as follows:
-\[\lambda a.a\]
+Lambda calculus is all about first-class higher-order pure
+(anonymous\footnote{The core lambda calculus has no way of naming functions.})
+unary functions. Such a function takes a single input, and returns a single
+expression that is only dependent on the input, so it doesn't have any outside
+state. Such a function can take and return any expression, which in lambda
+calculus is always a function. A simple function definition in lambda calculus
+looks as follows: \[\lambda a.a\]
 
 The lambda signifies a function. Everything following it will be part of that
 function's definition. The \(a\) before the \(.\) is the name of the argument.
@@ -76,7 +88,7 @@ in front of the symbol. Something like this:
 \[(\lambda a.a)x\]
 Which evaluates to \(x\), because you remove the \(x\) and then replace all the
 \(a\)'s in the function body with \(x\) and then remove the function signifier
-and argument list.
+and argument list. It is a simple process of substitution.
 
 In this case you need parentheses around the function, otherwise \(x\) would be
 considered part of the function's body, which it isn't. It's also important to
@@ -95,7 +107,7 @@ writing: \[(\lambda a.a)x=x\] We could use our previous definition of \(I\) and
 write: \[Ix=x\] We have now covered identifiers too.
 
 But if this is all there is, how can this possibly be Turing complete? How do
-we do boolean logic, or algebra? How can we do things with only unary anonymous
+we do boolean logic, or algebra? How can we do things with only unary
 functions? What are \(a\) and \(x\) supposed to represent? If there is no
 concept of value, how do we even use this meaningfully?
 
@@ -127,10 +139,11 @@ the preceding expressions. That just means that it is in the simpelest form and
 isn't able to be evaluated any further. Reducing an lambda expression to the
 \(\beta\)-normal form is called \emph{\(\beta\)-reduction}.
 
-You can start to see how we can compose unary anonymous functions to create
-more complex functions. In this example we used two nested unary functions to
-get the same result you would with a binary function. Such a nested function is
-often called a \emph{curry'd function}.
+You can start to see how we can compose unary functions to create more complex
+functions\footnote{That's what makes them higher-order (and first-class).}. In
+this example we used two nested unary functions to get the same result you
+would with a binary function. Such a nested function is often called a
+\emph{curry'd function}.
 
 You might think to yourself that having this many nested functions can be quite
 convoluted and not very readable, and you're quite right. That's why people
@@ -152,24 +165,22 @@ If you get this, everything else will follow naturally (mostly).
 
 \subsection{Combinatory logic}
 
-% Note to self: add references to Wikipedia
-
 Combinatory logic is a notation to eliminate the need for quantified variables
-in mathematical logic. That basically means a form of logic without values,
-just like in lambda calculus, but just pure logical expressions, using so
-called \emph{combinators}. The idea of combinators first came from
-\textcite{schonfinkel1924}, and was later rediscovered by \textcite{curry1930}.
-Combinators are just symbols, in this case letters, that perform operations on
-symbols that succeed it. We have actually looked at one of these combinators
-already.
+in mathematical logic \parencite{wiki:Combinatory_logic}. That basically means
+a form of logic without values, just like in lambda calculus, but just pure
+logical expressions, using so called \emph{combinators}. The idea of
+combinators first came from \textcite{schonfinkel1924}, and was later
+rediscovered by \textcite{curry1930}. Combinators are just symbols, in this
+case letters, that perform operations on symbols that succeed it. We've
+actually looked at one of these combinators already.
 
 \subsubsection{Identity}
 
 The first combinator we'll cover is \(I\). It does exactly the same thing as
-our \(I\) function we defined in lambda calculus in the previous subsection.
-In fact, all combinators can be defined in lambda calculus. This combinator may
-seem quite useless, but it is actually quite useful when composing combinators,
-which we'll come to soon.
+our \(I\) function we defined in lambda calculus in the previous subsection
+(\(I:=\lambda a.a\)). In fact, all combinators can be defined in lambda
+calculus. This combinator may seem quite useless, but it is actually quite
+useful when composing combinators, which we'll come to soon.
 
 \subsubsection{The omega combinator}
 
@@ -190,14 +201,14 @@ and so on to infinity. Or in lambda calculus:
 
 This expression cannot be evaluated. We say that it doesn't have a
 \(\beta\)-normal form. In lambda calculus and combinatory logic not every
-expression is reducable. As \textcite{turing1936} found out, there is no single
+expression is reducable. As \textcites{turing1936}{turing1937}
+proved\footnote{This is not what he proved specifically.}: there is no single
 algorithm to decide wether a lambda expression has a \(\beta\)-normal form.
-This is called the \emph{halting problem}\footnote{This is not a formal
-definition of the halting problem. A more formal definition is: ``In
+This is called the \emph{halting problem}\footnote{To be precise: In
 computability theory, the halting problem is the problem of determining, from a
 description of an arbitrary computer program and an input, whether the program
-will finish running, or continue to run forever.'' But it directly translates
-to lambda calculus, because it is turing complete.}.
+will finish running, or continue to run forever
+\parencite{wiki:Halting_problem}.}.
 
 \(M M\) is sometimes called the \(\Omega\) combinator. Omega, because it is the
 end of the Greek alphabet. The \(M\) combinator is sometimes called the
@@ -205,13 +216,89 @@ end of the Greek alphabet. The \(M\) combinator is sometimes called the
 different names. Sometimes because scientists discovered them seperatly,
 unaware of eachother, sometimes because scientists like to give them pet names.
 
-% Note to self: reference to wikipedia definition
+\subsubsection{The constant combinator}
 
-% Omega combinator
+The next combinator we'll cover is \(K\). It is a combinator that takes two
+arguments and returns the first. We can easily define it in lambda calculus as
+follows:
+\[K:=\lambda ab.a\]
 
-% To mock a mockingbird
+Remember that we defined this as a curry'd function. This means we can give it
+just one argument and get a new function out of it. Let's say we apply \(K\) to
+\(5\):
+\[K5=(\lambda ab.a)5=\lambda b.5\]
+Our new function, \(K5\), is a function that takes an argument and returns
+\(5\). This means that whatever we apply this function to, we always get \(5\).
+\(K\) gets its name from the German word \emph{Konstant}, meaning constant. You
+can probably see why.
+
+Just like with the previous combinators, it'll prove very useful, much more so
+than you'd expect.
+
+\subsubsection{The kite}
+
+Here is where things get a little spicier. Our next combinator is \(KI\). It
+takes two arguments and returns the latter. We can define it in lambda calculus
+as follows:
+\[KI:=\lambda ab.b\]
+
+You may already be thinking about its name. Why does it have two letters? And
+why are they two letters we've talked about already? Well, the answer is very
+simple. If you apply \(K\) to \(I\), you get \(KI\). Don't believe me? Let's
+try!
+
+If we use our definition of \(KI\) and apply it to \(xy\) we get:
+\[KIxy=(\lambda ab.b)xy=y\]
+But if we use the K and I combinators seperately, we get the following:
+\[KIxy=(\lambda ab.a)Ixy=(\lambda b.I)xy=Iy=y\]
+
+If you think about it, it is very logical. If \(K\) takes two arguments and
+returns the first, then, in this case, it uses up both \(I\) and \(x\) and
+returns \(I\), which will just return the next argument, in this case \(y\).
+\(KI\) will always return the second symbol after the I, because---again---the
+first gets used up by \(K\).
+
+We can also just see what function we get when we apply \(K\) to \(I\):
+\[KI=(\lambda ab.a)I=\lambda b.I=\lambda b.\lambda a.a=\lambda ba.a\] We get
+our definition of \(KI\) (except the names of the arguments are switched).
+
+We're starting to define combinators as combinations of other combinators.
+Every combinator, in fact, can be defined as a combination of other
+combinators. That's why they are called combinators.
+
+\subsubsection{The starling}
+
+\subsubsection{The cardinal}
+
+\subsubsection{The bluebird}
+
+\subsubsection{\(S\) and \(K\)}
+
+\subsubsection{To Mock a Mockingbird}
+
+\subsubsection{Equality}
+
+\section{Using lambda calculus for computation}
+
+\subsection{Binary logic}
+
+\subsection{Church numerals}
+
+\section{Functional programming (lambda calculus applied)}
+
+\subsection{Laziness}
+
+% Note to self: write about how lambda functions can create new lambda
+% functions, as we've seen in the combinatory logic subsection
+
+\subsection{Haskell}
+
+\section{Functional programming in other paradigms}
+
+\section{Possibilities for the future}
+
+\section{Afterword}
 
 \newpage
-\printbibliography
-
+\printbibliography[heading=bibintoc, title={References}]
 \end{document}
