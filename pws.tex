@@ -2,7 +2,7 @@
 
 \usepackage[a4paper, margin=1in]{geometry}
 \usepackage[british]{babel}
-\usepackage[backend=biber, style=authoryear-icomp]{biblatex}
+\usepackage[backend=biber, style=numeric-comp]{biblatex}
 
 \addbibresource{bibliography.bib}
 
@@ -44,8 +44,8 @@ increasingly popular paradigm is functional programming. Functional programming
 is fundamentally based on lambda calculus and it has been seeping into other
 paradigms and into mainstream languages. Most of the popular languages now
 implement lambda functions and have ways to write in a more declarative style
-of programming. In this paper I will look at all the ways lambda calculus is
-being used in computer science and how it may be used in the future.
+of programming. In this paper I will look at all the ways lambda calculus has
+influenced computer science and how it may do so in the future.
 
 \section{Introduction to lambda calculus}
 
@@ -58,10 +58,97 @@ algebra. There are many branches of mathematics that use different systems.
 One example would be formal logic, which is used for logical operations on
 booleans. Another such example is lambda calculus.
 
-\subsection{A short history}
+\subsection{A short history\label{history}}
 
-% TODO: Something about church, turing, church-turing hypothesis and formal
-% equivalency
+People always trusted mathematics to be true and relied on it heavily. If
+something was proven true with mathematical logic, then that must be true.
+However, starting from the late 19th century, people ran into paradoxes. People
+made a distinction between reasoning that was rigorous and reasoning that
+wasn't---reasoning that was fundamentally purely logical, and reasoning that
+wasn't as purely logical. The fact that mathematical logic, which people looked
+at for rigorousness, was infested with paradoxes and self-reference was very
+troubling for people at the time.
+
+The concept of mathematics and mathematical logic wasn't well defined, so
+people started to think about the formalisation of mathematical logic to try
+and solve these issues. People wanted a system that would encapsulate all of
+mathematical logic. Preferably this system would be simple, clean and
+intuïtive.
+
+Throughout the late 19th and early 20th centuries, people started formally
+defining and redefining different aspects of mathematics. \textcite{frege1879}
+wrote about propositional calculus and functions as graphs, and in doing so
+reëvaluated the concept of functions and was already using concepts like
+currying functions without really giving thought to it. \textcite{peano1889}
+invented the Peano axioms and Peano arithmetic as a way of defining natural
+numbers. He was not the first to attempt defining natural numbers, but he was
+the most successful. \textcite{schonfinkel1924} invented combinatory logic as a
+way to remove the need for quantified variables, which was later rediscovered
+and improved on by \textcite{curry1930}. One major attempt to define all of
+mathematics was done by \textcite{russell1997}. They wrote a book that would
+become well know in all of mathematics and logic. This book is called
+\emph{Principia Mathematica}. They did, however, run into a few problems, which
+arose from self-reference. To solve these problems that this paradoxical
+self-reference brought with it, they invented an elaborate system, the theory
+of types, to circumvent/eliminate it. It was a very carefully crafted bastion
+against self-reference ever coming up in their system, which was not very
+simple, clean or intuïtive.
+
+People praised \emph{PM} as they thought they had finally done it; they had
+formalised all of mathematical logic, they had realised the dream of grounding
+all of mathematics in logic. But in Vienna, Gödel was sceptical of this book.
+He started seeing some cracks, he felt that there was something wrong aboout
+this attempt. Gödel felt that self-reference was a fundamental part of
+mathematical logic. Then the crazy bastard went out and actually proved that
+there is no consistent system of axioms whose theorems can be listed by an
+effective procedure that is capable of proving all truths about arithmetic of
+natural numbers\footnote{This is a definition of the first incompleteness
+theorem I got from \textcite{wiki:Incompleteness_theorems}}
+\parencite{godel1931}, meaning that such a system is either inconsistent or
+incomplete\footnote{Incompleteness means that there are things that are true,
+but are not provable.}, greatly disturbing many mathematicians and upending
+mathematics as they knew it.
+
+During this time, in this environment of the formalisation of mathematical
+logic, \textcite{church1932} invented the lambda calculus. Lambda calculus is a
+very simple and minimalistic system of substitution. A little while later,
+\textcite{turing1936, turing1937correction} invented turing machines. Turing
+machines are conceptual mathematical machines that function based on
+state---they were state machines. These could perform all kinds of mathematical
+and logical computations. He was not the first to invent computers, but he was
+the first to work them out as well as he did (and, as you probably know, he
+built one with which he cracked the German enigma code).
+
+There was this problem that has a few different names. It is often known as the
+\emph{halting problem} or the \emph{Entscheidungsproblem}, which is German for
+\emph{decision problem}. The halting problem and decision problem aren't
+exactly synonyms, but they come down to the same thing. Basically, it asks
+wether it is possible to know via an algorithm wether a computation will
+complete execution or result in an infinite loop. In 1936,
+\textcite{turing1936, turing1937correction} spent a long time proving that this
+isn't possible using his turing machines, but it didn't get published until
+early 1937. Also in 1936, \textcite{church1936} proved the same thing using
+lambda calculus and happended to publish it before Turing did. When Turing
+finally got around to publishing his proof, he found out that he was beaten to
+it by Church. He wasn't to pleased. What is interesting, though, is that lambda
+calculus and turing machines take two completely different approaches. Turing
+machines funtion entirely on state, while lambda calculus is completely
+stateless (we'll look at this later). Turing thought this was interesting too,
+so he researched lambda calculus and how it relates to his turing machines, and
+proved that they are formally equivalent \parencite{turing1937computability}.
+Church and Turing gave their names to the Church-Turing thesis, which basically
+states that all computable functions can by computed by a Turing machine or
+lambda calculus---in other words, lambda calculus is turing complete.
+
+Why do I tell you all this? Well, your main takeaway should be that even though
+lambda calculus is a very simple system, it is turing complete. Lambda calculus
+and turing machines take wildly different approaches: one state based, the
+other stateless. Another difference is that turing machines can be physically
+built. We can, however, use lambda calculus on these turing machines and
+simulate turing machines with lambda calculus, which is part of the thesis of
+this paper. We will look at lambda calculus and how the work of all the
+previously mentioned mathematicians, and many more, can be applied in lambda
+calculus to get a turing complete system.
 
 \subsection{The syntax}
 
@@ -88,7 +175,7 @@ in front of the symbol. Something like this:
 \[(\lambda a.a)x\]
 Which evaluates to \(x\), because you remove the \(x\) and then replace all the
 \(a\)'s in the function body with \(x\) and then remove the function signifier
-and argument list. It is a simple process of substitution.
+and argument list. It all comes down to a simple process of substitution.
 
 In this case you need parentheses around the function, otherwise \(x\) would be
 considered part of the function's body, which it isn't. It's also important to
@@ -111,19 +198,19 @@ we do boolean logic, or algebra? How can we do things with only unary
 functions? What are \(a\) and \(x\) supposed to represent? If there is no
 concept of value, how do we even use this meaningfully?
 
-Well, the key is this: a function can return any expression, so even other
-functions, not just a single symbol. We can start composing these simple
-functions into more complex functions. Let's say that we wanted to have a
-function that takes two arguments, and then applies the first argument to the
-second one. You are probably asking yourself a few questions. For example, what
-does it mean for one argument to be applied to another? Well, as I said, these
-arguments are expressions and can thus be functions themselves. But the biggest
-question you are probably asking yourself is: how can you have a function that
-takes two arguments?
+Well, the key is this: a function can return any expression (remember?), which
+is always a function\footnote{Everything is.}, not just a single symbol. We can
+start composing these simple functions into more complex functions. Let's say
+that we wanted to have a function that takes two arguments, and then applies
+the first argument to the second one. You are probably asking yourself a few
+questions. For example, what does it mean for one argument to be applied to
+another? Well, as I said, everything is a function. But the biggest question
+you are probably asking yourself is: how can you have a function that takes two
+arguments?
 
-Well, we actually can't, but what we can do is to have a function that takes
-one argument and returns another function that takes one argument. We can
-define the function as follows:
+We actually can't, but what we can do is to have a function that takes one
+argument and returns another function that takes one argument. We can define
+that function as follows:
 \[\lambda a.\lambda b.ab\]
 We currently have a function definition inside the body of another function. If
 we now apply this function to a symbol like \(x\), we get this:
@@ -136,7 +223,7 @@ Alternatively, we could write it all on one line:
 
 \(xy\) in this case is what we would call the \emph{\(\beta\)-normal form} of
 the preceding expressions. That just means that it is in the simpelest form and
-isn't able to be evaluated any further. Reducing an lambda expression to the
+isn't able to be evaluated any further. Reducing a lambda expression to the
 \(\beta\)-normal form is called \emph{\(\beta\)-reduction}.
 
 You can start to see how we can compose unary functions to create more complex
@@ -154,7 +241,8 @@ example function above as:
 Do keep in mind, that even though this looks and, for the most part, acts as if
 it is a single binary function, it really isn't. It still is a curry'd function
 that feeds in the arguments one-by-one, but this way the expression becomes
-more readable and easier to think about conceptually.
+more readable and easier to think about conceptually. We will use this notation
+from now on.
 
 Congratulations, you now know the very basics of lambda calculus. You may still
 not see how this is Turing complete or how this can be useful and meaningful.
@@ -167,7 +255,7 @@ If you get this, everything else will follow naturally (mostly).
 
 Combinatory logic is a notation to eliminate the need for quantified variables
 in mathematical logic \parencite{wiki:Combinatory_logic}. That basically means
-a form of logic without values, just like in lambda calculus, but just pure
+a form of logic without values, just like with lambda calculus, but just pure
 logical expressions, using so called \emph{combinators}. The idea of
 combinators first came from \textcite{schonfinkel1924}, and was later
 rediscovered by \textcite{curry1930}. Combinators are just symbols, in this
@@ -179,7 +267,8 @@ actually looked at one of these combinators already.
 The first combinator we'll cover is \(I\). It does exactly the same thing as
 our \(I\) function we defined in lambda calculus in the previous subsection
 (\(I:=\lambda a.a\)). In fact, all combinators can be defined in lambda
-calculus. This combinator may seem quite useless, but it is actually quite
+calculus. Lambda calculus is really just 90\% combinatory logic, but without
+identifiers. This combinator may seem quite useless, but it is actually quite
 useful when composing combinators, which we'll come to soon.
 
 \subsubsection{The omega combinator}
@@ -201,20 +290,17 @@ and so on to infinity. Or in lambda calculus:
 
 This expression cannot be evaluated. We say that it doesn't have a
 \(\beta\)-normal form. In lambda calculus and combinatory logic not every
-expression is reducable. As \textcites{turing1936}{turing1937}
-proved\footnote{This is not what he proved specifically.}: there is no single
-algorithm to decide wether a lambda expression has a \(\beta\)-normal form.
-This is called the \emph{halting problem}\footnote{To be precise: In
-computability theory, the halting problem is the problem of determining, from a
-description of an arbitrary computer program and an input, whether the program
-will finish running, or continue to run forever
-\parencite{wiki:Halting_problem}.}.
+expression is reducable. As we've seen in the second to last paragraph of
+section \ref{history}: there is no single algorithm to decide wether a lambda
+expression has a \(\beta\)-normal form.
 
 \(M M\) is sometimes called the \(\Omega\) combinator. Omega, because it is the
 end of the Greek alphabet. The \(M\) combinator is sometimes called the
-\(\omega\) combinator because of this. These combinators often have many
-different names. Sometimes because scientists discovered them seperatly,
-unaware of eachother, sometimes because scientists like to give them pet names.
+\(\omega\) combinator because of this. Combinators often have many different
+names. Sometimes because scientists discovered them seperatly, unaware of
+eachother, sometimes because they preferred a different name, sometimes because
+scientists like to give them pet names \footnote{I have a theory they are just
+trying to throw us off}.
 
 \subsubsection{The constant combinator}
 
