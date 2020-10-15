@@ -19,16 +19,16 @@
 
 % TODO: Something about PWS
 
-The reason I chose this subject is that it combines two things I enjoy:
-abstract maths and computer science. I have been programming for about five to
-six years now. I mainly enjoy low-level programming, so---naturally---C is my
-most used language and I am most familiar with a simple procedural paradigm.
-Such a paradigm is, however, not always very easy to use when working with very
-large and complex systems. I, as many, started out with object-oriented
-programming, but I did not like that very much. Therefore, I have been
-exploring alternative paradigms, including data-oriented programming and
-functional programming. I am quite familiar with data-oriented programming and
-the Rust programming language by now, but functional programming isn't
+The reason I chose to write about this subject, is that it combines two things
+I enjoy: abstract maths and computer science. I have been programming for about
+five to six years now. I mainly enjoy low-level programming, so---naturally---C
+is my most used language and I am most familiar with a simple procedural
+paradigm. Such a paradigm is, however, not always very easy to use when working
+with very large and complex systems. I, as many, started out with
+object-oriented programming, but I did not like that very much. Therefore, I
+have been exploring alternative paradigms, including data-oriented programming
+and functional programming. I am quite familiar with data-oriented programming
+and the Rust programming language by now, but functional programming isn't
 something I've ever really got into yet. I did find out about lambda calculus
 and combinatory logic, which intrigued me, but I haven’t got into it beyond a
 basic level of understanding. That is why I decided to research it for this
@@ -142,16 +142,18 @@ Turing machines, and proved that they are formally equivalent
 \parencite{turing1937computability}. 
 
 Why do I tell you all this? Well, your main takeaway should be that even though
-lambda calculus is a very simple system, it is Turing complete. Lambda calculus
-and Turing machines take wildly different approaches: one state based, the
-other stateless. Another difference is that Turing machines can be physically
-built. We can, however, use lambda calculus on these Turing machines \emph{and}
-simulate Turing machines with lambda calculus, which is part of the thesis of
-this work. We will look at lambda calculus and how the work of all the
-previously mentioned mathematicians, and many more, can be applied in lambda
-calculus to get a Turing complete system.
+lambda calculus is a very simple system, which at first glance might not seem
+to be very semantic or seem to have any real world implications, it actually is
+Turing complete. Lambda calculus and Turing machines take wildly different
+approaches: one state based, the other stateless. Another difference is that
+Turing machines can be physically built. We can, however, use lambda calculus
+on these Turing machines \emph{and} simulate Turing machines with lambda
+calculus, which is a fundamental part to the thesis of this work. We will look
+at lambda calculus and how the work of all the previously mentioned
+mathematicians, and many more, can be applied in lambda calculus to get a
+useful system.
 
-\subsection{The syntax\label{syntax}}
+\subsection{The syntax}\label{syntax}
 
 Lambda calculus is all about first-class higher-order pure
 (anonymous)\footnote{The core lambda calculus has no way of naming functions.}
@@ -224,7 +226,7 @@ the preceding expressions. That just means that it is in the simpelest form and
 isn't able to be evaluated any further. Reducing a lambda expression to the
 \(\beta\)-normal form is called \emph{\(\beta\)-reduction}.
 
-You can start to see how we can compose unary functions to create more complex
+You can start to see how we can combine unary functions to create more complex
 functions\footnote{That's what makes them higher-order (and first-class).}. In
 this example we used two nested unary functions to get the same result you
 would with a binary function. Such a nested function is often called a
@@ -237,7 +239,7 @@ example function above as:
 \[\lambda ab.ab\]
 Do keep in mind, that even though this looks and, for the most part, acts as if
 it is a single binary function, it really isn't. It still is a Curry'd function
-that feeds in the arguments one-by-one, but this way the expression becomes
+that feeds in the arguments one by one, but this way the expression becomes
 more readable and easier to think about conceptually. We will use this notation
 from now on.
 
@@ -248,7 +250,7 @@ it is, how it doesn't have a concept of value or data, how everything is an
 expression, how it is stateless, etc. But we'll get to all of that eventually.
 If you get this, everything else will follow naturally (mostly).
 
-\subsection{Combinatory logic}
+\subsection{Combinatory logic}\label{combinatorylogic}
 
 Combinatory logic is a notation to eliminate the need for quantified variables
 in mathematical logic \parencite{wiki:Combinatory_logic}. That basically means
@@ -285,14 +287,15 @@ Or, written out in lambda calculus:
 
 What happens if you apply \(M\) to \(M\)? You get:
 \[M M = M M = M M = ...\]
-and so on to infinity. Or in lambda calculus:
+ad infinitum. Or in lambda calculus:
 \[(\lambda f.ff)\lambda f.ff=(\lambda f.ff)\lambda f.ff=(\lambda f.ff)\lambda f.ff=...\]
 
 This expression cannot be evaluated. We say that it doesn't have a
 \(\beta\)-normal form. In lambda calculus and combinatory logic not every
 expression is reducable. As we've seen in the second to last paragraph of
 section \ref{history}: there is no single algorithm to decide wether a lambda
-expression has a \(\beta\)-normal form.
+expression has a \(\beta\)-normal form\footnote{This is not exactly what is
+written, but it means the same thing.}.
 
 \(M M\) is sometimes called the \(\Omega\) combinator. Omega, because it is the
 end of the Greek alphabet. The \(M\) combinator is sometimes called the
@@ -352,7 +355,7 @@ We're starting to define combinators as combinations of other combinators.
 Every combinator, in fact, can be defined as a combination of other
 combinators. That's why they are called combinators.
 
-\subsubsection{The flip combinator}
+\subsubsection{The flip combinator}\label{flipcombinator}
 
 The next combinator is is the \(C\) combinator. The \(C\) combinator is
 definable in lambda calculus as:
@@ -383,9 +386,9 @@ other combinator usually would.
 
 Our next combinator, \(B\), is defined as follows:
 \[B:=\lambda fga.f(ga)\]
-It applies a to b before applying f to the result. I haven't much to say about
-this combinator yet, but we will use it extensively in sections to come. I can
-say that it is used for function composition. % todo add ref
+It applies a to b before applying f to the result. This combinator is used for
+function composition. We say that the resulting function of the application of
+B to two functions composes those two functions.
 
 \subsubsection{The thrush}
 
@@ -427,27 +430,147 @@ You may have noticed some of the previous subsections have birdnames as titles.
 This is because they are the names given to the combinators, discussed in the
 respective subsections, by an author named \textcite{smullyan2000}. He is a
 mathematician who likes to write puzzle books. His book \emph{To Mock a
-Mockingbird} is practically a large metaphor for combinatory logic. There are
-some unrelated puzzles in the beginning of the book, but the rest is about a
-big forest with birds. The birds represent the combinators. The beginletters of
-the birdnames are the names of the combinators. The way the birds interact
-reflects the way the combinators interact. The reason he chose birds for his
-metaphor is because Curry was an avid bird watcher.
+Mockingbird} \parencite{smullyan2000} is practically a large metaphor for
+combinatory logic. There are some unrelated puzzles in the beginning of the
+book, but the rest is about a big forest with birds. The birds represent the
+combinators. The beginletters of the birdnames are the names of the
+combinators. The way the birds interact reflects the way the combinators
+interact. The reason he chose birds for his metaphor is because Curry was an
+avid bird watcher. If you feel like you still don't understand the notation of
+combinatory logic completely, I would recommend you give this book a read,
+because it explains it very simply and clearly
 
-I think it would be fun if we looked at one of the puzzles and see if we can
-solve it using our knowledge of combinatory logic.
+I think it would be fun if we had a look at one of the puzzles to see if we can
+solve it using our newfound knowledge of combinatory logic. I think the first
+puzzle is sufficiently interesting. So far, \textcite{smullyan2000} has only
+introduced the mockingbird and the idea of function composition, but not yet
+the bluebird. I have taken the puzzle directly from the book:
+
+\setlength{\leftskip}{1cm}
+\setlength{\rightskip}{1cm}
+\begin{center}
+\rule{15cm}{0.5pt}
+\end{center}
+
+It could happen that if you call out \(B\) to \(A\), \(A\) might call the same
+bird \(B\) back to you. If this happens, it indicates that \(A\) is fond of the
+bird \(B\). In symbols, \(A\) is fond of \(B\) means that: \(AB = B\)
+
+We are now given that the forest satisfies the following two conditions. 
+
+\(C_{1}\) (the composition condition): For any two birds \(A\) and \(B\)
+(whether the same or different) there is a bird \(C\) such that for any bird
+\(x\), \(Cx = A(Bx)\). In other words, for any birds \(A\) and \(B\) there is a
+bird \(C\) that composes \(A\) with \(B\). 
+
+\(C_{2}\) (the mockingbird condition): The forest contains a mockingbird \(M\). 
+
+One rumor has it that every bird of the forest is fond of at least one bird.
+Another rumor has it that there is at least one bird that is not fond of any
+bird. The interesting thing is that it is possible to settle the matter
+completely by virtue of the given conditions \(C_{1}\) and \(C_{2}\).
+
+Which of the two rumors is correct? 
+
+\begin{center}
+\rule{15cm}{0.5pt}
+\end{center}
+\setlength{\leftskip}{0pt}
+\setlength{\rightskip}{0pt}
+
+Do note that in this case, \(C\) and \(B\) do not refer to the \(C\) and \(B\)
+combinators we've looked at previously.
+
+The answer will be shown on the next page.
+
+\newpage
+
+Because of \(C_{1}\) and \(C_{2}\), we know that for every bird \(A\), there's
+a bird---we'll call it \(C\)---that composes \(A\) with \(M\). We can say the
+following:
+\[Cx=A(Mx)=A(xx)\] 
+If we now fill in \(C\) in place of \(x\), we get:
+\[A(CC)=CC\]
+We thus know that for any bird \(A\), \(A\) is fond of the bird \(CC\), where
+\(C\) composes \(A\) with \(M\). Therefore rumour one is true and rumour two is
+false.
+
+The answer \textcite{smullyan2000} gives is a bit more verbose, but it comes
+down to the same thing.
 
 \section{Using lambda calculus for computation}
 
-\subsection{Church encodings}
+Now that we've gone throught lambda calculus and combinatory logic, it is
+finally time to get to the good parts. I hope the way here wasn't too boring or
+difficult. We will now look at how to use lambda calculus for computation.
 
-\subsection{Church arithmetic}
+\subsection{Boolean logic}
+
+Let's look at a simple form of computation before jumping into numbers and
+stuff. Let's start with binary logic. In it's simplest form, binary logic is
+really just control flow: \emph{if A then B else C}. We want to have some
+condition that chooses between two expressions. We know how to do that already
+(see section \ref{combinatorylogic}). \(K\) choses the first of two expressions
+and \(KI\) the latter. We can define true to be \(K\) and false to be \(KI\):
+\[T:=K=\lambda ab.a\]
+\[F:=KI=\lambda ab.b\]
+
+We can now have some condition \(C\) that can either be \(T\) or \(F\) and
+return an expression \(A\) or \(B\) depending on it.
+
+But how can we do logic gates? Let's look at negation. We have already looked
+at the flip combinator---\(C\) (section \ref{flipcombinator}), which does
+exactly what we want. Thus, we can say:
+\[NOT:=C=\lambda fab.fba\]
+
+We could also do it another way. We already know how to do control flow, so we
+could define a function that chooses the opposite of what the input is. In
+simple programming terms: \emph{if P then F else T}. Or in lambda calculus:
+\[NOT:=\lambda p.pFT\]
+
+It depends which one's preferable. The \(C\) combinator is a bit more elegant
+maybe, but you only get a function that is extentionally equal to \(T\) or
+\(F\), while the other definition literally returns \(T\) or \(F\).
+
+How do we define \(AND\)? We could define it in simple programming terms, and
+then translate it to lambda caluclus. In simple programming terms, \(AND\)
+would look like this: \emph{if P then (if Q then T else F) else F}. In lambda
+calculus we would get:
+\[AND:=\lambda pq.p(qTF)F\]
+But this is a very naïve way of defining \(AND\). If you look closely at the
+\(qTF\) part, you notice that it actually just returns whatever \(q\) is
+anyway. Thus, we can say:
+\[AND:=\lambda pq.pqF\]
+You can also replace the remaining \(F\) with \(q\) if you want, because the
+\(F\) will only be returned if \(q\) is \(F\)---in other words: \(q\) in that
+case is alway false. So we can say:
+\[AND:=\lambda pq.pqp\]
+
+We can define \(OR\) in a very similar way. If the first argument is true, we
+just return it, else we return the second argument:
+\[OR:=\lambda pq.ppq\]
+
+Defining \(XOR\) is very easy too. If the first argument is true, then we want
+to return what the second argument is not, else we want to return what the
+second argument is. In lambda calculus:
+\[XOR:=\lambda pq.p(NOT\:q)q\]
+Or:
+\[XOR:=\lambda pq.p(qFT)q\]
+
+We can define boolean equality (\(BEQ\)) similarly:
+\[BEQ:=\lambda pq.pq(qFT)\]
+Which you can read as: "If \(p\) is true, then return what \(q\) is, else
+return what \(q\) is not."
+
+\subsection{Church encodings}
 
 \subsection{Recursion}
 
 \subsection{Data structures}
 
 \section{Functional programming (lambda calculus applied)}
+
+\subsection{Why do we even care?}
 
 \subsection{Lambda functions}
 
