@@ -13,29 +13,31 @@
 
 \maketitle
 \newpage
-\tableofcontents
-\newpage
 
-% I still need to decide wether I need a preface and afterword
-
-\section{Preface}
+\section*{Preface}
+\addcontentsline{toc}{section}{Preface}
 
 % TODO: Something about PWS
 
 The reason I chose this subject is that it combines two things I enjoy:
 abstract maths and computer science. I have been programming for about five to
-six years now. I mainly enjoy low-level programming, so, naturally, C is my
+six years now. I mainly enjoy low-level programming, so---naturally---C is my
 most used language and I am most familiar with a simple procedural paradigm.
 Such a paradigm is, however, not always very easy to use when working with very
-large and complex systems. I, as many, started out with Object-Oriented
-Programming, but I did not like that very much. Therefore, I have been
-exploring alternative paradigms, including Data-Oriented Programming and
-Functional Programming. I am quite familiar with Data-Oriented Programming and
-the Rust programming language by now, but Functional Programming isn't
+large and complex systems. I, as many, started out with object-oriented
+programming, but I did not like that very much. Therefore, I have been
+exploring alternative paradigms, including data-oriented programming and
+functional programming. I am quite familiar with data-oriented programming and
+the Rust programming language by now, but functional programming isn't
 something I've ever really got into yet. I did find out about lambda calculus
 and combinatory logic, which intrigued me, but I haven’t got into it beyond a
 basic level of understanding. That is why I decided to research it for this
-paper. 
+work. 
+
+\newpage
+
+\tableofcontents
+\newpage
 
 \section{Introduction}
 
@@ -44,7 +46,7 @@ increasingly popular paradigm is functional programming. Functional programming
 is fundamentally based on lambda calculus and it has been seeping into other
 paradigms and into mainstream languages. Most of the popular languages now
 implement lambda functions and have ways to write in a more declarative style
-of programming. In this paper I will look at all the ways lambda calculus has
+of programming. In this work I will look at all the ways lambda calculus has
 influenced computer science and how it may do so in the future.
 
 \section{Introduction to lambda calculus}
@@ -63,15 +65,15 @@ booleans. Another such example is lambda calculus.
 People always trusted mathematics to be true and relied on it heavily. If
 something was proven true with mathematical logic, then that must be true.
 However, starting from the late 19th century, people ran into paradoxes. People
-made a distinction between reasoning that was rigorous and reasoning that
-wasn't---reasoning that was fundamentally purely logical, and reasoning that
-wasn't as purely logical. The fact that mathematical logic, which people looked
-at for rigorousness, was infested with paradoxes and self-reference was very
-troubling for people at the time.
+made a distinction between reasoning that is rigorous and reasoning that
+isn't---reasoning that is logical, and reasoning that is psychological. The
+fact that mathematical logic, which people looked at for rigorousness, is
+infested with paradoxes and self-reference was very troubling for people at the
+time.
 
 The concept of mathematics and mathematical logic wasn't well defined, so
-people started to think about the formalisation of mathematical logic to try
-and solve these issues. People wanted a system that would encapsulate all of
+people started to think about the formalisation of mathematical logic to try to
+solve these issues. People wanted a system that would encapsulate all of
 mathematical logic. Preferably this system would be simple, clean and
 intuïtive.
 
@@ -79,45 +81,46 @@ Throughout the late 19th and early 20th centuries, people started formally
 defining and redefining different aspects of mathematics. \textcite{frege1879}
 wrote about propositional calculus and functions as graphs, and in doing so
 reëvaluated the concept of functions and was already using concepts like
-currying functions without really giving thought to it. \textcite{peano1889}
-invented the Peano axioms and Peano arithmetic as a way of defining natural
-numbers. He was not the first to attempt defining natural numbers, but he was
-the most successful. \textcite{schonfinkel1924} invented combinatory logic as a
-way to remove the need for quantified variables, which was later rediscovered
-and improved on by \textcite{curry1930}. One major attempt to define all of
-mathematics was done by \textcite{russell1997}. They wrote a book that would
-become well know in all of mathematics and logic. This book is called
-\emph{Principia Mathematica}. They did, however, run into a few problems, which
-arose from self-reference. To solve these problems that this paradoxical
-self-reference brought with it, they invented an elaborate system, the theory
-of types, to circumvent/eliminate it. It was a very carefully crafted bastion
-against self-reference ever coming up in their system, which was not very
-simple, clean or intuïtive.
+Currying functions (more on this in section \ref{syntax}) without really giving
+thought to it. \textcite{peano1889} invented the Peano axioms and Peano
+arithmetic as a way of defining natural numbers. He was not the first to
+attempt defining natural numbers, but he was the most successful.
+\textcite{schonfinkel1924} invented combinatory logic, which was later
+rediscovered and improved on by \textcite{curry1930}, as a way to remove the
+need for quantified variables in logic.
+
+One major attempt to define all of mathematics was done by
+\textcite{russell1997}. They wrote a book that would become well know in all of
+mathematics and logic. This book is called \emph{Principia Mathematica}. They
+did, however, run into a few problems, which arose from self-reference. To
+solve these problems that this paradoxical self-reference brought with it, they
+invented an elaborate system, the theory of types, to circumvent/eliminate it.
+It was a very carefully crafted bastion against self-reference ever coming up
+in their system, which was not very simple, clean or intuïtive.
 
 People praised \emph{PM} as they thought they had finally done it; they had
 formalised all of mathematical logic, they had realised the dream of grounding
 all of mathematics in logic. But in Vienna, Gödel was sceptical of this book.
 He started seeing some cracks, he felt that there was something wrong aboout
 this attempt. Gödel felt that self-reference was a fundamental part of
-mathematical logic. Then the crazy bastard went out and actually proved that
-there is no consistent system of axioms whose theorems can be listed by an
-effective procedure that is capable of proving all truths about arithmetic of
-natural numbers\footnote{This is a definition of the first incompleteness
-theorem I got from \textcite{wiki:Incompleteness_theorems}}
-\parencite{godel1931}, meaning that such a system is either inconsistent or
-incomplete\footnote{Incompleteness means that there are things that are true,
-but are not provable.}, greatly disturbing many mathematicians and upending
-mathematics as they knew it.
+mathematical logic. Then he went out and actually proved that there is no
+consistent system of axioms whose theorems can be listed by an effective
+procedure that is capable of proving all truths about arithmetic of natural
+numbers\footnote{This is a definition of the first incompleteness theorem I got
+from \textcite{wiki:Incompleteness_theorems}} \parencite{godel1931}, meaning
+that such a system is either inconsistent or incomplete\footnote{Incompleteness
+means that there are things that are true, but are not provable.}, greatly
+disturbing many mathematicians and upending mathematics as they knew it.
 
 During this time, in this environment of the formalisation of mathematical
 logic, \textcite{church1932} invented the lambda calculus. Lambda calculus is a
 very simple and minimalistic system of substitution. A little while later,
-\textcite{turing1936, turing1937correction} invented turing machines. Turing
+\textcite{turing1936, turing1937correction} invented Turing machines. Turing
 machines are conceptual mathematical machines that function based on
 state---they were state machines. These could perform all kinds of mathematical
 and logical computations. He was not the first to invent computers, but he was
 the first to work them out as well as he did (and, as you probably know, he
-built one with which he cracked the German enigma code).
+built one which he cracked the German enigma code with).
 
 There was this problem that has a few different names. It is often known as the
 \emph{halting problem} or the \emph{Entscheidungsproblem}, which is German for
@@ -125,35 +128,33 @@ There was this problem that has a few different names. It is often known as the
 exactly synonyms, but they come down to the same thing. Basically, it asks
 wether it is possible to know via an algorithm wether a computation will
 complete execution or result in an infinite loop. In 1936,
-\textcite{turing1936, turing1937correction} spent a long time proving that this
-isn't possible using his turing machines, but it didn't get published until
-early 1937. Also in 1936, \textcite{church1936} proved the same thing using
-lambda calculus and happended to publish it before Turing did. When Turing
-finally got around to publishing his proof, he found out that he was beaten to
-it by Church. He wasn't to pleased. What is interesting, though, is that lambda
-calculus and turing machines take two completely different approaches. Turing
-machines funtion entirely on state, while lambda calculus is completely
-stateless (we'll look at this later). Turing thought this was interesting too,
-so he researched lambda calculus and how it relates to his turing machines, and
-proved that they are formally equivalent \parencite{turing1937computability}.
-Church and Turing gave their names to the Church-Turing thesis, which basically
-states that all computable functions can by computed by a Turing machine or
-lambda calculus---in other words, lambda calculus is turing complete.
+\textcite{turing1936, turing1937correction} spent a long time proving, using
+his Turing machines, that this isn't possible, but it didn't get published
+until early 1937. Also in 1936, \textcite{church1936} proved the same thing
+using lambda calculus and happended to publish it before Turing did. When
+Turing finally got around to publishing his proof, he found out that he was
+beaten to it by Church. He wasn't to pleased. What is interesting, though, is
+that lambda calculus and Turing machines take two completely different
+approaches. Turing machines funtion entirely on state, while lambda calculus is
+completely stateless (we'll look at this later). Turing thought this was
+interesting too, so he researched lambda calculus and how it relates to his
+Turing machines, and proved that they are formally equivalent
+\parencite{turing1937computability}. 
 
 Why do I tell you all this? Well, your main takeaway should be that even though
-lambda calculus is a very simple system, it is turing complete. Lambda calculus
-and turing machines take wildly different approaches: one state based, the
-other stateless. Another difference is that turing machines can be physically
-built. We can, however, use lambda calculus on these turing machines and
-simulate turing machines with lambda calculus, which is part of the thesis of
-this paper. We will look at lambda calculus and how the work of all the
+lambda calculus is a very simple system, it is Turing complete. Lambda calculus
+and Turing machines take wildly different approaches: one state based, the
+other stateless. Another difference is that Turing machines can be physically
+built. We can, however, use lambda calculus on these Turing machines \emph{and}
+simulate Turing machines with lambda calculus, which is part of the thesis of
+this work. We will look at lambda calculus and how the work of all the
 previously mentioned mathematicians, and many more, can be applied in lambda
-calculus to get a turing complete system.
+calculus to get a Turing complete system.
 
-\subsection{The syntax}
+\subsection{The syntax\label{syntax}}
 
 Lambda calculus is all about first-class higher-order pure
-(anonymous\footnote{The core lambda calculus has no way of naming functions.})
+(anonymous)\footnote{The core lambda calculus has no way of naming functions.}
 unary functions. Such a function takes a single input, and returns a single
 expression that is only dependent on the input, so it doesn't have any outside
 state. Such a function can take and return any expression, which in lambda
@@ -196,17 +197,15 @@ write: \[Ix=x\] We have now covered identifiers too.
 But if this is all there is, how can this possibly be Turing complete? How do
 we do boolean logic, or algebra? How can we do things with only unary
 functions? What are \(a\) and \(x\) supposed to represent? If there is no
-concept of value, how do we even use this meaningfully?
-
-Well, the key is this: a function can return any expression (remember?), which
-is always a function\footnote{Everything is.}, not just a single symbol. We can
-start composing these simple functions into more complex functions. Let's say
-that we wanted to have a function that takes two arguments, and then applies
-the first argument to the second one. You are probably asking yourself a few
-questions. For example, what does it mean for one argument to be applied to
-another? Well, as I said, everything is a function. But the biggest question
-you are probably asking yourself is: how can you have a function that takes two
-arguments?
+concept of value, how do we even use this meaningfully? Well, the key is this:
+a function can return any expression (remember?), which is always a
+function\footnote{Everything is.}, not just a single symbol. We can start
+composing these simple functions into more complex functions. Let's say that we
+wanted to have a function that takes two arguments, and then applies the first
+argument to the second one. You are probably asking yourself a few questions.
+For example, what does it mean for one argument to be applied to another? Well,
+as I said, everything is a function. But the biggest question you are probably
+asking yourself is: how can you have a function that takes two arguments?
 
 We actually can't, but what we can do is to have a function that takes one
 argument and returns another function that takes one argument. We can define
@@ -220,7 +219,6 @@ apply this function to a symbol like \(y\), we get this:
 \[(\lambda b.xb)y=xy\]
 Alternatively, we could write it all on one line:
 \[(\lambda a.\lambda b.ab)xy=(\lambda b.xb)y=xy\]
-
 \(xy\) in this case is what we would call the \emph{\(\beta\)-normal form} of
 the preceding expressions. That just means that it is in the simpelest form and
 isn't able to be evaluated any further. Reducing a lambda expression to the
@@ -230,8 +228,7 @@ You can start to see how we can compose unary functions to create more complex
 functions\footnote{That's what makes them higher-order (and first-class).}. In
 this example we used two nested unary functions to get the same result you
 would with a binary function. Such a nested function is often called a
-\emph{curry'd function}.
-
+\emph{Curry'd function}.
 You might think to yourself that having this many nested functions can be quite
 convoluted and not very readable, and you're quite right. That's why people
 often use a shorthand notation. They would basically write it as if it is a
@@ -239,7 +236,7 @@ single binary function (as with any n-ary function). They would write the
 example function above as:
 \[\lambda ab.ab\]
 Do keep in mind, that even though this looks and, for the most part, acts as if
-it is a single binary function, it really isn't. It still is a curry'd function
+it is a single binary function, it really isn't. It still is a Curry'd function
 that feeds in the arguments one-by-one, but this way the expression becomes
 more readable and easier to think about conceptually. We will use this notation
 from now on.
@@ -261,6 +258,9 @@ combinators first came from \textcite{schonfinkel1924}, and was later
 rediscovered by \textcite{curry1930}. Combinators are just symbols, in this
 case letters, that perform operations on symbols that succeed it. We've
 actually looked at one of these combinators already.
+
+We will be using Curry's names of the combinators, since his names are most
+widely used.
 
 \subsubsection{Identity}
 
@@ -309,7 +309,7 @@ arguments and returns the first. We can easily define it in lambda calculus as
 follows:
 \[K:=\lambda ab.a\]
 
-Remember that we defined this as a curry'd function. This means we can give it
+Remember that we defined this as a Curry'd function. This means we can give it
 just one argument and get a new function out of it. Let's say we apply \(K\) to
 \(5\):
 \[K5=(\lambda ab.a)5=\lambda b.5\]
@@ -352,38 +352,133 @@ We're starting to define combinators as combinations of other combinators.
 Every combinator, in fact, can be defined as a combination of other
 combinators. That's why they are called combinators.
 
-\subsubsection{The starling}
+\subsubsection{The flip combinator}
 
-\subsubsection{The cardinal}
+The next combinator is is the \(C\) combinator. The \(C\) combinator is
+definable in lambda calculus as:
+\[C:=\lambda fab.fba\]
+What it basically does is switch the arguments to the next combinator around.
+
+If we apply \(C\) to \(K\) and two random symbols, we get the same result we
+would get if we had applied \(KI\) to those same symbols:
+\[CKxy=Kyx=y\]
+\[KIxy=y\]
+\[CK=KI\]
+Let's see what happens when we apply C to K in lambda calculus (I have changed
+the names of \(K\)'s arguments as to avoid confusion with those of \(C\)):
+\[(\lambda fab.fba)\lambda xy.x=\lambda ab.(\lambda xy.x)ba\]
+We don't get our exact definition of \(KI\). But we can see that for every
+input, \(CK\) and \(KI\) \emph{always} produce the same output. We say that
+these functions are \emph{extentionally equal}---they have been defined
+seperately and we cannot rewrite one to the other, but we know that they
+produce the same results, so they must be equal.
+
+You can do the same thing to find out that \(CKI=K\). It really does make
+sense. \(K\) and \(KI\) both "select" one of two arguments. One selects the
+first, the other selects the latter. Flipping their arguments make them select
+the opposite of what they normally would, so they select the argument that the
+other combinator usually would.
 
 \subsubsection{The bluebird}
 
+Our next combinator, \(B\), is defined as follows:
+\[B:=\lambda fga.f(ga)\]
+It applies a to b before applying f to the result. I haven't much to say about
+this combinator yet, but we will use it extensively in sections to come. I can
+say that it is used for function composition. % todo add ref
+
+\subsubsection{The thrush}
+
+Our next combinator is \(Th\). It is defined as follows:
+\[Th:=\lambda af.fa\]
+It swaps around two functions.
+% todo stuff
+
+\subsubsection{The starling}
+
+Our last combinator is \(S\). It can be defined as follows:
+\[S:=\lambda fga.fa(ga)\]
+It applies f to a and its result to the result of the application of g to a.
+
 \subsubsection{\(S\) and \(K\)}
+
+% todo ref "every combinator can be ...."
+% todo ref proof S and K completeness
+
+As I've said, every combinator can be defined as a combination of other
+combinators. The question arises: how many combinators do we need to define
+every other combinator? It turns out you need just two. You can define every
+other combinator using just \(S\) and \(K\).
+
+% todo stuff
 
 \subsubsection{To Mock a Mockingbird}
 
-\subsubsection{Equality}
+At the start of this section about combinatory logic, I said that
+\textcite{schonfinkel1924} invented combinatory logic as a way of removing the
+need for quantifiable variables. He started with propositional logic and
+stripped it down until there was a very pure and simple form of logic left. But
+how can we use this form of logic in the real world, if he even removes things
+like propositions? You already know that it is Turing complete, so it must be
+able to do any computation, but I haven't explain how yet. But we can use
+combinatory logic in the real world already.
+
+You may have noticed some of the previous subsections have birdnames as titles.
+This is because they are the names given to the combinators, discussed in the
+respective subsections, by an author named \textcite{smullyan2000}. He is a
+mathematician who likes to write puzzle books. His book \emph{To Mock a
+Mockingbird} is practically a large metaphor for combinatory logic. There are
+some unrelated puzzles in the beginning of the book, but the rest is about a
+big forest with birds. The birds represent the combinators. The beginletters of
+the birdnames are the names of the combinators. The way the birds interact
+reflects the way the combinators interact. The reason he chose birds for his
+metaphor is because Curry was an avid bird watcher.
+
+I think it would be fun if we looked at one of the puzzles and see if we can
+solve it using our knowledge of combinatory logic.
 
 \section{Using lambda calculus for computation}
 
-\subsection{Binary logic}
+\subsection{Church encodings}
 
-\subsection{Church numerals}
+\subsection{Church arithmetic}
+
+\subsection{Recursion}
+
+\subsection{Data structures}
 
 \section{Functional programming (lambda calculus applied)}
 
+\subsection{Lambda functions}
+
 \subsection{Laziness}
 
-% Note to self: write about how lambda functions can create new lambda
-% functions, as we've seen in the combinatory logic subsection
+\subsection{Types}
+
+\subsection{Monads}
 
 \subsection{Haskell}
 
+\subsection{Comparison to with other paradigms}
+
+\subsubsection{Declarative vs imperative}
+
+\subsubsection{Usefulness vs conceptual purity}
+
+\subsubsection{Meta programming}
+
 \section{Functional programming in other paradigms}
+
+\subsection{Lambda functions}
+
+\subsection{Iterators}
 
 \section{Possibilities for the future}
 
-\section{Afterword}
+\subsection{Conceptual \emph{and} useful}
+
+\section*{Afterword}
+\addcontentsline{toc}{section}{Afterword}
 
 \newpage
 \printbibliography[heading=bibintoc, title={References}]
