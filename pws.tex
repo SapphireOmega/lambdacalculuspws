@@ -1,4 +1,4 @@
-\documentclass[11pt]{article}
+\documentclass[11pt]{book}
 
 \usepackage[a4paper, margin=1in]{geometry}
 \usepackage[british]{babel}
@@ -12,10 +12,9 @@
 \begin{document}
 
 \maketitle
-\newpage
 
-\section*{Preface}
-\addcontentsline{toc}{section}{Preface}
+\chapter*{Preface}
+\addcontentsline{toc}{chapter}{Preface}
 
 % TODO: Something about PWS
 
@@ -34,12 +33,10 @@ and combinatory logic, which intrigued me, but I haven’t got into it beyond a
 basic level of understanding. That is why I decided to research it for this
 work. 
 
-\newpage
-
 \tableofcontents
-\newpage
 
-\section{Introduction}
+\chapter*{Introduction}
+\addcontentsline{toc}{chapter}{Introduction}
 
 With the decline of OOP, many other paradigms are gaining in popularity. One
 increasingly popular paradigm is functional programming. Functional programming
@@ -49,7 +46,7 @@ implement lambda functions and have ways to write in a more declarative style
 of programming. In this work I will look at all the ways lambda calculus has
 influenced computer science and how it may do so in the future.
 
-\section{Introduction to lambda calculus}
+\chapter{Introduction to lambda calculus}
 
 Lambda calculus is, as its name suggests, a calculus. A calculus is a system of
 manipulating symbols, which by themselves don't have any semantic meaning, in a
@@ -60,7 +57,7 @@ algebra. There are many branches of mathematics that use different systems.
 One example would be formal logic, which is used for logical operations on
 booleans. Another such example is lambda calculus.
 
-\subsection{A short history\label{history}}
+\section{A short history\label{history}}
 
 People always trusted mathematics to be true and relied on it heavily. If
 something was proven true with mathematical logic, then that must be true.
@@ -151,7 +148,7 @@ this work. We will look at lambda calculus and how the work of all the
 previously mentioned mathematicians, and many more, can be applied in lambda
 calculus to get a Turing complete system.
 
-\subsection{The syntax\label{syntax}}
+\section{The syntax\label{syntax}}
 
 Lambda calculus is all about first-class higher-order pure
 (anonymous)\footnote{The core lambda calculus has no way of naming functions.}
@@ -248,7 +245,7 @@ it is, how it doesn't have a concept of value or data, how everything is an
 expression, how it is stateless, etc. But we'll get to all of that eventually.
 If you get this, everything else will follow naturally (mostly).
 
-\subsection{Combinatory logic}
+\section{Combinatory logic}
 
 Combinatory logic is a notation to eliminate the need for quantified variables
 in mathematical logic \parencite{wiki:Combinatory_logic}. That basically means
@@ -262,7 +259,7 @@ actually looked at one of these combinators already.
 We will be using Curry's names of the combinators, since his names are most
 widely used.
 
-\subsubsection{Identity}
+\subsection{Identity}
 
 The first combinator we'll cover is \(I\). It does exactly the same thing as
 our \(I\) function we defined in lambda calculus in the previous subsection
@@ -271,7 +268,7 @@ calculus. Lambda calculus is really just 90\% combinatory logic, but without
 identifiers. This combinator may seem quite useless, but it is actually quite
 useful when composing combinators, which we'll come to soon.
 
-\subsubsection{The omega combinator}
+\subsection{The omega combinator}
 
 The next combinator we'll cover is \(M\). All it does is repeat its one
 argument twice. It can be defined in lambda calculus as follows:
@@ -302,7 +299,7 @@ eachother, sometimes because they preferred a different name, sometimes because
 scientists like to give them pet names \footnote{I have a theory they are just
 trying to throw us off}.
 
-\subsubsection{The constant combinator}
+\subsection{The constant combinator}
 
 The next combinator we'll cover is \(K\). It is a combinator that takes two
 arguments and returns the first. We can easily define it in lambda calculus as
@@ -321,7 +318,7 @@ can probably see why.
 Just like with the previous combinators, it'll prove very useful, much more so
 than you'd expect.
 
-\subsubsection{The kite}
+\subsection{The kite}
 
 Here is where things get a little spicier. Our next combinator is \(KI\). It
 takes two arguments and returns the latter. We can define it in lambda calculus
@@ -352,7 +349,7 @@ We're starting to define combinators as combinations of other combinators.
 Every combinator, in fact, can be defined as a combination of other
 combinators. That's why they are called combinators.
 
-\subsubsection{The flip combinator}
+\subsection{The flip combinator}
 
 The next combinator is is the \(C\) combinator. The \(C\) combinator is
 definable in lambda calculus as:
@@ -379,7 +376,7 @@ first, the other selects the latter. Flipping their arguments make them select
 the opposite of what they normally would, so they select the argument that the
 other combinator usually would.
 
-\subsubsection{The bluebird}
+\subsection{The bluebird}
 
 Our next combinator, \(B\), is defined as follows:
 \[B:=\lambda fga.f(ga)\]
@@ -387,20 +384,20 @@ It applies a to b before applying f to the result. I haven't much to say about
 this combinator yet, but we will use it extensively in sections to come. I can
 say that it is used for function composition. % todo add ref
 
-\subsubsection{The thrush}
+\subsection{The thrush}
 
 Our next combinator is \(Th\). It is defined as follows:
 \[Th:=\lambda af.fa\]
 It swaps around two functions.
 % todo stuff
 
-\subsubsection{The starling}
+\subsection{The starling}
 
 Our last combinator is \(S\). It can be defined as follows:
 \[S:=\lambda fga.fa(ga)\]
 It applies f to a and its result to the result of the application of g to a.
 
-\subsubsection{\(S\) and \(K\)}
+\subsection{\(S\) and \(K\)}
 
 % todo ref "every combinator can be ...."
 % todo ref proof S and K completeness
@@ -412,7 +409,7 @@ other combinator using just \(S\) and \(K\).
 
 % todo stuff
 
-\subsubsection{To Mock a Mockingbird}
+\subsection{To Mock a Mockingbird}
 
 At the start of this section about combinatory logic, I said that
 \textcite{schonfinkel1924} invented combinatory logic as a way of removing the
@@ -437,48 +434,48 @@ metaphor is because Curry was an avid bird watcher.
 I think it would be fun if we looked at one of the puzzles and see if we can
 solve it using our knowledge of combinatory logic.
 
-\section{Using lambda calculus for computation}
+\chapter{Using lambda calculus for computation}
 
-\subsection{Church encodings}
+\section{Church encodings}
 
-\subsection{Church arithmetic}
+\section{Church arithmetic}
 
-\subsection{Recursion}
+\section{Recursion}
 
-\subsection{Data structures}
+\section{Data structures}
 
-\section{Functional programming (lambda calculus applied)}
+\chapter{Functional programming (lambda calculus applied)}
 
-\subsection{Lambda functions}
+\section{Lambda functions}
 
-\subsection{Laziness}
+\section{Laziness}
 
-\subsection{Types}
+\section{Types}
 
-\subsection{Monads}
+\section{Monads}
 
-\subsection{Haskell}
+\section{Haskell}
 
-\subsection{Comparison to with other paradigms}
+\section{Comparison to with other paradigms}
 
-\subsubsection{Declarative vs imperative}
+\subsection{Declarative vs imperative}
 
-\subsubsection{Usefulness vs conceptual purity}
+\subsection{Usefulness vs conceptual purity}
 
-\subsubsection{Meta programming}
+\subsection{Meta programming}
 
-\section{Functional programming in other paradigms}
+\chapter{Functional programming in other paradigms}
 
-\subsection{Lambda functions}
+\section{Lambda functions}
 
-\subsection{Iterators}
+\section{Iterators}
 
-\section{Possibilities for the future}
+\chapter{Possibilities for the future}
 
-\subsection{Conceptual \emph{and} useful}
+\section{Conceptual \emph{and} useful}
 
-\section*{Afterword}
-\addcontentsline{toc}{section}{Afterword}
+\chapter*{Afterword}
+\addcontentsline{toc}{chapter}{Afterword}
 
 \newpage
 \printbibliography[heading=bibintoc, title={References}]
