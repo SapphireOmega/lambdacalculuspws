@@ -3,6 +3,7 @@
 \usepackage[a4paper, margin=1in]{geometry}
 \usepackage[british]{babel}
 \usepackage[backend=biber, style=numeric-comp]{biblatex}
+\usepackage{amsmath}
 
 \addbibresource{bibliography.bib}
 
@@ -372,7 +373,7 @@ the names of \(K\)'s arguments as to avoid confusion with those of \(C\)):
 \[(\lambda fab.fba)\lambda xy.x=\lambda ab.(\lambda xy.x)ba\]
 We don't get our exact definition of \(KI\). But we can see that for every
 input, \(CK\) and \(KI\) \emph{always} produce the same output. We say that
-these functions are \emph{extentionally equal}---they have been defined
+these functions are \emph{extensionally equal}---they have been defined
 seperately and we cannot rewrite one to the other, but we know that they
 produce the same results, so they must be equal.
 
@@ -508,15 +509,14 @@ difficult. We will now look at how to use lambda calculus for computation.
 
 Let's look at a simple form of computation before jumping into numbers and
 stuff. Let's start with binary logic. In it's simplest form, binary logic is
-really just control flow: \emph{if A then B else C}. We want to have some
-condition that chooses between two expressions. We know how to do that already
-(see section \ref{combinatorylogic}). \(K\) choses the first of two expressions
-and \(KI\) the latter. We can define true to be \(K\) and false to be \(KI\):
+really just control flow: \emph{if A then B else C} (\(A\:?\:B\::\:C\)). We
+want to have some condition that chooses between two expressions. We know how
+to do that already (see section \ref{combinatorylogic}). \(K\) choses the first
+of two expressions and \(KI\) the latter. We can define true to be \(K\) and
+false to be \(KI\):
+
 \[T:=K=\lambda ab.a\]
 \[F:=KI=\lambda ab.b\]
-
-We can now have some condition \(C\) that can either be \(T\) or \(F\) and
-return an expression \(A\) or \(B\) depending on it.
 
 But how can we do logic gates? Let's look at negation. We have already looked
 at the flip combinator---\(C\) (section \ref{flipcombinator}), which does
@@ -525,17 +525,24 @@ exactly what we want. Thus, we can say:
 
 We could also do it another way. We already know how to do control flow, so we
 could define a function that chooses the opposite of what the input is. In
-simple programming terms: \emph{if P then F else T}. Or in lambda calculus:
+simple programming terms:
+\[if\;p\;then\;F\;else\;T\]
+Or in a C-like expression:
+\[p\enspace ?\enspace F\;:\;T\]
+Or in lambda calculus:
 \[NOT:=\lambda p.pFT\]
 
 It depends which one's preferable. The \(C\) combinator is a bit more elegant
-maybe, but you only get a function that is extentionally equal to \(T\) or
-\(F\), while the other definition literally returns \(T\) or \(F\).
+and performat, because it takes less function applications, but you get a
+function that is only extensionally equal to \(T\) or \(F\), while the other
+definition literally returns \(T\) or \(F\).
 
 How do we define \(AND\)? We could define it in simple programming terms, and
 then translate it to lambda caluclus. In simple programming terms, \(AND\)
-would look like this: \emph{if P then (if Q then T else F) else F}. In lambda
-calculus we would get:
+would look like this:
+\[if\;p\;then\;(if\;q\;then\;T\;else\;F)\;else\;f\]
+\[p\enspace ?\enspace q\enspace ?\enspace T:F:F\]
+In lambda calculus we would get:
 \[AND:=\lambda pq.p(qTF)F\]
 But this is a very naïve way of defining \(AND\). If you look closely at the
 \(qTF\) part, you notice that it actually just returns whatever \(q\) is
@@ -545,6 +552,9 @@ You can also replace the remaining \(F\) with \(q\) if you want, because the
 \(F\) will only be returned if \(q\) is \(F\)---in other words: \(q\) in that
 case is alway false. So we can say:
 \[AND:=\lambda pq.pqp\]
+This is the equivalent of:
+\[if\; p\; then\; q\; else\; p\;\]
+\[p\enspace ?\enspace q\::\:p\]
 
 We can define \(OR\) in a very similar way. If the first argument is true, we
 just return it, else we return the second argument:
@@ -554,13 +564,149 @@ Defining \(XOR\) is very easy too. If the first argument is true, then we want
 to return what the second argument is not, else we want to return what the
 second argument is. In lambda calculus:
 \[XOR:=\lambda pq.p(NOT\:q)q\]
-Or:
+Giving:
 \[XOR:=\lambda pq.p(qFT)q\]
+Alternatively:
+\[XOR:=\lambda pq.p((\lambda fab.fba)q)q=\lambda pq.p(\lambda ab.qba)q\]
 
 We can define boolean equality (\(BEQ\)) similarly:
 \[BEQ:=\lambda pq.pq(qFT)\]
+Or:
+\[BEQ:=\lambda pq.pq(\lambda ab.qba)\]
 Which you can read as: "If \(p\) is true, then return what \(q\) is, else
 return what \(q\) is not."
+
+Let's look at an example expression and solve it in lambda calculus. We'll
+solve the following expression:
+\[!\;(x\;\&\&\;y)\;==\;!\,x\;||\;!\,y\]
+
+If you're not familiar with C-like expressions: \(!\) means NOT, \(\&\&\) means
+AND, \(==\) means BEQ and \(||\) means OR. \(!\) has a higher and \(==\) a
+lower precedence than the rest.
+
+We can write and reduce this expression using the functions/combinators we
+defined (using \(NOT:=\lambda p.pFT\), because else we wouldn't be able to
+write out \(NOT\) without using lambda calculus):
+\begin{align*}
+	&\enspace BEQ\enspace
+		(NOT\;(AND\:x\:y))\enspace
+		(OR\;(NOT\:x)\;(NOT\:y))\\
+	=&\enspace BEQ\enspace
+		(NOT\;(xyx))\enspace
+		(OR\;(xFT)\;(yFT))\\
+	=&\enspace BEQ\enspace
+		(xqxFT)\enspace
+		(xFT\:(xFT)\:(yFT))\\
+	=&\enspace xyxFT\enspace
+		(xFT\:(xFT)\:(yFT))\enspace
+		(xFT\:(xFT)\:(yFT)\:FT)
+\end{align*}
+
+If you were to write this in pure lambda calculus (using \(NOT:=C\), because it
+is simpeler to write out), you would get the following:
+\small
+\begin{align}
+	&\enspace\lambda xy.
+		(\lambda pq.pq(\lambda cd.qdc))
+		((\lambda fab.fba)((\lambda pq.pqp)xy))
+		((\lambda pq.ppq)((\lambda fab.fba)x)((\lambda fab.fba)y))\\
+	=&\enspace\lambda xy.
+		(\lambda pq.pq(\lambda cd.qdc))
+		((\lambda fab.fba)(xyx))
+		((\lambda pq.ppq)(\lambda ab.xba)(\lambda ab.yba))\\
+	=&\enspace\lambda xy.
+		(\lambda pq.pq(\lambda cd.qdc))
+		(\lambda ab.xyxba)
+		((\lambda ab.xba)(\lambda ab.xba)(\lambda ab.yba))\\
+	=&\enspace\lambda xy.
+		(\lambda pq.pq(\lambda cd.qdc))
+		(\lambda ab.xyxba)
+		(x(\lambda ab.yba)(\lambda ab.xba))\\
+	=&\enspace\lambda xy.
+		(\lambda ab.xyxba)
+		(x(\lambda ab.yba)(\lambda ab.xba))
+		(\lambda cd.x(\lambda ab.yba)(\lambda ab.xba)dc)\\
+	=&\enspace\lambda xy.\label{exteq0}
+		xyx
+		(\lambda cd.x(\lambda ab.yba)(\lambda ab.xba)dc)
+		(x(\lambda ab.yba)(\lambda ab.xba))\\
+	\equiv&\enspace\lambda xy.\label{exteq1}
+		xyx
+		(\lambda cd.x(\lambda ab.yba)(\lambda ab.a)dc)
+		(x(\lambda ab.yba)(\lambda ab.a))\\
+	\equiv&\enspace\lambda xy.\label{exteq2}
+		xyx
+		(xy(\lambda ab.b))
+		(x(\lambda ab.yba)(\lambda ab.a))\\
+	\equiv&\enspace\lambda xy.\label{exteq3}
+		xyx
+		(xy(\lambda ab.b))
+		(\lambda ab.a)\\
+	\equiv&\enspace\lambda xy.\label{exteq4}
+		xyx
+		(\lambda ab.a)
+		(\lambda ab.a)\\
+	\equiv&\enspace\lambda ab.a\label{exteq5}
+\end{align}
+\normalsize
+
+We know that expressions \ref{exteq0} and \ref{exteq1} are extensionally equal;
+\[
+	\lambda x.x(\lambda ab.yba)(\lambda ab.xba)\equiv
+	\lambda x.x(\lambda ab.yba)(\lambda ab.a)
+\]
+because \(x\) picks between \(\lambda ab.yba\) and \(\lambda ab.xba\).
+\(\lambda ab.xba\) only gets picked when \(x\) is \(F\), so \(\lambda ab.xba\)
+is always \(\lambda ab.Fba\)=\(\lambda ab.a\). Therefore, a \(x(\lambda
+ab.yba)(\lambda ab.xba)\) that occurs at the start of its grouping (we do need
+to keep left-associativity in mind) can be replaced with \(x(\lambda
+ab.yba)(\lambda ab.a)\).
+
+We also know that expressions \ref{exteq1} and \ref{exteq2} are extensionally
+equal. We know that
+\[\lambda xcd.x(\lambda ab.yba)(\lambda ab.a)dc\]
+selects between
+\[\lambda cd.(\lambda ab.yba)dc=\lambda cd.ycd\equiv y\]
+and
+\[\lambda cd.(\lambda ab.a)dc=\lambda cd.d=\lambda ab.b\]
+therefore
+\[\lambda xcd.x(\lambda ab.yba)(\lambda ab.a)dc\equiv\lambda x.xy(\lambda ab.b)\]
+
+Expressions \ref{exteq2} and \ref{exteq3} are also extensionally equal, because
+\(xyx\) selects between the expressions \(xy(\lambda ab.b)\) and \(x(\lambda
+ab.yba)(\lambda ab.a)\). The expression \(x(\lambda ab.yba)(\lambda ab.a)\)
+only gets selected if \(xyx=F\). There are two ways for \(xyx=F\) being true;
+either \(x=F\), or both \(x=T\) and \(y=F\). \(x=F\) gives
+\[x(\lambda ab.yba)(\lambda ab.a)=F(\lambda ab.yba)(\lambda ab.a)=\lambda ab.a\]
+and \(x=T\) and \(y=F\) gives
+\[
+	x(\lambda ab.yba)(\lambda ab.a)
+	=T(\lambda ab.Fab)(\lambda ab.a)
+	=\lambda ab.Fab
+	=\lambda ab.a
+\]
+meaning that for all the posibilities of
+\[
+	xyx(xy(\lambda ab.b))(x(\lambda ab.yba)(\lambda ab.a))
+	=x(\lambda ab.yba)(\lambda ab.a)
+\]
+also
+\[x(\lambda ab.yba)(\lambda ab.a)\equiv\lambda ab.a\]
+meaning
+\[
+	\lambda xy.xyx(xy(\lambda ab.b))(x(\lambda ab.yba)(\lambda ab.a))
+	\equiv\lambda xy.xyx(xy(\lambda ab.b))(\lambda ab.a)
+\]
+
+We can apply the same reasoning to prove that equations \ref{exteq3} and
+\ref{exteq4} are extensionally equal. We know \(xyx\) picks between
+\(xy(\lambda ab.a)\) and \(\lambda ab.a\). For \(xyx\) to pick the first,
+\(xyx\) must equal \(T\), which is only possible if both \(x=T\) and \(y=T\).
+Which gives
+\[xy(\lambda ab.a)=TT(\lambda ab.a)=T=\lambda ab.a\]
+
+The last step should be quite self-explainatory; \(xyx\) can only select
+between \(\lambda ab.a\) and \(\lambda ab.a\).
 
 \subsection{Church encodings}
 
