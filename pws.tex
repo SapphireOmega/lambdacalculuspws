@@ -262,8 +262,8 @@ rediscovered by \textcite{curry1930}. Combinators are just symbols, in this
 case letters, that perform operations on symbols that succeed it. We've
 actually looked at one of these combinators already.
 
-We will be using Curry's names of the combinators, since his names are most
-widely used.
+We will be using Curry's names for combinators, since his names are most widely
+used.
 
 \subsubsection{Identity}
 
@@ -274,7 +274,7 @@ calculus. Lambda calculus is really just 90\% combinatory logic, but without
 identifiers. This combinator may seem quite useless, but it is actually quite
 useful when composing combinators, which we'll come to soon.
 
-\subsubsection{The omega combinator}
+\subsubsection{The omega combinator}\label{omega}
 
 The next combinator we'll cover is \(M\). All it does is repeat its one
 argument twice. It can be defined in lambda calculus as follows:
@@ -383,13 +383,25 @@ first, the other selects the latter. Flipping their arguments make them select
 the opposite of what they normally would, so they select the argument that the
 other combinator usually would.
 
-\subsubsection{The bluebird}
+\subsubsection{The composition combinator}\label{composition}
 
 Our next combinator, \(B\), is defined as follows:
 \[B:=\lambda fga.f(ga)\]
+
 It applies a to b before applying f to the result. This combinator is used for
-function composition. We say that the resulting function of the application of
-B to two functions composes those two functions.
+function composition. This function applies \(g\) on \(a\) and applies \(f\) on
+that. We say that this function composes \(f\) with \(g\).
+
+In mathematics we usually write function composition as follows:
+\[f\circ g\]
+So
+\[(f\circ g)a=f(ga)\]
+
+In combinatory logic we write function composition as follows:
+\[Bfg\]
+which reduces to
+\[(\lambda fga.f(ga))fg=\lambda a.f(ga)\]
+in lambda calculus
 
 \subsubsection{The thrush}
 
@@ -420,32 +432,40 @@ other combinator using just \(S\) and \(K\).
 
 At the start of this section about combinatory logic, I said that
 \textcite{schonfinkel1924} invented combinatory logic as a way of removing the
-need for quantifiable variables. He started with propositional logic and
-stripped it down until there was a very pure and simple form of logic left. But
-how can we use this form of logic in the real world, if he even removes things
-like propositions? You already know that it is Turing complete, so it must be
-able to do any computation, but I haven't explain how yet. But we can use
-combinatory logic in the real world already.
+need for quantified variables. He started with propositional logic and stripped
+it down until there was a very pure and simple form of logic left. But how can
+we use this form of logic in the real world, if he even removes things like
+propositions? You already know that it is Turing complete, so it must be able
+to do any computation, but I haven't explain how yet (see section
+\ref{computation}). But we can use combinatory logic in the real world already.
 
 You may have noticed some of the previous subsections have birdnames as titles.
 This is because they are the names given to the combinators, discussed in the
-respective subsections, by an author named \textcite{smullyan2000}. He is a
-mathematician who likes to write puzzle books. His book \emph{To Mock a
-Mockingbird} \parencite{smullyan2000} is practically a large metaphor for
-combinatory logic. There are some unrelated puzzles in the beginning of the
-book, but the rest is about a big forest with birds. The birds represent the
-combinators. The beginletters of the birdnames are the names of the
-combinators. The way the birds interact reflects the way the combinators
-interact. The reason he chose birds for his metaphor is because Curry was an
-avid bird watcher. If you feel like you still don't understand the notation of
-combinatory logic completely, I would recommend you give this book a read,
-because it explains it very simply and clearly
+respective subsections, by an author named Smullyan. He is a mathematician who
+likes to write puzzle books. His book \emph{To Mock a Mockingbird}
+\parencite{smullyan2000} is practically a large metaphor for combinatory logic.
+There are some unrelated puzzles in the beginning of the book, but the rest is
+about a big forest with birds. The birds represent the combinators. The
+beginletters of the birdnames are the names of the combinators. The way the
+birds interact reflects the way the combinators interact. The reason he chose
+birds for his metaphor is that Curry was an avid bird watcher. If you feel like
+you still don't understand the notation of combinatory logic completely, I
+would recommend you give this book a read, because it explains it very simply
+and clearly.
+
+In Smullyan's world, there is a forest with birds. These birds represent
+combinators. If you call out a birdname to a bird, it will give you the name of
+another bird. If you give a bird a birdname of a bird that is present, it will
+give you back a name of a bird that is present. Calling out birdnames to birds
+represents application.
 
 I think it would be fun if we had a look at one of the puzzles to see if we can
 solve it using our newfound knowledge of combinatory logic. I think the first
-puzzle is sufficiently interesting. So far, \textcite{smullyan2000} has only
-introduced the mockingbird and the idea of function composition, but not yet
-the bluebird. I have taken the puzzle directly from the book:
+puzzle is sufficiently interesting. So far, Smullyan has only introduced the
+mockingbird, which is the omega operator (section \ref{omega}), and the idea of
+function composition, but not yet the bluebird, which is the composition
+operator (section \ref{composition}). I have taken the puzzle directly from the
+book:
 
 \setlength{\leftskip}{1cm}
 \setlength{\rightskip}{1cm}
@@ -499,21 +519,31 @@ false.
 The answer \textcite{smullyan2000} gives is a bit more verbose, but it comes
 down to the same thing.
 
-\section{Using lambda calculus for computation}
+\section{Using lambda calculus for computation}\label{computation}
 
 Now that we've gone throught lambda calculus and combinatory logic, it is
 finally time to get to the good parts. I hope the way here wasn't too boring or
 difficult. We will now look at how to use lambda calculus for computation.
 
-\subsection{Boolean logic}
+\subsection{Church encoding}
 
-Let's look at a simple form of computation before jumping into numbers and
-stuff. Let's start with binary logic. In it's simplest form, binary logic is
-really just control flow: \emph{if A then B else C} (\(A\:?\:B\::\:C\)). We
-want to have some condition that chooses between two expressions. We know how
-to do that already (see section \ref{combinatorylogic}). \(K\) choses the first
-of two expressions and \(KI\) the latter. We can define true to be \(K\) and
-false to be \(KI\):
+To do computation with lambda calculus, we need to be able to do a few things
+such as boolean logic and arithmetic. Lambda calculus itself doesn't have these
+things built in to it, but we can define things such as boolean logic and
+arithmetic in lambda calculus. In the \ref{history} section, I talked about how
+mathematicions were defining everything in maths. We can build of of their work
+and see how we can implement their definitions in lambda calculus. This is
+exactly what Church did.
+
+\subsubsection{Church booleans}
+
+Let's look at a simple form of computation before jumping into arithmetic.
+We'll start with binary logic. In it's simplest form, binary logic is really
+just control flow: \emph{if A then B else C} (\(A\:?\:B\::\:C\)). We want to
+have some condition that chooses between two expressions. We know how to do
+that already (see section \ref{combinatorylogic}). \(K\) choses the first of
+two expressions and \(KI\) the latter. We can define true to be \(K\) and false
+to be \(KI\):
 
 \[T:=K=\lambda ab.a\]
 \[F:=KI=\lambda ab.b\]
@@ -602,8 +632,58 @@ write out \(NOT\) without using lambda calculus):
 		(xFT\:(xFT)\:(yFT)\:FT)
 \end{align*}
 
-If you were to write this in pure lambda calculus (using \(NOT:=C\), because it
-is simpeler to write out), you would get the following:
+%todo ref de morges law
+
+If we've done this correctly, then according to \emph{De Morgan's Law}, we
+should always get \(T\) for any substitution of \(x\) and \(y\) for \(T\) and
+\(F\) in this final expression.
+
+\(x=F\) and \(y=F\) gives us:
+\begin{align*}
+	&\enspace FFFFT\enspace
+		(FFT\:(FFT)\:(FFT))\enspace
+		(FFT\:(FFT)\:(FFT)\:FT)\\
+	=&\enspace FFT\enspace(TTT)\enspace(TTTFT)\\
+	=&\enspace TT\enspace(TFT)\\
+	=&\enspace TTF\\
+	=&\enspace T
+\end{align*}
+
+\(x=F\) and \(y=T\) gives us:
+\begin{align*}
+	&\enspace FTFFT\enspace
+		(FFT\:(FFT)\:(TFT))\enspace
+		(FFT\:(FFT)\:(TFT)\:FT)\\
+	=&\enspace FFT\enspace(TTF)\enspace(TTFFT)\\
+	=&\enspace TT\enspace(TFT)\\
+	=&\enspace TTF\\
+	=&\enspace T
+\end{align*}
+
+\(x=T\) and \(y=F\) gives us:
+\begin{align*}
+	&\enspace TFTFT\enspace
+		(TFT\:(TFT)\:(FFT))\enspace
+		(TFT\:(TFT)\:(FFT)\:FT)\\
+	=&\enspace FFT\enspace(FFT)\enspace(FFTFT)\\
+	=&\enspace TT\enspace(TFT)\\
+	=&\enspace TTF\\
+	=&\enspace T\\
+\end{align*}
+
+\(x=T\) and \(y=T\) gives us:
+\begin{align*}
+	&\enspace TTTFT\enspace
+		(TFT\:(TFT)\:(TFT))\enspace
+		(TFT\:(TFT)\:(TFT)\:FT)\\
+	=&\enspace TFT\enspace(FFF)\enspace(FFFFT)\\
+	=&\enspace FF\enspace(FFT)\\
+	=&\enspace FFT\\
+	=&\enspace T
+\end{align*}
+
+We can also try to solve this expression in lambda calculus (using the
+shorthand notation and using \(NOT:=C\), because it is easier to write out):
 \small
 \begin{align}
 	&\enspace\lambda xy.
@@ -675,7 +755,7 @@ therefore
 Expressions \ref{exteq2} and \ref{exteq3} are also extensionally equal, because
 \(xyx\) selects between the expressions \(xy(\lambda ab.b)\) and \(x(\lambda
 ab.yba)(\lambda ab.a)\). The expression \(x(\lambda ab.yba)(\lambda ab.a)\)
-only gets selected if \(xyx=F\). There are two ways for \(xyx=F\) being true;
+only gets selected if \(xyx=F\). There are two ways for \(xyx=F\) to be true;
 either \(x=F\), or both \(x=T\) and \(y=F\). \(x=F\) gives
 \[x(\lambda ab.yba)(\lambda ab.a)=F(\lambda ab.yba)(\lambda ab.a)=\lambda ab.a\]
 and \(x=T\) and \(y=F\) gives
@@ -708,11 +788,104 @@ Which gives
 The last step should be quite self-explainatory; \(xyx\) can only select
 between \(\lambda ab.a\) and \(\lambda ab.a\).
 
-\subsection{Church encodings}
+\subsubsection{Church numerals}
+
+Now that we've covered boolean logic, it is finally time to move on to
+arithmetic. Remember that in section \ref{history}, I said that
+\textcite{peano1889} defined natural numbers? He basically defined zero and
+then defined every number as a successor of the previous number, starting from
+zero. He also defined the properties of natural numbers.
+
+We can do exactly the same in lambda calculus. The key concept is function
+composition (section \ref{composition}).
+
+We'll define functions that compose a given function \(f\), \(n\) times with
+themselves, where \(n\) is the natural number the function is supposed to
+represent. Thus we'll say:
+\begin{align*}
+	N0&:=\lambda fa.a\\
+	N1&:=\lambda fa.fa\\
+	N2&:=\lambda fa.f(fa)\\
+	N3&:=\lambda fa.f(f(fa))
+\end{align*}
+and so on, or in a more standard mathematical notation:
+\begin{align*}
+	0f&:=0\\
+	1f&:=f\\
+	2f&:=f\circ f\\
+	3f&:=f\circ f\circ f
+\end{align*}
+
+We can't define an infinite number of functions by hand, so we'll use this
+shorthand definition:
+\[n:=\lambda fa.f^{\circ n}a\]
+meaning: applying a number \(n\) to a function \(f\) is the same as composing
+\(f\) with \(f\), \(n\) times.
+
+We can use this in an example. Let's say we wanted to do a negation multiple
+times. We can use our newly defined numbers:
+\begin{align*}
+	N0\enspace NOT\enspace T &= T\\
+	N1\enspace NOT\enspace T &= NOT\enspace T = F\\
+	N2\enspace NOT\enspace T &= NOT\enspace (NOT\enspace T) = T\\
+	N3\enspace NOT\enspace T &= NOT\enspace (NOT\enspace (NOT\enspace T))=F
+\end{align*}
+
+What happens when we compose \(N3\) with \(N3\)? We know we can do composition
+with the \(B\) combinator (section \ref{composition}).
+\begin{align*}
+	&\enspace B\enspace N3\enspace N3\\
+	=&\enspace(\lambda fgh.f(gh))\:N3\enspace N3\\
+	=&\enspace\lambda h.N3\:(N3\enspace h)\\
+	=&\enspace\lambda h.N3\:((\lambda fb.f(f(fb))h))\\
+	=&\enspace\lambda h.N3\:(\lambda b.h(h(hb)))\\
+	=&\enspace\lambda h.(\lambda fa.f(f(fa)))(\lambda b.h(h(hb)))\\
+	=&\enspace\lambda h.\lambda a.
+		(\lambda b.h(h(hb)))((\lambda b.h(h(hb)))((\lambda b.h(h(hb)))a))\\
+	=&\enspace\lambda ha.(\lambda b.h(h(hb)))((\lambda b.h(h(hb)))(h(h(ha))))\\
+	=&\enspace\lambda ha.(\lambda b.h(h(hb)))(h(h(h(h(h(ha))))))\\
+	=&\enspace\lambda ha.h(h(h(h(h(h(h(h(ha))))))))\\
+	=&\enspace N9
+\end{align*}
+We can tell that composition with natural numbers is the same as
+multiplication, thus we can say:
+\[MULT:=B=\lambda fga.f(ga)\]
+
+What happens when we apply \(N3\) to \(N3\)? We get the following:
+\begin{align*}
+	&N3\enspace N3\\
+	=\enspace&\lambda fa.f(f(fa))\:N3\\
+	=\enspace&\lambda a.N3(N3(N3\enspace a))\\
+	=\enspace&\lambda a.N3(N9\enspace a))\\
+	=\enspace&\lambda a.N27\enspace a\\
+	\equiv\enspace&N27
+\end{align*}
+so we can say:
+\begin{align*}
+	&3\enspace3\\
+	=\enspace&3\circ3\circ3\\
+	=\enspace&27
+\end{align*}
+so application of natural numbers is the same exponentiation.
+
+How do we do addition? Let's start with adding one---in other words, finding
+the successor. All we need to do is compose the function once more. We could
+define the \(SUCC\) function as follows:
+\[SUCC:=\lambda nfa.f(nfa)\]
+
+If we now try to find the successor of \(N3\), we get:
+\begin{align*}
+	&SUCC\enspace N3\\
+	=\enspace&(\lambda nfa.f(nfa))\:N3\\
+	=\enspace&\lambda fa.f(N3\enspace fa)\\
+	=\enspace&\lambda fa.f((\lambda hb.h(h(hb)))fa)\\
+	=\enspace&\lambda fa.f(f(f(fa)))\\
+	=\enspace&N4
+\end{align*}
+
+\subsubsection{Data structures}
 
 \subsection{Recursion}
-
-\subsection{Data structures}
 
 \section{Functional programming (lambda calculus applied)}
 
