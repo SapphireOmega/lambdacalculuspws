@@ -203,12 +203,13 @@ functions? What are \(a\) and \(x\) supposed to represent? If there is no
 concept of value, how do we even use this meaningfully? Well, the key is this:
 a function can return any expression (remember?), which is always a
 function\footnote{Everything is.}, not just a single symbol. We can start
-composing these simple functions into more complex functions. Let's say that we
-wanted to have a function that takes two arguments, and then applies the first
-argument to the second one. You are probably asking yourself a few questions.
-For example, what does it mean for one argument to be applied to another? Well,
-as I said, everything is a function. But the biggest question you are probably
-asking yourself is: how can you have a function that takes two arguments?
+combinating these simple functions into more complex functions. Let's say that
+we wanted to have a function that takes two arguments, and then applies the
+first argument to the second one. You are probably asking yourself a few
+questions. For example, what does it mean for one argument to be applied to
+another? Well, as I said, everything is a function. But the biggest question
+you are probably asking yourself is: how can you have a function that takes two
+arguments?
 
 We actually can't, but what we can do is to have a function that takes one
 argument and returns another function that takes one argument. We can define
@@ -403,12 +404,17 @@ which reduces to
 \[(\lambda fga.f(ga))fg=\lambda a.f(ga)\]
 in lambda calculus
 
-\subsubsection{The thrush}
+There is something noteworthy about function composition: function composition
+works from right to left. When you compose functions, the rightmost function
+get's called first, instead of the leftmost function, which you can easily tell
+just by looking at the definition of \(B\).
+
+\subsubsection{The thrush}\label{thrush}
 
 Our next combinator is \(Th\). It is defined as follows:
 \[Th:=\lambda af.fa\]
 It swaps around two functions.
-% todo stuff
+% todo CI and POW and data storage
 
 \subsubsection{The starling}
 
@@ -801,26 +807,37 @@ composition (section \ref{composition}).
 
 We'll define functions that compose a given function \(f\), \(n\) times with
 themselves, where \(n\) is the natural number the function is supposed to
-represent. Thus we'll say:
+represent. Thus we'll say
 \begin{align*}
 	N0&:=\lambda fa.a\\
 	N1&:=\lambda fa.fa\\
 	N2&:=\lambda fa.f(fa)\\
-	N3&:=\lambda fa.f(f(fa))
+	N3&:=\lambda fa.f(f(fa))\\
+	N4&:=\lambda fa.f(f(f(fa)))
 \end{align*}
-and so on, or in a more standard mathematical notation:
+and so on, or in a more standard mathematical notation
 \begin{align*}
 	0f&:=0\\
 	1f&:=f\\
 	2f&:=f\circ f\\
-	3f&:=f\circ f\circ f
+	3f&:=f\circ f\circ f\\
+	4f&:=f\circ f\circ f\circ f
+\end{align*}
+You can also say
+\begin{align*}
+	N0:=&\:F\\
+	N1:=&\:\lambda f.f=I\\
+	N2:=&\:\lambda f.Bff\\
+	N3:=&\:\lambda f.B(Bff)f\\
+	N4:=&\:\lambda f.B(B(Bff)f)f\\
 \end{align*}
 
 We can't define an infinite number of functions by hand, so we'll use this
 shorthand definition:
 \[n:=\lambda fa.f^{\circ n}a\]
 meaning: applying a number \(n\) to a function \(f\) is the same as composing
-\(f\) with \(f\), \(n\) times.
+\(f\) with \(f\), \(n\) times. This is meaningful, because it allows us to do
+something a given number of times.
 
 We can use this in an example. Let's say we wanted to do a negation multiple
 times. We can use our newly defined numbers:
@@ -831,8 +848,10 @@ times. We can use our newly defined numbers:
 	N3\enspace NOT\enspace T &= NOT\enspace (NOT\enspace (NOT\enspace T))=F
 \end{align*}
 
-What happens when we compose \(N3\) with \(N3\)? We know we can do composition
-with the \(B\) combinator (section \ref{composition}).
+Numbers are just function composition. Function composition, and thus the \(B\)
+combinator (section \ref{composition}), is fundamental to all arithmetic in
+lambda calculus. What happens when we compose two numbers, say \(N3\) with
+\(N3\)?
 \begin{align*}
 	&\enspace B\enspace N3\enspace N3\\
 	=&\enspace(\lambda fgh.f(gh))\:N3\enspace N3\\
@@ -847,33 +866,78 @@ with the \(B\) combinator (section \ref{composition}).
 	=&\enspace\lambda ha.h(h(h(h(h(h(h(h(ha))))))))\\
 	=&\enspace N9
 \end{align*}
+
+%todo ref composition associativity
+
 We can tell that composition with natural numbers is the same as
-multiplication, thus we can say:
-\[MULT:=B=\lambda fga.f(ga)\]
+multiplication, which makes a lot of sense, because function composition is
+associative. The ninefold composition of \(f\) is the same as the threefold
+composition of the threefold composition of \(f\):
+\[
+	f\circ f\circ f\circ f\circ f\circ f\circ f\circ f\circ f
+	= (f\circ f\circ f) \circ (f\circ f\circ f) \circ (f\circ f\circ f) 
+\]
 
-What happens when we apply \(N3\) to \(N3\)? We get the following:
+We know that if we were to define a \(MULT\) combinator, the following should
+be true:
+\[
+	MULT\enspace N3\enspace N3\enspace f\enspace a
+		=(f\circ f\circ f\circ f\circ f\circ f\circ f\circ f\circ f)a
+\]
+and in extension
 \begin{align*}
-	&N3\enspace N3\\
-	=\enspace&\lambda fa.f(f(fa))\:N3\\
-	=\enspace&\lambda a.N3(N3(N3\enspace a))\\
-	=\enspace&\lambda a.N3(N9\enspace a))\\
-	=\enspace&\lambda a.N27\enspace a\\
-	\equiv\enspace&N27
+	MULT\enspace N3\enspace N3\enspace f\enspace a
+		&=((f\circ f\circ f)\circ(f\circ f\circ f)\circ(f\circ f\circ f))\:a\\
+		&=((N3\enspace f)\circ (N3\enspace f)\circ (N3\enspace f))\:a\\
+		&=N3\:(N3\enspace f)\:a\\
+	MULT\enspace N3\enspace N3\enspace f\enspace
+		&=N3\:(N3\enspace f)\\
+		&=B\enspace N3\enspace N3\enspace f\\
+	MULT&=B
 \end{align*}
-so we can say:
-\begin{align*}
-	&3\enspace3\\
-	=\enspace&3\circ3\circ3\\
-	=\enspace&27
-\end{align*}
-so application of natural numbers is the same exponentiation.
+thus we can say
+\[MULT:=B=\lambda nkf.n(kf)\]
 
-How do we do addition? Let's start with adding one---in other words, finding
+What happens when we apply \(N3\) to \(N2\)? We get the following:
+\begin{align*}
+	&N3\enspace N2\\
+	=\enspace&\lambda fa.f(f(fa))\:N2\\
+	=\enspace&\lambda a.N2(N2(N2\enspace a))\\
+	=\enspace&\lambda a.N2(N4\enspace a))\\
+	=\enspace&\lambda a.N8\enspace a\\
+	\equiv\enspace&N8
+\end{align*}
+in other "words"
+\begin{align*}
+	&3\enspace2\\
+	=\enspace&2\circ2\circ2\\
+	=\enspace&8
+\end{align*}
+so application of natural numbers is the same exponentiation, but the numbers
+are reversed. Thus, we can say:
+\[POW:=\lambda nk.kn\]
+which is just our \(Th\) combinator (section \ref{thrush}).
+\[POW:=Th\]
+
+How do we do addition? Let's start with adding one---in other words---finding
 the successor. All we need to do is compose the function once more. We could
 define the \(SUCC\) function as follows:
 \[SUCC:=\lambda nfa.f(nfa)\]
+Alternatively:
+\[SUCC:=\lambda nf.Bf(nf)\]
+which some find prettier, because it makes it clear that we're doing function
+composition, but it also takes a bit longer to compute, because the second
+definition reduces down to the first:
+\begin{align*}
+	&\lambda nf.Bf(nf)\\
+	=\enspace&\lambda nf.(\lambda gha.g(ha))f(nf)\\
+	=\enspace&\lambda nf.\lambda a.f((nf)a)\\
+	=\enspace&\lambda nfa.f(nfa)
+\end{align*}
+so if you use the second, you need to perform that reduction every time you
+invoke it.
 
-If we now try to find the successor of \(N3\), we get:
+If we now try to find the successor of \(N3\), we get
 \begin{align*}
 	&SUCC\enspace N3\\
 	=\enspace&(\lambda nfa.f(nfa))\:N3\\
@@ -882,6 +946,45 @@ If we now try to find the successor of \(N3\), we get:
 	=\enspace&\lambda fa.f(f(f(fa)))\\
 	=\enspace&N4
 \end{align*}
+or
+\begin{align*}
+	&SUCC\enspace N3\\
+	=\enspace&(\lambda nf.Bf(nf))\:N3\\
+	=\enspace&\lambda f.Bf(N3\enspace f)\\
+	=\enspace&\lambda f.Bf((\lambda ha.h(h(ha)))f)\\
+	=\enspace&\lambda f.Bf(\lambda a.f(f(fa)))\\
+	=\enspace&\lambda f.Bf(\lambda a.f(f(fa)))\\
+	=\enspace&\lambda f.(\lambda ghb.g(hb))f(\lambda a.f(f(fa)))\\
+	=\enspace&\lambda f.(\lambda b.f((\lambda a.f(f(fa)))b))\\
+	=\enspace&\lambda f.\lambda b.f(f(f(fb)))\\
+	=\enspace&\lambda fa.f(f(f(fa)))\\
+	=\enspace&N4
+\end{align*}
+
+To add two numbers, we can now just call this successor function multiple
+times. Say we wanted to add three to four. We can call the successor function
+three times on four:
+\begin{align*}
+	&N3\enspace SUCC\enspace N4\\
+	=\enspace&SUCC\:(SUCC\:(SUCC\enspace N4))\\
+	=\enspace&SUCC\:(SUCC\enspace N5)\\
+	=\enspace&SUCC\enspace N6\\
+	=\enspace&N7
+\end{align*}
+Thus we can say
+\[ADD:=\lambda nk.(n\enspace SUCC\enspace k)\]
+\(SUCC\) is really just an infix \(ADD\).
+
+We could also say that if we want to add two numbers \(n\) and \(k\), we can
+compose a function \(n\) times and \(k\) times and compose the results to get a
+(\(n+k\))-fold composition of the function. In lambda calculus:
+\[ADD:=\lambda nkf.B(nf)(kf)\]
+or
+\[ADD:=\lambda nkfa.(nf)(kfa)\]
+which looks a lot like our \(SUCC\) function, just with an extra argument to
+decide the number of times to compose the function, and it's prefix instead of
+infix. In a more mathematical notation, you can say
+\[ADD\enspace n\enspace k\enspace f := f^{\circ n}\circ f^{\circ k}\]
 
 \subsubsection{Data structures}
 
