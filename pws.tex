@@ -26,14 +26,14 @@ five to six years now. I mainly enjoy low-level programming, so---naturally---C
 is my most used language and I am most familiar with a simple procedural
 paradigm. Such a paradigm is, however, not always very easy to use when working
 with very large and complex systems. I, as many, started out with
-object-oriented programming, but I did not like that very much. Therefore, I
-have been exploring alternative paradigms, including data-oriented programming
-and functional programming. I am quite familiar with data-oriented programming
-and the Rust programming language by now, but functional programming isn't
-something I've ever really got into yet. I did find out about lambda calculus
-and combinatory logic, which intrigued me, but I haven’t got into it beyond a
-basic level of understanding. That is why I decided to research it for this
-work. 
+object-oriented programming (OOP), but I did not like that very much.
+Therefore, I have been exploring alternative paradigms, including data-oriented
+programming and functional programming. I am quite familiar with data-oriented
+programming and the Rust programming language by now, but functional
+programming isn't something I've ever really got into yet. I did find out about
+lambda calculus and combinatory logic, which intrigued me, but I haven’t got
+into it beyond a basic level of understanding. That is why I decided to
+research it for this work. 
 
 \newpage
 
@@ -307,7 +307,7 @@ eachother, sometimes because they preferred a different name, sometimes because
 scientists like to give them pet names \footnote{I have a theory they are just
 trying to throw us off}.
 
-\subsubsection{The constant combinator}
+\subsubsection{The constant combinator}\label{constant}
 
 The next combinator we'll cover is \(K\). It is a combinator that takes two
 arguments and returns the first. We can easily define it in lambda calculus as
@@ -411,8 +411,8 @@ just by looking at the definition of \(B\).
 
 \subsubsection{The thrush}\label{thrush}
 
-Our next combinator is \(Th\). It is defined as follows:
-\[Th:=\lambda af.fa\]
+Our next combinator is \(T_{h}\). It is defined as follows:
+\[T_{h}:=\lambda af.fa\]
 It swaps around two functions.
 % todo CI and POW and data storage
 
@@ -536,8 +536,8 @@ difficult. We will now look at how to use lambda calculus for computation.
 To do computation with lambda calculus, we need to be able to do a few things
 such as boolean logic and arithmetic. Lambda calculus itself doesn't have these
 things built in to it, but we can define things such as boolean logic and
-arithmetic in lambda calculus. In the \ref{history} section, I talked about how
-mathematicions were defining everything in maths. We can build of of their work
+arithmetic in lambda calculus. In section \ref{history}, I talked about how
+mathematicians were defining everything in maths. We can build of of their work
 and see how we can implement their definitions in lambda calculus. This is
 exactly what Church did.
 
@@ -916,8 +916,8 @@ in other "words"
 so application of natural numbers is the same exponentiation, but the numbers
 are reversed. Thus, we can say:
 \[POW:=\lambda nk.kn\]
-which is just our \(Th\) combinator (section \ref{thrush}).
-\[POW:=Th\]
+which is just our \(T_{h}\) combinator (section \ref{thrush}).
+\[POW:=T_{h}\]
 
 How do we do addition? Let's start with adding one---in other words---finding
 the successor. All we need to do is compose the function once more. We could
@@ -986,9 +986,55 @@ decide the number of times to compose the function, and it's prefix instead of
 infix. In a more mathematical notation, you can say
 \[ADD\enspace n\enspace k\enspace f := f^{\circ n}\circ f^{\circ k}\]
 
+\subsubsection{Merging of boolean operations and arithmetic}
+
+The C programming language has only added booleans in the C99 standard. In C,
+booleans are really just integers. All boolean expressions are really just
+arithmetic. In C, \(false\) is synonymous with \(0\) and every nonzero number
+means \(true\). In lambda calculus, this is the same. Our definition of \(N0\)
+is exactly the same as our definition of \(F\). In this section, we're going to
+talk about functions that are both useful in arithmetic and boolean logic,
+which are really just the same.
+
+I want to define a function that takes a church numeral and returns \(T\) if
+it's \(N0\) or \(F\) if it's not. I will call this function \(ISZERO\). To do
+this, we need to remember what a church numeral really is; it's a function that
+takes a function and an argument and applies that function a given number of
+times to that argument. The unique thing about \(N0\) is that it applies that
+given function zero times to the given argument, meaning it just returns the
+argument. That means that if we give \(T\) as the second argument, \(N0\) will
+return \(T\). So far, we have this:
+\[ISZERO:=\lambda n.n...T\]
+We still need to fill in the dots. If \(n\) isn't \(N0\), whatever is on the
+dots will be applied to \(T\) \(n\) times. We want this to always return \(F\).
+We know a function that can do this: the constant function (section
+\ref{constant}). Thus, we get:
+\[ISZERO:=\lambda n.n(KF)T\]
+Here is an example for if it is not yet clear to you why we use the constant
+combinator:
+\[ISZERO\enspace N3=(\lambda n.n(KF)T)N3=N3(KF)T=K\enspace F\enspace (KF(KF\enspace T))=F\]
+
+We've covered addition, multiplication and exponentiation, which were quite
+simple, but what about subtraction, division and finding the square root? Well,
+in contrast to the operations we've covered, these are actually quite complex.
+We'll quickly look at subtraction, but it gets very complicated very quickly,
+and it's really out of the scope of this text to cover all of arithmetic in
+lambda calculus. I just wanted to show that it's possible and that lambda
+calculus is turing complete.
+
+Just like we defined a successor function before defining addition, we'll
+define a predecessor function first. The predecessor function can be defined
+as:
+\[PRED:=\lambda n.n\;(\lambda g.ISZERO\;(g\enspace N1)\;I\;(B\enspace SUCC\enspace g))\;(K\enspace N0)\;N0\]
+This is quite a bit to digest.
+
 \subsubsection{Data structures}
 
+Pairs and linked lists.
+
 \subsection{Recursion}
+
+Loops, y-combinator.
 
 \section{Functional programming (lambda calculus applied)}
 
