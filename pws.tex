@@ -987,7 +987,29 @@ decide the number of times to compose the function, and it's prefix instead of
 infix. In a more mathematical notation, you can say
 \[ADD\enspace n\enspace k\enspace f := f^{\circ n}\circ f^{\circ k}\]
 
-\subsubsection{Merging of boolean operations and arithmetic}
+\subsubsection{Data structures}
+
+A fundamental concept in programming is that of data structures. Data
+structures are ways of storing data together. There are different data
+structures, which are sort of like different data "layouts". You could argue
+that one combinator we've looked at, the thrush (section \ref{thrush}), is
+basically a data structure already; it takes an argument and holds on to it
+until you give it a function to apply to it. Although this isn't really a data
+structure yet; it only stores one thing. We can turn it into a data structure
+by "upgrading" it; let's give it another argument.
+\[V:=\lambda abf.fab\]
+We have basically defined something that is known as a (Church) pair. It holds
+on to two things. We could put two values into it:
+\[Vxy=\lambda f.fxy\]
+If we want to look at the first value, we can input \(K\):
+\[(\lambda f.fxy)\enspace K=Kxy=x\]
+If we want to look at the second value, we can input \(KI\):
+\[(\lambda f.fxy)\enspace KI=KIxy=y\]
+Thus, we could define the following functions:
+\[FST:=\lambda n.nK=\lambda ab.a\]
+\[SND:=KI=\lambda ab.b\]
+
+\subsubsection{Church arithmetic continuation}
 
 The C programming language has only added booleans in the C99 standard. In C,
 booleans are really just integers. All boolean expressions are really just
@@ -1024,14 +1046,18 @@ lambda calculus. I just wanted to show that it's possible and that lambda
 calculus is turing complete.
 
 Just like we defined a successor function before defining addition, we'll
-define a predecessor function first. The predecessor function can be defined
-as:
+define a predecessor function first. I'll give you the definition first, just
+to show what we're working towards. The predecessor function can be defined as:
 \[PRED:=\lambda n.n\;(\lambda g.ISZERO\;(g\enspace N1)\;I\;(B\enspace SUCC\enspace g))\;(K\enspace N0)\;N0\]
-This is quite a bit to digest.
+This is quite a bit to digest. Let's start from the beginning.
 
-\subsubsection{Data structures}
+The reason subtraction is so much harder than addition, is that applying a
+function once more is very easy, but removing an application is hard. The trick
+is this: you don't remove an application, you reapply all the functions from
+the start, until you get to the number you want the predecessor of. In other
+words, you reapply all the functions, except for the last.
 
-Pairs and linked lists.
+% todo subtraction
 
 \subsection{Recursion}
 
@@ -1049,15 +1075,32 @@ Loops, y-combinator.
 
 \subsection{Monads}
 
-\subsection{Haskell}
+\subsection{Haskell}\label{haskell}
 
-\subsection{Comparison to with other paradigms}
+\subsection{Comparison to with other paradigms}\label{comparison}
 
 \subsubsection{Declarative vs imperative}
 
 \subsubsection{Usefulness vs conceptual purity}
 
-\subsubsection{Meta programming}
+\subsubsection{Meta programming}\label{metaprogramming}
+
+\section{A practical example}
+
+Section \ref{comparison} compares functional programming with other paradigms.
+I thought it would be interesting to do a practical example. In section
+\ref{metaprogramming}, I talked about the Lisp programming language family, in
+particular Scheme. It isn't all to hard to implement a Lisp-like language, but
+implementing a programming language is very conceptual. Programming languages
+have many concepts that are more easily expressed in a declarative/functional
+language like Haskell, rather than a procedural/imperative language like C.
+This section is really a practical continuation of section \ref{comparison}, so
+I recommend you read it before you read this. This section tries to paint a
+picture of what is said in section \ref{comparison}.
+
+\subsection{Scheme interpreter in C}
+
+\subsection{Scheme interpreter in Haskell}
 
 \section{Functional programming in other paradigms}
 
@@ -1065,11 +1108,16 @@ Loops, y-combinator.
 
 \subsection{Iterators}
 
+\subsection{A look at Rust, C\# and modern C++ standards}
+
 \section{Possibilities for the future}
 
 \subsection{Conceptual \emph{and} useful}
 
+\subsection{Programming language trends}
+
 \section*{Afterword}
+
 \addcontentsline{toc}{section}{Afterword}
 
 \newpage
