@@ -35,6 +35,39 @@ lambda calculus and combinatory logic, which intrigued me, but I haven’t got
 into it beyond a basic level of understanding. That is why I decided to
 research it for this work. 
 
+I have some things to note on the structure and style of this work. Firstly,
+the structure. The work starts with some introductory information about lambda
+calculus and its history. It goes on to explain the simple syntax of lambda
+calculus and how it can be used. The next section goes into lambda calculus
+in-depth. It really shows how lambda calculus is used as a Turing complete
+mathematical system. The section after that explains functional programming. It
+shows how lambda calculus can be turned into a programming language, and
+explains why it is useful by comparing it to other paradigms, namely procedural
+imperative programming (what that means isn't really of importance right now).
+The final few sections are smaller; they really just meant to illustrate what
+is said in the preceding sections.
+
+Secondly, every reference will be denoted with a number in braces which
+corresponds with a work found in the back on the references page. Many of my
+sources, however, aren't on there, because I didn't directly refer to them.
+Those sources will be displayed on the page after the references, the
+bibliography (as of now, I haven't yet compiled those sources and created that
+page).
+
+As for the style in which I explain lambda calculus, I may differ in it from
+how other literature usually approaches the topic. Lambda calculus is often
+used in a mathematical context, so people often write in a very mathematical
+style. People don't usually write pure lambda calculus, they borrow a lot of
+symbols from other mathematical disciplines, such as logic. Nor do people
+define it in words, but also with mathematical symbols and definitions. I try
+to keep the use of these symbols to a minimum so as to lower the barrier to
+entry. Rather than using mathematical symbols and definitions, I use my words
+to explain the lambda calculus, thus this work is written in a more prose-like
+style, rather than a strictly mathematical one. I think that lambda calculus is
+simple enough that, when explained well, most people should be able to follow
+it. On a similar note, I think that the way this work is written, most people
+who are not familiar with mathematical literature should be able to follow it.
+
 \newpage
 
 \tableofcontents
@@ -77,12 +110,12 @@ The concept of mathematics and mathematical logic wasn't well defined, so
 people started to think about the formalisation of mathematical logic to try to
 solve these issues. People wanted a system that would encapsulate all of
 mathematical logic. Preferably this system would be simple, clean and
-intuïtive.
+intuitive.
 
 Throughout the late 19th and early 20th centuries, people started formally
 defining and redefining different aspects of mathematics. \textcite{frege1879}
 wrote about propositional calculus and functions as graphs, and in doing so
-reëvaluated the concept of functions and was already using concepts like
+re-evaluated the concept of functions and was already using concepts like
 Currying functions (more on this in section \ref{syntax}) without really giving
 thought to it. \textcite{peano1889} invented the Peano axioms and Peano
 arithmetic as a way of defining natural numbers. He was not the first to
@@ -98,12 +131,12 @@ did, however, run into a few problems, which arose from self-reference. To
 solve these problems that this paradoxical self-reference brought with it, they
 invented an elaborate system, the theory of types, to circumvent/eliminate it.
 It was a very carefully crafted bastion against self-reference ever coming up
-in their system, which was not very simple, clean or intuïtive.
+in their system, which was not very simple, clean or intuitive.
 
 People praised \emph{PM} as they thought they had finally done it; they had
 formalised all of mathematical logic, they had realised the dream of grounding
 all of mathematics in logic. But in Vienna, Gödel was sceptical of this book.
-He started seeing some cracks, he felt that there was something wrong aboout
+He started seeing some cracks, he felt that there was something wrong about
 this attempt. Gödel felt that self-reference was a fundamental part of
 mathematical logic. Then he went out and actually proved that there is no
 consistent system of axioms whose theorems can be listed by an effective
@@ -128,16 +161,16 @@ There was this problem that has a few different names. It is often known as the
 \emph{halting problem} or the \emph{Entscheidungsproblem}, which is German for
 \emph{decision problem}. The halting problem and decision problem aren't
 exactly synonyms, but they come down to the same thing. Basically, it asks
-wether it is possible to know via an algorithm wether a computation will
+whether it is possible to know via an algorithm whether a computation will
 complete execution or result in an infinite loop. In 1936,
 \textcite{turing1936, turing1937correction} spent a long time proving, using
 his Turing machines, that this isn't possible, but it didn't get published
 until early 1937. Also in 1936, \textcite{church1936} proved the same thing
-using lambda calculus and happended to publish it before Turing did. When
+using lambda calculus and happened to publish it before Turing did. When
 Turing finally got around to publishing his proof, he found out that he was
 beaten to it by Church. He wasn't to pleased. What is interesting, though, is
 that lambda calculus and Turing machines take two completely different
-approaches. Turing machines funtion entirely on state, while lambda calculus is
+approaches. Turing machines function entirely on state, while lambda calculus is
 completely stateless (we'll look at this later). Turing thought this was
 interesting too, so he researched lambda calculus and how it relates to his
 Turing machines, and proved that they are formally equivalent
@@ -158,7 +191,7 @@ useful system.
 \subsection{The syntax}\label{syntax}
 
 Lambda calculus is all about first-class higher-order pure
-(anonymous)\footnote{The core lambda calculus has no way of naming functions.}
+(anonymous\footnote{The core lambda calculus has no way of naming functions.})
 unary functions. Such a function takes a single input, and returns a single
 expression that is only dependent on the input, so it doesn't have any outside
 state. Such a function can take and return any expression, which in lambda
@@ -169,7 +202,7 @@ The lambda signifies a function. Everything following it will be part of that
 function's definition. The \(a\) before the \(.\) is the name of the argument.
 There is only one, because, as I said before, all functions in lambda calculus
 are unary. Everything following the \(.\) is part of the function body, which
-is the return expression. The funcion above is the identity function in lambda
+is the return expression. The function above is the identity function in lambda
 calculus; it just returns the input. This is the equivalent of multiplying by
 one, or defining a function like \(f(x)=x\), or multiplying a vector with the
 identity matrix; it does nothing.
@@ -193,7 +226,7 @@ simple. I have explained abstraction (functions), application (applying
 functions), and grouping (parentheses), which is basically all we need. You
 can also give names to expressions. We could name our identity function \(I\)
 as follows: \[I:=\lambda a.a\] But this isn't really part of the core lambda
-calculus anymore, just some syntactic sugar. This way, instead of constantly
+calculus any more, just some syntactic sugar. This way, instead of constantly
 having to write \(\lambda a.a\), we can just write \(I\). So instead of
 writing: \[(\lambda a.a)x=x\] We could use our previous definition of \(I\) and
 write: \[Ix=x\] We have now covered identifiers too.
@@ -204,13 +237,12 @@ functions? What are \(a\) and \(x\) supposed to represent? If there is no
 concept of value, how do we even use this meaningfully? Well, the key is this:
 a function can return any expression (remember?), which is always a
 function\footnote{Everything is.}, not just a single symbol. We can start
-combinating these simple functions into more complex functions. Let's say that
-we wanted to have a function that takes two arguments, and then applies the
-first argument to the second one. You are probably asking yourself a few
-questions. For example, what does it mean for one argument to be applied to
-another? Well, as I said, everything is a function. But the biggest question
-you are probably asking yourself is: how can you have a function that takes two
-arguments?
+combining these simple functions into more complex functions. Let's say that we
+wanted to have a function that takes two arguments, and then applies the first
+argument to the second one. You are probably asking yourself a few questions.
+For example, what does it mean for one argument to be applied to another? Well,
+as I said, everything is a function. But the biggest question you are probably
+asking yourself is: how can you have a function that takes two arguments?
 
 We actually can't, but what we can do is to have a function that takes one
 argument and returns another function that takes one argument. We can define
@@ -225,7 +257,7 @@ apply this function to a symbol like \(y\), we get this:
 Alternatively, we could write it all on one line:
 \[(\lambda a.\lambda b.ab)xy=(\lambda b.xb)y=xy\]
 \(xy\) in this case is what we would call the \emph{\(\beta\)-normal form} of
-the preceding expressions. That just means that it is in the simpelest form and
+the preceding expressions. That just means that it is in the simplest form and
 isn't able to be evaluated any further. Reducing a lambda expression to the
 \(\beta\)-normal form is called \emph{\(\beta\)-reduction}.
 
@@ -233,7 +265,7 @@ You can start to see how we can combine unary functions to create more complex
 functions\footnote{That's what makes them higher-order (and first-class).}. In
 this example we used two nested unary functions to get the same result you
 would with a binary function. Such a nested function is often called a
-\emph{Curry'd function}.
+\emph{Curried function}.
 You might think to yourself that having this many nested functions can be quite
 convoluted and not very readable, and you're quite right. That's why people
 often use a shorthand notation. They would basically write it as if it is a
@@ -241,7 +273,7 @@ single binary function (as with any n-ary function). They would write the
 example function above as:
 \[\lambda ab.ab\]
 Do keep in mind, that even though this looks and, for the most part, acts as if
-it is a single binary function, it really isn't. It still is a Curry'd function
+it is a single binary function, it really isn't. It still is a curried function
 that feeds in the arguments one by one, but this way the expression becomes
 more readable and easier to think about conceptually. We will use this notation
 from now on.
@@ -295,16 +327,16 @@ ad infinitum. Or in lambda calculus:
 
 This expression cannot be evaluated. We say that it doesn't have a
 \(\beta\)-normal form. In lambda calculus and combinatory logic not every
-expression is reducable. As we've seen in the second to last paragraph of
-section \ref{history}: there is no single algorithm to decide wether a lambda
+expression is reducible. As we've seen in the second to last paragraph of
+section \ref{history}: there is no single algorithm to decide whether a lambda
 expression has a \(\beta\)-normal form\footnote{This is not exactly what is
 written, but it means the same thing.}.
 
 \(M M\) is sometimes called the \(\Omega\) combinator. Omega, because it is the
 end of the Greek alphabet. The \(M\) combinator is sometimes called the
 \(\omega\) combinator because of this. Combinators often have many different
-names. Sometimes because scientists discovered them seperatly, unaware of
-eachother, sometimes because they preferred a different name, sometimes because
+names. Sometimes because scientists discovered them separately, unaware of each
+other, sometimes because they preferred a different name, sometimes because
 scientists like to give them pet names \footnote{I have a theory they are just
 trying to throw us off}.
 
@@ -315,7 +347,7 @@ arguments and returns the first. We can easily define it in lambda calculus as
 follows:
 \[K:=\lambda ab.a\]
 
-Remember that we defined this as a Curry'd function. This means we can give it
+Remember that we defined this as a curried function. This means we can give it
 just one argument and get a new function out of it. Let's say we apply \(K\) to
 \(5\):
 \[K5=(\lambda ab.a)5=\lambda b.5\]
@@ -341,7 +373,7 @@ try!
 
 If we use our definition of \(KI\) and apply it to \(xy\) we get:
 \[KIxy=(\lambda ab.b)xy=y\]
-But if we use the K and I combinators seperately, we get the following:
+But if we use the K and I combinators separately, we get the following:
 \[KIxy=(\lambda ab.a)Ixy=(\lambda b.I)xy=Iy=y\]
 
 If you think about it, it is very logical. If \(K\) takes two arguments and
@@ -376,7 +408,7 @@ the names of \(K\)'s arguments as to avoid confusion with those of \(C\)):
 We don't get our exact definition of \(KI\). But we can see that for every
 input, \(CK\) and \(KI\) \emph{always} produce the same output. We say that
 these functions are \emph{extensionally equal}---they have been defined
-seperately and we cannot rewrite one to the other, but we know that they
+separately and we cannot rewrite one to the other, but we know that they
 produce the same results, so they must be equal.
 
 You can do the same thing to find out that \(CKI=K\). It really does make
@@ -390,9 +422,9 @@ other combinator usually would.
 Our next combinator, \(B\), is defined as follows:
 \[B:=\lambda fga.f(ga)\]
 
-It applies a to b before applying f to the result. This combinator is used for
-function composition. This function applies \(g\) on \(a\) and applies \(f\) on
-that. We say that this function composes \(f\) with \(g\).
+It applies \(a\) to \(b\) before applying \(f\) to the result. This combinator
+is used for function composition. This function applies \(g\) on \(a\) and
+applies \(f\) on that. We say that this function composes \(f\) with \(g\).
 
 In mathematics we usually write function composition as follows:
 \[f\circ g\]
@@ -407,7 +439,7 @@ in lambda calculus
 
 There is something noteworthy about function composition: function composition
 works from right to left. When you compose functions, the rightmost function
-get's called first, instead of the leftmost function, which you can easily tell
+gets called first, instead of the leftmost function, which you can easily tell
 just by looking at the definition of \(B\).
 
 \subsubsection{The thrush}\label{thrush}
@@ -421,7 +453,7 @@ It swaps around two functions.
 
 Our last combinator is \(S\). It can be defined as follows:
 \[S:=\lambda fga.fa(ga)\]
-It applies f to a and its result to the result of the application of g to a.
+It applies \(f\) to \(a\) and its result to the result of the application of \(g\) to \(a\).
 
 \subsubsection{\(S\) and \(K\)}
 
@@ -446,25 +478,25 @@ propositions? You already know that it is Turing complete, so it must be able
 to do any computation, but I haven't explain how yet (see section
 \ref{computation}). But we can use combinatory logic in the real world already.
 
-You may have noticed some of the previous subsections have birdnames as titles.
-This is because they are the names given to the combinators, discussed in the
-respective subsections, by an author named Smullyan. He is a mathematician who
-likes to write puzzle books. His book \emph{To Mock a Mockingbird}
-\parencite{smullyan2000} is practically a large metaphor for combinatory logic.
-There are some unrelated puzzles in the beginning of the book, but the rest is
-about a big forest with birds. The birds represent the combinators. The
-beginletters of the birdnames are the names of the combinators. The way the
-birds interact reflects the way the combinators interact. The reason he chose
-birds for his metaphor is that Curry was an avid bird watcher. If you feel like
-you still don't understand the notation of combinatory logic completely, I
-would recommend you give this book a read, because it explains it very simply
-and clearly.
+You may have noticed some of the previous subsections have bird names as
+titles. This is because they are the names given to the combinators, discussed
+in the respective subsections, by an author named Smullyan. He is a
+mathematician who likes to write puzzle books. His book \emph{To Mock a
+Mockingbird} \parencite{smullyan2000} is practically a large metaphor for
+combinatory logic. There are some unrelated puzzles in the beginning of the
+book, but the rest is about a big forest with birds. The birds represent the
+combinators. The begin letters of the bird names are the names of the
+combinators. The way the birds interact reflects the way the combinators
+interact. The reason he chose birds for his metaphor is that Curry was an avid
+bird watcher. If you feel like you still don't understand the notation of
+combinatory logic completely, I would recommend you give this book a read,
+because it explains it very simply and clearly.
 
 In Smullyan's world, there is a forest with birds. These birds represent
-combinators. If you call out a birdname to a bird, it will give you the name of
-another bird. If you give a bird a birdname of a bird that is present, it will
-give you back a name of a bird that is present. Calling out birdnames to birds
-represents application.
+combinators. If you call out a bird name to a bird, it will give you the name
+of another bird. If you give a bird a bird name of a bird that is present, it
+will give you back a name of a bird that is present. Calling out bird names to
+birds represents application.
 
 I think it would be fun if we had a look at one of the puzzles to see if we can
 solve it using our newfound knowledge of combinatory logic. I think the first
@@ -528,7 +560,7 @@ down to the same thing.
 
 \section{Using lambda calculus for computation}\label{computation}
 
-Now that we've gone throught lambda calculus and combinatory logic, it is
+Now that we've gone through lambda calculus and combinatory logic, it is
 finally time to get to the good parts. I hope the way here wasn't too boring or
 difficult. We will now look at how to use lambda calculus for computation.
 
@@ -548,7 +580,7 @@ Let's look at a simple form of computation before jumping into arithmetic.
 We'll start with binary logic. In it's simplest form, binary logic is really
 just control flow: \emph{if A then B else C} (\(A\:?\:B\::\:C\)). We want to
 have some condition that chooses between two expressions. We know how to do
-that already (see section \ref{combinatorylogic}). \(K\) choses the first of
+that already (see section \ref{combinatorylogic}). \(K\) chooses the first of
 two expressions and \(KI\) the latter. We can define true to be \(K\) and false
 to be \(KI\):
 
@@ -570,12 +602,12 @@ Or in lambda calculus:
 \[NOT:=\lambda p.pFT\]
 
 It depends which one's preferable. The \(C\) combinator is a bit more elegant
-and performat, because it takes less function applications, but you get a
+and performant, because it takes less function applications, but you get a
 function that is only extensionally equal to \(T\) or \(F\), while the other
 definition literally returns \(T\) or \(F\).
 
 How do we define \(AND\)? We could define it in simple programming terms, and
-then translate it to lambda caluclus. In simple programming terms, \(AND\)
+then translate it to lambda calculus. In simple programming terms, \(AND\)
 would look like this:
 \[if\;p\;then\;(if\;q\;then\;T\;else\;F)\;else\;f\]
 \[p\enspace ?\enspace q\enspace ?\enspace T:F:F\]
@@ -587,7 +619,7 @@ anyway. Thus, we can say:
 \[AND:=\lambda pq.pqF\]
 You can also replace the remaining \(F\) with \(q\) if you want, because the
 \(F\) will only be returned if \(q\) is \(F\)---in other words: \(q\) in that
-case is alway false. So we can say:
+case is always false. So we can say:
 \[AND:=\lambda pq.pqp\]
 This is the equivalent of:
 \[if\; p\; then\; q\; else\; p\;\]
@@ -772,7 +804,7 @@ and \(x=T\) and \(y=F\) gives
 	=\lambda ab.Fab
 	=\lambda ab.a
 \]
-meaning that for all the posibilities of
+meaning that for all the possibilities of
 \[
 	xyx(xy(\lambda ab.b))(x(\lambda ab.yba)(\lambda ab.a))
 	=x(\lambda ab.yba)(\lambda ab.a)
@@ -792,7 +824,7 @@ We can apply the same reasoning to prove that equations \ref{exteq3} and
 Which gives
 \[xy(\lambda ab.a)=TT(\lambda ab.a)=T=\lambda ab.a\]
 
-The last step should be quite self-explainatory; \(xyx\) can only select
+The last step should be quite self-explanatory; \(xyx\) can only select
 between \(\lambda ab.a\) and \(\lambda ab.a\).
 
 \subsubsection{Church numerals}
@@ -987,7 +1019,7 @@ decide the number of times to compose the function, and it's prefix instead of
 infix. In a more mathematical notation, you can say
 \[ADD\enspace n\enspace k\enspace f := f^{\circ n}\circ f^{\circ k}\]
 
-\subsubsection{Data structures}
+\subsubsection{Data structures}\label{pairs}
 
 A fundamental concept in programming is that of data structures. Data
 structures are ways of storing data together. There are different data
@@ -1006,18 +1038,50 @@ If we want to look at the first value, we can input \(K\):
 If we want to look at the second value, we can input \(KI\):
 \[(\lambda f.fxy)\enspace KI=KIxy=y\]
 Thus, we could define the following functions:
-\[FST:=\lambda n.nK=\lambda ab.a\]
-\[SND:=KI=\lambda ab.b\]
+\[FST:=\lambda n.nK\]
+\[SND:=\lambda n.n(KI)\]
+From now on, we'll also use:
+\[PAIR:=V\]
 
-\subsubsection{Church arithmetic continuation}
+Pairs are very powerful, we use them for all kinds of things. One thing we can
+do is create linked lists. We do this by putting a value in the first index of
+the pair and another pair in the second. You can continue this pattern to make
+infinitely large lists. We could, for example, make a list from \(N1\) through
+\(N4\):
+\[PAIR\enspace N1\enspace(PAIR\enspace N2\enspace(PAIR\enspace N3\enspace N4))\]
+If we want to find the first index of the array, we would do:
+\[FST\enspace(PAIR\enspace N1\enspace(PAIR\enspace N2\enspace(PAIR\enspace N3\enspace N4)))=N1\]
+For the second index, we would do:
+\begin{align*}
+	&FST\enspace(SND\enspace(PAIR\enspace N1\enspace(PAIR\enspace N2\enspace(PAIR\enspace N3\enspace N4))))\\
+	=\enspace&FST\enspace(PAIR\enspace N2\enspace(PAIR\enspace N3\enspace N4))\\
+	=\enspace&N2
+\end{align*}
+We can easily write a function that prepends something to a list. The following
+function prepends a list with \(N0\):
+\[\lambda p.PAIR\enspace N0\enspace p\]
+Applying it gives:
+\begin{align*}
+	&(\lambda p.PAIR\enspace N0\enspace p)\enspace
+		(PAIR\enspace N1\enspace(PAIR\enspace N2\enspace(PAIR\enspace N3\enspace N4)))\\
+	=\enspace&PAIR\enspace N0\enspace
+		(PAIR\enspace N1\enspace(PAIR\enspace N2\enspace(PAIR\enspace N3\enspace N4)))
+\end{align*}
+Appending to a list is a bit harder; it involves stepping through the entire
+list and changing the last pair to link to a new pair. We'll talk more about
+later, when we cover functional programming and meta programming.
+
+% todo: ref to lists in functional and meta programming
+
+\subsubsection{Church arithmetic and boolean logic continuation}
 
 The C programming language has only added booleans in the C99 standard. In C,
 booleans are really just integers. All boolean expressions are really just
-arithmetic. In C, \(false\) is synonymous with \(0\) and every nonzero number
+arithmetic. In C, \(false\) is synonymous with \(0\) and every non-zero number
 means \(true\). In lambda calculus, this is the same. Our definition of \(N0\)
-is exactly the same as our definition of \(F\). In this section, we're going to
-talk about functions that are both useful in arithmetic and boolean logic,
-which are really just the same.
+is exactly the same as our definition of \(F\). This section talks about things
+that are important to both boolean logic and arithmetic, which are really just
+the same.
 
 I want to define a function that takes a church numeral and returns \(T\) if
 it's \(N0\) or \(F\) if it's not. I will call this function \(ISZERO\). To do
@@ -1029,8 +1093,8 @@ argument. That means that if we give \(T\) as the second argument, \(N0\) will
 return \(T\). So far, we have this:
 \[ISZERO:=\lambda n.n...T\]
 We still need to fill in the dots. If \(n\) isn't \(N0\), whatever is on the
-dots will be applied to \(T\) \(n\) times. We want this to always return \(F\).
-We know a function that can do this: the constant function (section
+dots will be applied to \(T\), \(n\) times. We want this to always return
+\(F\). We know a function that can do this: the constant function (section
 \ref{constant}). Thus, we get:
 \[ISZERO:=\lambda n.n(KF)T\]
 Here is an example for if it is not yet clear to you why we use the constant
@@ -1043,13 +1107,16 @@ in contrast to the operations we've covered, these are actually quite complex.
 We'll quickly look at subtraction, but it gets very complicated very quickly,
 and it's really out of the scope of this text to cover all of arithmetic in
 lambda calculus. I just wanted to show that it's possible and that lambda
-calculus is turing complete.
+calculus is Turing complete.
 
 Just like we defined a successor function before defining addition, we'll
-define a predecessor function first. I'll give you the definition first, just
-to show what we're working towards. The predecessor function can be defined as:
+define a predecessor function before defining subtraction.
+
+%I'll give you the
+%definition first, just to show what we're working towards. The predecessor
+%function can be defined as:
 \[PRED:=\lambda n.n\;(\lambda g.ISZERO\;(g\enspace N1)\;I\;(B\enspace SUCC\enspace g))\;(K\enspace N0)\;N0\]
-This is quite a bit to digest. Let's start from the beginning.
+%This is quite a bit to digest. Let's start from the beginning.
 
 The reason subtraction is so much harder than addition, is that applying a
 function once more is very easy, but removing an application is hard. The trick
@@ -1057,11 +1124,68 @@ is this: you don't remove an application, you reapply all the functions from
 the start, until you get to the number you want the predecessor of. In other
 words, you reapply all the functions, except for the last.
 
+How do we know when to stop? If we create an algoritm that just reapplies our
+function until we get to the number we want to know the predecessor of, we will
+have already overshot the predecessor when we get to that number. What we
+actually want to do, is not to create an algorithm that returns a number after
+each iteration, but to create a pair containing the new number and the previous
+number carried over from the last iteration. That way, we can compare the
+second number of the pair to the input, and if they are equal, we return the
+first number of the pair.
+
+Let's start by defining a function that takes a pair, and returns the next
+pair. Given a pair, we can make a new pair, of which the first item is the same
+as the second item of the input pair, and the second item is the successor of
+the second item of the input pair.
+\[NEXT:=\lambda p.PAIR\ (SND\ p)\ (SUCC\ (SND\ p))\]
+It can be reduced to
+\begin{align*}
+	&\lambda p.PAIR\ (SND\ p)\ (SUCC\ (SND\ P))\\
+	=\ &\lambda p.(\lambda abf.fab)\ (SND\ p)\ (SUCC\ (SND\ p))\\
+	=\ &\lambda pf.f\ (SND\ p)\ (SUCC\ (SND\ p))\\
+	=\ &\lambda pf.f\ (p\ KI)\ (SUCC\ (p\ KI))\\
+	=\ &\lambda pf.f\ (p\ KI)\ ((\lambda nga.g(nga))\ (p\ KI))\\
+	=\ &\lambda pf.f\ (p\ KI)\ (\lambda ga.g((p\ KI)ga))\\
+	=\ &\lambda pf.f(p(\lambda ab.b))(\lambda ga.g((p(\lambda ab.b))ga))
+\end{align*}
+in lambda calculus.
+
+Using this, we can quite easily define a predecessor function. If we want to
+find the predecessor of \(n\), we can apply \(NEXT\), \(n\) times to the pair
+\((N0,N0)\). The second item be equal to \(n\), so the first item will be
+\(n\)'s predecessor.
+\[PRED:=\lambda n.FST\ (n\ NEXT\ (PAIR\ N0\ N0))\]
+which reduces to
+\begin{align*}
+	&\lambda n.FST\ (n\ NEXT\ (PAIR\ N0\ N0))\\
+	=\ &\lambda n.n\ NEXT\ (PAIR\ N0\ N0)\ K\\
+	=\ &\lambda n.n\ NEXT\ (\lambda f.f\ N0\ N0)\ K\\
+	=\ &\lambda n.n\ NEXT\ (\lambda f.f(\lambda ba.a)(\lambda ba.a))\ K\\
+	=\ &\lambda n.n
+		(\lambda pf.f(p(\lambda ab.b))(\lambda ga.g((p(\lambda ab.b))ga)))
+		(\lambda f.f(\lambda ba.a)(\lambda ba.a))
+		(\lambda ab.a)
+\end{align*}
+in lambda calculus.
+
+Just like how addition is just the successor function applied multiple times,
+subtraction is just the predecessor function applied multiple times.
+\[SUB:=\lambda nk.n\ PRED\ k\]
+which reduces to
+\[
+	\lambda nk.n
+		(\lambda m.m
+			(\lambda pf.f(p(\lambda ab.b))(\lambda ga.g((p(\lambda ab.b))ga)))
+			(\lambda f.f(\lambda ba.a)(\lambda ba.a))
+			(\lambda ab.a))k
+\]
+
+
 % todo subtraction
 
 \subsection{Recursion}
 
-Loops, y-combinator.
+Loops, Y-combinator.
 
 \section{Functional programming (lambda calculus applied)}
 
