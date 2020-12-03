@@ -21,12 +21,12 @@
 % TODO: Something about PWS
 
 The reason I chose to write about this subject, is that it combines two things
-I enjoy: abstract maths and computer science. I have been programming for about
-five to six years now. I mainly enjoy low-level programming, so---naturally---C
-is my most used language and I am most familiar with a simple procedural
-paradigm. Such a paradigm is, however, not always very easy to use when working
-with very large and complex systems. I, as many, started out with
-object-oriented programming (OOP), but I did not like that very much.
+I enjoy: abstract mathematics and computer science. I have been programming for
+about five to six years now. I mainly enjoy low-level programming,
+so---naturally---C is my most used language and I am most familiar with a
+simple procedural paradigm. Such a paradigm is, however, not always very easy
+to use when working with very large and complex systems. I, as many, started
+out with object-oriented programming (OOP), but I did not like that very much.
 Therefore, I have been exploring alternative paradigms, including data-oriented
 programming and functional programming. I am quite familiar with data-oriented
 programming and the Rust programming language by now, but functional
@@ -392,8 +392,8 @@ combinators. That's why they are called combinators.
 
 \subsubsection{The flip combinator}\label{flipcombinator}
 
-The next combinator is is the \(C\) combinator. The \(C\) combinator is
-definable in lambda calculus as:
+The next combinator is the \(C\) combinator. The \(C\) combinator is definable
+in lambda calculus as:
 \[C:=\lambda fab.fba\]
 What it basically does is switch the arguments to the next combinator around.
 
@@ -570,11 +570,13 @@ To do computation with lambda calculus, we need to be able to do a few things
 such as boolean logic and arithmetic. Lambda calculus itself doesn't have these
 things built in to it, but we can define things such as boolean logic and
 arithmetic in lambda calculus. In section \ref{history}, I talked about how
-mathematicians were defining everything in maths. We can build of of their work
-and see how we can implement their definitions in lambda calculus. This is
-exactly what Church did.
+mathematicians were defining everything in mathematics. We can build of of
+their work and see how we can implement their definitions in lambda calculus.
+This is exactly what Church did.
 
-\subsubsection{Church booleans}
+% todo citation needed
+
+\subsubsection{Simple boolean operations}
 
 Let's look at a simple form of computation before jumping into arithmetic.
 We'll start with binary logic. In it's simplest form, binary logic is really
@@ -827,16 +829,15 @@ Which gives
 The last step should be quite self-explanatory; \(xyx\) can only select
 between \(\lambda ab.a\) and \(\lambda ab.a\).
 
-\subsubsection{Church numerals}
+\subsubsection{Natural numbers}
 
 Now that we've covered boolean logic, it is finally time to move on to
 arithmetic. Remember that in section \ref{history}, I said that
 \textcite{peano1889} defined natural numbers? He basically defined zero and
 then defined every number as a successor of the previous number, starting from
-zero. He also defined the properties of natural numbers.
-
-We can do exactly the same in lambda calculus. The key concept is function
-composition (section \ref{composition}).
+zero. He also defined the properties of natural numbers. We can do exactly the
+same in lambda calculus. The key concept is function composition (section
+\ref{composition}).
 
 We'll define functions that compose a given function \(f\), \(n\) times with
 themselves, where \(n\) is the natural number the function is supposed to
@@ -1019,6 +1020,34 @@ decide the number of times to compose the function, and it's prefix instead of
 infix. In a more mathematical notation, you can say
 \[ADD\enspace n\enspace k\enspace f := f^{\circ n}\circ f^{\circ k}\]
 
+\subsubsection{Boolean comparison}
+
+The C programming language has only added booleans in the C99 standard. In C,
+booleans are really just integers. All boolean expressions are really just
+arithmetic. In C, \(false\) is synonymous with \(0\) and every non-zero number
+means \(true\). In lambda calculus, this is the same. Our definition of \(N0\)
+is exactly the same as our definition of \(F\). This section talks about things
+that are important to both boolean logic and arithmetic, which are really just
+the same.
+
+I want to define a function that takes a church numeral and returns \(T\) if
+it's \(N0\) or \(F\) if it's not. I will call this function \(ISZERO\). To do
+this, we need to remember what a church numeral really is; it's a function that
+takes a function and an argument and applies that function a given number of
+times to that argument. The unique thing about \(N0\) is that it applies that
+given function zero times to the given argument, meaning it just returns the
+argument. That means that if we give \(T\) as the second argument, \(N0\) will
+return \(T\). So far, we have this:
+\[ISZERO:=\lambda n.n...T\]
+We still need to fill in the dots. If \(n\) isn't \(N0\), whatever is on the
+dots will be applied to \(T\), \(n\) times. We want this to always return
+\(F\). We know a function that can do this: the constant function (section
+\ref{constant}). Thus, we get:
+\[ISZERO:=\lambda n.n(KF)T\]
+Here is an example for if it is not yet clear to you why we use the constant
+combinator:
+\[ISZERO\enspace N3=(\lambda n.n(KF)T)N3=N3(KF)T=K\enspace F\enspace (KF(KF\enspace T))=F\]
+
 \subsubsection{Data structures}\label{pairs}
 
 A fundamental concept in programming is that of data structures. Data
@@ -1073,33 +1102,7 @@ later, when we cover functional programming and meta programming.
 
 % todo: ref to lists in functional and meta programming
 
-\subsubsection{Church arithmetic and boolean logic continuation}
-
-The C programming language has only added booleans in the C99 standard. In C,
-booleans are really just integers. All boolean expressions are really just
-arithmetic. In C, \(false\) is synonymous with \(0\) and every non-zero number
-means \(true\). In lambda calculus, this is the same. Our definition of \(N0\)
-is exactly the same as our definition of \(F\). This section talks about things
-that are important to both boolean logic and arithmetic, which are really just
-the same.
-
-I want to define a function that takes a church numeral and returns \(T\) if
-it's \(N0\) or \(F\) if it's not. I will call this function \(ISZERO\). To do
-this, we need to remember what a church numeral really is; it's a function that
-takes a function and an argument and applies that function a given number of
-times to that argument. The unique thing about \(N0\) is that it applies that
-given function zero times to the given argument, meaning it just returns the
-argument. That means that if we give \(T\) as the second argument, \(N0\) will
-return \(T\). So far, we have this:
-\[ISZERO:=\lambda n.n...T\]
-We still need to fill in the dots. If \(n\) isn't \(N0\), whatever is on the
-dots will be applied to \(T\), \(n\) times. We want this to always return
-\(F\). We know a function that can do this: the constant function (section
-\ref{constant}). Thus, we get:
-\[ISZERO:=\lambda n.n(KF)T\]
-Here is an example for if it is not yet clear to you why we use the constant
-combinator:
-\[ISZERO\enspace N3=(\lambda n.n(KF)T)N3=N3(KF)T=K\enspace F\enspace (KF(KF\enspace T))=F\]
+\subsubsection{Natural numbers continuation}
 
 We've covered addition, multiplication and exponentiation, which were quite
 simple, but what about subtraction, division and finding the square root? Well,
@@ -1109,13 +1112,15 @@ and it's really out of the scope of this text to cover all of arithmetic in
 lambda calculus. I just wanted to show that it's possible and that lambda
 calculus is Turing complete.
 
+% todo scope
+
 Just like we defined a successor function before defining addition, we'll
 define a predecessor function before defining subtraction.
 
 %I'll give you the
 %definition first, just to show what we're working towards. The predecessor
 %function can be defined as:
-\[PRED:=\lambda n.n\;(\lambda g.ISZERO\;(g\enspace N1)\;I\;(B\enspace SUCC\enspace g))\;(K\enspace N0)\;N0\]
+%\[PRED:=\lambda n.n\;(\lambda g.ISZERO\;(g\enspace N1)\;I\;(B\enspace SUCC\enspace g))\;(K\enspace N0)\;N0\]
 %This is quite a bit to digest. Let's start from the beginning.
 
 The reason subtraction is so much harder than addition, is that applying a
@@ -1179,9 +1184,92 @@ which reduces to
 			(\lambda f.f(\lambda ba.a)(\lambda ba.a))
 			(\lambda ab.a))k
 \]
+There are many alternative ways of going about defining subtraction, but this
+is probably the most straightforward.
 
+\subsubsection{Other kinds of numbers}
 
-% todo subtraction
+We have as of yet only covered natural numbers. They are the easiest to define
+and use. There are, however, many other types of numbers, such as integers,
+rationals, reals, complex numbers, etc. I will quickly cover how you'd go about
+defining them, but I won't go into it deeply. I have shown how natural numbers
+work, and using them with pairs you can create all sorts of numbers, but it can
+be slightly difficult to wrap your head around, and it isn't in the scope of
+this text. I just wanted to show how simple arithmetic works in lambda calculus
+and show it is possible. I am not, however, trying to define all arithmetic. We
+are just touching on the topic.
+
+That said, the way you define these other, more complicated types of numbers is
+very elegant in my opinion, and I really wanted to show it. Another reason I
+wanted to show it, is that it makes use of pairs extensively. By showing these
+elegant solutions to defining more complicated types of numbers, I can really
+show the usefulness and power of pairs.
+
+Let's start with the easiest of the bunch: integers. They are just like natural
+numbers, except they can be negative. There are different ways of achieving
+this. The simplest would be to define an integer as a pair of a boolean and a
+natural number, where the boolean decides whether the integer is positive or
+negative. You can then define special arithmetic operators for integers, based
+on those for natural numbers, to take into account the sign of the number
+(whether it's positive or negative).
+\[(sign,n)\]
+
+This makes multiplication very straightforward; you just perform a regular
+multiplication on the natural numbers in the pairs, and xor the signs.
+\[MULT_s:=\lambda ab.PAIR\ (XOR\ (FST\ a)\ (FST\ b))\ (MULT\ (SND\ a)\ (SND\ b))\]
+
+Addition is a bit more complicated, since it requires a lot of conditionals. 
+\begin{align*}
+	ADD_s:=\lambda ab.\left\{
+		\begin{array}{ll}
+			(T, ADD\ (SND\ a)\ (SND\ b))
+				&\mbox{if } a \geq 0 \wedge b \geq 0 \\
+			(F, ADD\ (SND\ a)\ (SND\ b))
+				&\mbox{if } a \le 0 \wedge b \le 0 \\
+			(T, SUB\ (SND\ a)\ (SND\ b))
+				&\mbox{if } a \geq 0 \wedge b \le 0 \wedge \lvert a \rvert \geq \lvert b \rvert \\
+			(F, SUB\ (SND\ b)\ (SND\ a))
+				&\mbox{if } a \geq 0 \wedge b \le 0 \wedge \lvert a \rvert < \lvert b \rvert \\
+			(T, SUB\ (SND\ b)\ (SND\ a))
+				&\mbox{if } a \geq 0 \wedge b \le 0 \wedge \lvert a \rvert < \lvert b \rvert \\
+			(F, SUB\ (SND\ a)\ (SND\ b))
+				&\mbox{if } a \geq 0 \wedge b \le 0 \wedge \lvert a \rvert \geq \lvert b \rvert \\
+		\end{array}
+	\right.
+\end{align*}
+Converting this to pure lambda calculus will be left as an exercise to the
+reader.
+
+This makes subtraction very simple though, it is just addition, but you negate
+the sign of one of the numbers.
+\begin{align*}
+	NEG_s&:=\lambda a.PAIR\ (NOT\ (FST\ a))\ (SND\ a) \\
+	SUB_s&:=\lambda ab.ADD_s\ a\ (NEG_s\ b)
+\end{align*}
+
+However, this is not the only way of defining integers. Instead of defining an
+integer as a pair of a boolean and a natural number, you define it as a pair of
+two natural numbers so that if you subtract the second from the first, you get
+your integer. In other words, an integer \(k\) is represented as a pair
+\((a,b)\), where \(a\) and \(b\) are natural numbers and \(k=a-b\). This means
+there are multiple ways (infinite in fact) of representing a given integer, but
+it also means that our operators are greatly simplified. We can define our
+operators as follows:
+\begin{align*}
+	ADD_i:=&\lambda ab.PAIR\ (ADD\ (FST\ a)\ (FST\ b))\ (ADD\ (SND\ a)\ (SND\ b))\\
+	NEG_i:=&\lambda a.PAIR\ (SND\ a)\ (FST\ a)\\
+	SUB_i:=&\lambda ab.ADD\ a\ (NEG_i\ b)\\
+	MULT_i:=&\lambda ab.PAIR\\
+		&\enspace(ADD\ (MULT\ (FST\ a)\ (FST\ b))\ (MULT\ (SND\ a)\ (SND\ b)))\\
+		&\enspace(ADD\ (MULT\ (FST\ a)\ (SND\ b))\ (MULT\ (SND\ a)\ (FST\ b)))
+\end{align*}
+Multiplication is relatively complex, but it's still simpler and more elegant
+than our previous definition of addition using a cubic ton of convoluted
+conditionals.
+
+We can use integers to create rationals. How you ask? Well with pairs of course!
+Just like how we used a pair of naturals to define integers, we can use a pair
+of integers to define rationals.
 
 \subsection{Recursion}
 
@@ -1189,13 +1277,13 @@ Loops, Y-combinator.
 
 \section{Functional programming (lambda calculus applied)}
 
-\subsection{Why do we even care?}
+% todo: why it's useful
+
+\subsection{Types}
 
 \subsection{Lambda functions}
 
 \subsection{Laziness}
-
-\subsection{Types}
 
 \subsection{Monads}
 
@@ -1240,9 +1328,14 @@ picture of what is said in section \ref{comparison}.
 
 \subsection{Programming language trends}
 
+\newpage
 \section*{Afterword}
 
+\newpage
+\section*{Unreferenced resources}
+
 \addcontentsline{toc}{section}{Afterword}
+\addcontentsline{toc}{section}{Unreferenced resources}
 
 \newpage
 \printbibliography[heading=bibintoc, title={References}]
