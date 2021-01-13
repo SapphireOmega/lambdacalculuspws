@@ -4,6 +4,7 @@
 \usepackage[british]{babel}
 \usepackage[backend=biber, style=numeric-comp]{biblatex}
 \usepackage{amsmath}
+\usepackage{listings}
 
 \addbibresource{bibliography.bib}
 
@@ -166,15 +167,14 @@ complete execution or result in an infinite loop. In 1936,
 \textcite{turing1936, turing1937correction} spent a long time proving, using
 his Turing machines, that this isn't possible, but it didn't get published
 until early 1937. Also in 1936, \textcite{church1936} proved the same thing
-using lambda calculus and happened to publish it before Turing did. When
-Turing finally got around to publishing his proof, he found out that he was
-beaten to it by Church. He wasn't to pleased. What is interesting, though, is
-that lambda calculus and Turing machines take two completely different
-approaches. Turing machines function entirely on state, while lambda calculus is
-completely stateless (we'll look at this later). Turing thought this was
-interesting too, so he researched lambda calculus and how it relates to his
-Turing machines, and proved that they are formally equivalent
-\parencite{turing1937computability}. 
+using lambda calculus and happened to publish it before Turing did. When Turing
+finally got around to publishing his proof, he found out that he was beaten to
+it by Church. He wasn't too pleased. What is interesting, though, is that
+lambda calculus and Turing machines take two completely different approaches.
+Turing machines function entirely on state, while lambda calculus is completely
+stateless (we'll look at this later). Turing thought this was interesting too,
+so he researched lambda calculus and how it relates to his Turing machines, and
+proved that they are formally equivalent \parencite{turing1937computability}. 
 
 Why do I tell you all this? Well, your main takeaway should be that even though
 lambda calculus is a very simple system, which at first glance might not seem
@@ -340,6 +340,9 @@ other, sometimes because they preferred a different name, sometimes because
 scientists like to give them pet names \footnote{I have a theory they are just
 trying to throw us off}.
 
+The omega combinator will be discussed further in section
+\ref{general_recursion}.
+
 \subsubsection{The constant combinator}\label{constant}
 
 The next combinator we'll cover is \(K\). It is a combinator that takes two
@@ -422,50 +425,67 @@ other combinator usually would.
 Our next combinator, \(B\), is defined as follows:
 \[B:=\lambda fga.f(ga)\]
 
-It applies \(a\) to \(b\) before applying \(f\) to the result. This combinator
-is used for function composition. This function applies \(g\) on \(a\) and
-applies \(f\) on that. We say that this function composes \(f\) with \(g\).
+It applies \(g\) to \(a\) before applying \(f\) to the result. This combinator
+is used for function composition. When a function applies \(g\) to \(a\) and
+\(f\) to the result, we say that this function composes \(f\) with \(g\).
+Function composition is used to apply a sequence of operations on a variable
+(but the order in which you write them is reversed).
 
 In mathematics we usually write function composition as follows:
 \[f\circ g\]
 So
-\[(f\circ g)a=f(ga)\]
+\[(f\circ g)\ a=f(ga)\]
 
-In combinatory logic we write function composition as follows:
+If we define a function \(h\) as
+\[h=f_4\circ f_3\circ f_2\circ f_1\]
+it means that \(h\) applies \(f_1\), \(f_2\), \(f_3\) and \(f_4\) in that
+order. It is really important to keep in mind this reversed order, or you are in
+for a confusing ride.
+
+In combinatory logic we write function composition of \(f\) and \(g\) as
+follows:
 \[Bfg\]
 which reduces to
 \[(\lambda fga.f(ga))fg=\lambda a.f(ga)\]
-in lambda calculus
-
-There is something noteworthy about function composition: function composition
-works from right to left. When you compose functions, the rightmost function
-gets called first, instead of the leftmost function, which you can easily tell
-just by looking at the definition of \(B\).
+in lambda calculus.
 
 \subsubsection{The thrush}\label{thrush}
 
 Our next combinator is \(T_{h}\). It is defined as follows:
 \[T_{h}:=\lambda af.fa\]
-It swaps around two functions.
+It swaps around two functions. It is basically a very simple form of storage;
+when you apply it to an argument, it stores that argument to have some other
+function applied to it later.
+
 % todo CI and POW and data storage
+
+\subsubsection{The vireo}\label{vireo}
+
+The \(V\)-combinator is basically the \(T_h\)-combinator with an extra
+argument. If you consider \(T_h\) a variable, \(V\) could be considered a
+\emph{pair} (section \ref{pairs}).
+
+It is defined as
+\[V:=\lambda abf.fab\]
 
 \subsubsection{The starling}
 
-Our last combinator is \(S\). It can be defined as follows:
+Our last combinator is \(S\). It can be defined as follows
 \[S:=\lambda fga.fa(ga)\]
-It applies \(f\) to \(a\) and its result to the result of the application of \(g\) to \(a\).
+It applies \(f\) to \(a\) and its result to the result of the application of
+\(g\) to \(a\).
 
 \subsubsection{\(S\) and \(K\)}
 
 % todo ref "every combinator can be ...."
 % todo ref proof S and K completeness
+% todo you also only need 2 logic gates to define all of them (principia
+% mathematica and bausteinen der mathematischen logic)
 
 As I've said, every combinator can be defined as a combination of other
 combinators. The question arises: how many combinators do we need to define
 every other combinator? It turns out you need just two. You can define every
 other combinator using just \(S\) and \(K\).
-
-% todo stuff
 
 \subsubsection{To Mock a Mockingbird}
 
@@ -829,7 +849,7 @@ Which gives
 The last step should be quite self-explanatory; \(xyx\) can only select
 between \(\lambda ab.a\) and \(\lambda ab.a\).
 
-\subsubsection{Natural numbers}
+\subsubsection{Natural numbers}\label{natural_numbers}
 
 Now that we've covered boolean logic, it is finally time to move on to
 arithmetic. Remember that in section \ref{history}, I said that
@@ -1020,7 +1040,7 @@ decide the number of times to compose the function, and it's prefix instead of
 infix. In a more mathematical notation, you can say
 \[ADD\enspace n\enspace k\enspace f := f^{\circ n}\circ f^{\circ k}\]
 
-\subsubsection{Boolean comparison}
+\subsubsection{Boolean comparison}\label{boolean_comparison}
 
 The C programming language has only added booleans in the C99 standard. In C,
 booleans are really just integers. All boolean expressions are really just
@@ -1059,6 +1079,8 @@ until you give it a function to apply to it. Although this isn't really a data
 structure yet; it only stores one thing. We can turn it into a data structure
 by "upgrading" it; let's give it another argument.
 \[V:=\lambda abf.fab\]
+Which we have already seen in section \ref{vireo}.
+
 We have basically defined something that is known as a (Church) pair. It holds
 on to two things. We could put two values into it:
 \[Vxy=\lambda f.fxy\]
@@ -1218,7 +1240,8 @@ This makes multiplication very straightforward; you just perform a regular
 multiplication on the natural numbers in the pairs, and xor the signs.
 \[MULT_s:=\lambda ab.PAIR\ (XOR\ (FST\ a)\ (FST\ b))\ (MULT\ (SND\ a)\ (SND\ b))\]
 
-Addition is a bit more complicated, since it requires a lot of conditionals. 
+Addition is a bit more complicated, since it requires a lot of conditionals
+(section \ref{boolean_comparison}).
 \begin{align*}
 	ADD_s:=\lambda ab.\left\{
 		\begin{array}{ll}
@@ -1254,7 +1277,7 @@ your integer. In other words, an integer \(k\) is represented as a pair
 \((a,b)\), where \(a\) and \(b\) are natural numbers and \(k=a-b\). This means
 there are multiple ways (infinite in fact) of representing a given integer, but
 it also means that our operators are greatly simplified. We can define our
-operators as follows:
+operators as follows
 \begin{align*}
 	ADD_i:=&\lambda ab.PAIR\ (ADD\ (FST\ a)\ (FST\ b))\ (ADD\ (SND\ a)\ (SND\ b))\\
 	NEG_i:=&\lambda a.PAIR\ (SND\ a)\ (FST\ a)\\
@@ -1267,27 +1290,225 @@ Multiplication is relatively complex, but it's still simpler and more elegant
 than our previous definition of addition using a cubic ton of convoluted
 conditionals.
 
-We can use integers to create rationals. How you ask? Well with pairs of course!
-Just like how we used a pair of naturals to define integers, we can use a pair
-of integers to define rationals.
+We can use integers to create rationals. How you ask? Well with pairs of
+course! Just like how we used a pair of naturals to define integers, we can use
+a pair of integers to define rationals. You define a rational number \(q\) as a
+pair \((k,a)\), where \(k\) is an integer and \(a\) a natural number such that
+\(q=k/(1+a)\).
 
-\subsection{Recursion}
+% TODO: reals, complex numbers
 
-Loops, Y-combinator.
+\subsection{Recursion}\label{recursion}
+
+% Loops, Y-combinator.
+
+We already know how to do some control flow using conditionals, but how about
+looping? We can achieve this using \emph{recursion}.
+
+\subsubsection{What is recursion?}
+
+To understand recursion, we must first understand recursion. Recursion is when
+we make use of self-reference, usually through defining something in terms of
+itself. A common example is the following factorial function (in C):
+\begin{lstlisting}[language=C]
+int fac(unsigned int n)
+{
+	if (i == 0)
+		return 1;
+	else
+		return n * fac(n - 1);
+}
+\end{lstlisting}
+or if you prefer ternary operators:
+\begin{lstlisting}[language=C]
+int fac(unsigned int i)
+{
+	return n == 0 ? 1 : n * fac(n - 1);
+}
+\end{lstlisting}
+
+Our definition of \texttt{fac()} contains calls to \texttt{fac()}, i.\,e.\ we
+have defined it in terms of itself. This is a very effective (although
+sometimes tricky, if you're not used to it) way of looping. Recursion, in fact,
+completely eliminates the need for things such as \emph{for} or \emph{while}
+loops commonly found in programming languages.
+
+We've covered boolean logic and arithmetic in section \ref{computation}. Thus,
+we can also define our C-function in pseudo lambda calculus\footnote{Lambda
+calculus has no identifiers, so we can't just define an identifier in terms of
+itself to achieve recursion}.
+\[FAC:=\lambda n.ISZERO\ n\ N1\ (MULT\ n\ (FAC\ (PRED\ n)))\]
+or if you want to eliminate some braces using function composition (section
+\ref{composition})
+\[FAC:=\lambda n.ISZERO\ n\ N1\ (MULT\ n\ (B\ FAC\ PRED\ n))\]
+where \(n\) is a natural number as defined in section \ref{natural_numbers}.
+
+Because of something called \emph{laziness} (section \ref{laziness}), we don't
+have to be afraid that computation won't finish. In short, laziness means that
+the computer won't try to evaluate something untill it has to. If it were to
+try to evaluate this function, it would become an infinitely long expression
+\begin{align*}
+	FAC:=\ &\lambda n.ISZERO\ n\ N1\ (MULT\ n\ (FAC\ (PRED\ n))) \\
+	=\ &\lambda n.ISZERO\ n\ N1\ (MULT\\
+		&\qquad n\\
+		&\qquad((\lambda m.ISZERO\ m\ N1\ (MULT\ m\ (FAC\ (PRED\ m))))\\
+		&\qquad\qquad(PRED\ n))) \\
+	=\ &\lambda n.ISZERO\ n\ N1\ (MULT\\
+		&\qquad n\\
+		&\qquad((\lambda m.ISZERO\ m\ N1\ (MULT\\
+		&\qquad\qquad m\\
+		&\qquad\qquad((\lambda l.ISZERO\ l\ N1\ (MULT\ l\ (FAC\ (PRED\ l))))\\
+		&\qquad\qquad\qquad(PRED\ m))))\\
+		&\qquad\qquad\qquad\qquad(PRED\ n))) \\
+	=\ &...
+\end{align*}
+but if we input a value, computation does terminate. Say we want to know the
+factorial of 0
+\begin{align*}
+	FAC\ N0&=(\lambda n.ISZERO\ n\ N1\ (MULT\ n\ (FAC\ PRED\ n)))\ N0\\
+	&=ISZERO\ N0\ N1\ (MULT\ N0\ (FAC\ PRED\ N0))\\
+	&=N1
+\end{align*}
+or the factorial of 1
+\begin{align*}
+	FAC\ N1&=(\lambda n.ISZERO\ n\ N1\ (MULT\ n\ (FAC\ PRED\ n)))\ N1\\
+	&=ISZERO\ N1\ N1\ (MULT\ N1\ (FAC\ PRED\ N1))\\
+	&=MULT\ N1\ (FAC\ PRED\ N1)\\
+	&=MULT\ N1\ (FAC\ N0)\\
+	&=MULT\ N1\ N1\\
+	&=N1
+\end{align*}
+or the factorial of 2
+\begin{align*}
+	FAC\ N2&=(\lambda n.ISZERO\ n\ N1\ (MULT\ n\ (FAC\ PRED\ n)))\ N2\\
+	&=ISZERO\ N2\ N1\ (MULT\ N2\ (FAC\ PRED\ N2))\\
+	&=MULT\ N2\ (FAC\ PRED\ N2)\\
+	&=MULT\ N2\ (FAC\ N1)\\
+	&=MULT\ N2\ N1\\
+	&=N2
+\end{align*}
+or the factorial of 3
+\begin{align*}
+	FAC\ N3&=(\lambda n.ISZERO\ n\ N1\ (MULT\ n\ (FAC\ PRED\ n)))\ N3\\
+	&=ISZERO\ N3\ N1\ (MULT\ N3\ (FAC\ PRED\ N3))\\
+	&=MULT\ N3\ (FAC\ PRED\ N3)\\
+	&=MULT\ N3\ (FAC\ N2)\\
+	&=MULT\ N3\ N2\\
+	&=N6
+\end{align*}
+We don't need to evaluate the recursive branch if our input is 0, so we don't.
+In most languages, like C, every expression gets evaluated immediately (not
+including function calls\footnote{Which is why our factorial function in C
+works.}).
+
+The way we are achieving recursion in this example is by defining an identifier
+in terms of itself, which doesn't work in pure lambda calculus, since it
+doesn't have identifiers. What we need to do is to somehow create a combinator
+that can do recursion without the use of self-referencing identifiers. We will
+slowly work towards this combinator.
+
+\subsubsection{General recursion}\label{general_recursion}
+
+Let's start with the simplest recursive combinator you can create in lambda
+calculus
+\[LOOP:=(\lambda x.xx)\ \lambda x.xx\]
+which will result in an infinite loop if you try to reduce it:
+\begin{align*}
+	&(\lambda x.xx)\ \lambda x.xx \\
+	=\ &(\lambda x.xx)\ \lambda x.xx \\
+	=\ &(\lambda x.xx)\ \lambda x.xx \\
+	=\ & ...
+\end{align*}
+We have seen this before, this is the \emph{omega combinator} (section
+\ref{omega}).
+
+This is not very useful, it just hangs without doing anything. We could define
+a slightly more useful function as
+\[REC\ f:=f\ (REC\ f)\]
+which would be
+\[REC:=\lambda f.f\ (REC\ f)\]
+in pseudo lambda calculus. It can apply any function \(f\) recursively. This is
+called \emph{general recursion} in computer science---it is the simpelest way to
+perform an operation recursively.
+
+We can use this new function to redefine our \(LOOP\) combinator.
+\[LOOP:=REC\ \lambda a.a\]
+But we still haven't achieved general recursion in pure lambda calculus,
+because we are still defining identifiers---which pure lambda calculus doesn't
+have---in terms of themselves instead of defining a combinator which can do
+recursion by itself.
+
+We can also use this new \(REC\) function to redefine our factorial function
+\begin{align*}
+	FAC:=\ &REC\ (\lambda fn.ISZERO\ n\ N1\ (MULT\ n\ (f\ (PRED\ n))))\\
+	=\ &(\lambda fn.ISZERO\ n\ N1\ (MULT\ n\ (f\ (PRED\ n))))\\
+	&\qquad(REC\ (\lambda fn.ISZERO\ n\ N1\ (MULT\ n\ (f\ (PRED\ n)))))\\
+	=\ &(\lambda fn.ISZERO\ n\ N1\ (MULT\ n\ (f\ (PRED\ n))))\ FAC\\
+	=\ &\lambda n.ISZERO\ n\ N1\ (MULT\ n\ (FAC\ (PRED\ n)))
+\end{align*}
+which reduces to our previous definition as you can see.
+
+\subsubsection{The Y-combinator}
+
+We have now defined \(FAC\) not in terms of itself using a specialised
+recursion combinator. This combinator \emph{is} still defined in terms of
+itself though. If we succeed to define general recursion in lambda calculus
+without the use of self-refering identifiers, we can finally write our
+recursive functions in pure lambda calculus.
+
+Luckily for us, this combinator exists, it's called the \emph{Y-combinator}.
+Instead of self-reference, it uses self-application, much like how our earlier
+LOOP combinator is really a function applied to itself resulting in that same
+function being applied to itself. The Y-combinator looks much like our LOOP
+combinator, except it has and extra function as argument which is applied to
+the application of the arguments of the inner functions to themselves.
+\[Y:=\lambda f.(\lambda x.f(xx))\lambda x.f(xx)\]
+If we try to evaluate this, we again get an infinitely large expression
+\begin{align*}
+	Y:=\ &\lambda f.(\lambda x.f(xx))\lambda x.f(xx)\\
+	=\ &\lambda f.f((\lambda x.f(xx))\lambda x.f(xx))\\
+	=\ &\lambda f.f(f((\lambda x.f(xx))\lambda x.f(xx)))\\
+	=\ &\lambda f.f(f(f((\lambda x.f(xx))\lambda x.f(xx))))\\
+	=\ &\lambda f.f(f(f(f(f(f(f(f(f(f(...))))))))))
+\end{align*}
+We can see it does in fact function as expected.
+
+We have successfully encoded recursion without recursion, and can now implement
+our \(FAC\) function in lambda calculus.
+\begin{align*}
+	FAC:=\ &Y\ (\lambda fn.ISZERO\ n\ N1\ (MULT\ n\ (f\ (PRED\ n))))\\
+	=\ &(\lambda f.(\lambda x.f(xx))\lambda x.f(xx))\\
+	&\qquad(\lambda fn.(\lambda m.m(KF)T)\\
+	&\qquad\qquad n\\
+	&\qquad\qquad(\lambda ga.ga)\\
+	&\qquad\qquad((\lambda mkg.m(kg))\\
+	&\qquad\qquad\qquad n\\
+	&\qquad\qquad\qquad(f((\lambda m.FST\ (m\ NEXT\ (PAIR\ N0\ N0)))n))))
+\end{align*}
+
+% todo: reduce fib function
 
 \section{Functional programming (lambda calculus applied)}
 
 % todo: why it's useful
 
-\subsection{Types}
+\subsection{Desireable and interesting properties}
 
-\subsection{Lambda functions}
+\subsubsection{Statelessness}
 
-\subsection{Laziness}
+\subsubsection{Lambda functions}
 
-\subsection{Monads}
+\subsubsection{Laziness}\label{laziness}
+
+\subsection{Typed lambda calculus}
+
+\subsubsection{Simply typed lambda calculus}
+
+\subsubsection{System F}
 
 \subsection{Haskell}\label{haskell}
+
+\subsection{Monads}
 
 \subsection{Comparison to other paradigms}\label{comparison}
 
@@ -1304,11 +1525,12 @@ I thought it would be interesting to do a practical example. In section
 \ref{metaprogramming}, I talked about the Lisp programming language family, in
 particular Scheme. It isn't all to hard to implement a Lisp-like language, but
 implementing a programming language is very conceptual. Programming languages
-have many concepts that are more easily expressed in a declarative/functional
-language like Haskell, rather than a procedural/imperative language like C.
-This section is really a practical continuation of section \ref{comparison}, so
-I recommend you read it before you read this. This section tries to paint a
-picture of what is said in section \ref{comparison}.
+have many abstract concepts that are more easily expressed in a
+declarative/functional language like Haskell, rather than a
+procedural/imperative language like C. This section is really a practical
+continuation of section \ref{comparison}, so I recommend you read it before you
+read this. This section tries to paint a picture of what is said in section
+\ref{comparison}.
 
 \subsection{Scheme interpreter in C}
 
