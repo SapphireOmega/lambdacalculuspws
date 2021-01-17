@@ -8,6 +8,8 @@
 
 \addbibresource{bibliography.bib}
 
+%\usepackage{tabularx,booktabs}
+
 \title{Lambda Calculus and its Impact on Computer Science}
 \author{Joris Klaasse Bos\\ Zaanlands Lyceum}
 
@@ -1345,8 +1347,8 @@ where \(n\) is a natural number as defined in section \ref{natural_numbers}.
 
 Because of something called \emph{laziness} (section \ref{laziness}), we don't
 have to be afraid that computation won't finish. In short, laziness means that
-the computer won't try to evaluate something untill it has to. If it were to
-try to evaluate this function, it would become an infinitely long expression
+the computer won't try to evaluate something until it has to. If it were to try
+to evaluate this function, it would become an infinitely long expression
 \begin{align*}
 	FAC:=\ &\lambda n.ISZERO\ n\ N1\ (MULT\ n\ (FAC\ (PRED\ n))) \\
 	=\ &\lambda n.ISZERO\ n\ N1\ (MULT\\
@@ -1474,17 +1476,102 @@ If we try to evaluate this, we again get an infinitely large expression
 We can see it does in fact function as expected.
 
 We have successfully encoded recursion without recursion, and can now implement
-our \(FAC\) function in lambda calculus.
+our \(FAC\) function in lambda calculus. The lambda expression is really long,
+so I've tried to break it up across multiple lines in a way that somewhat makes
+sense.
+
+\begingroup
+\allowdisplaybreaks
 \begin{align*}
-	FAC:=\ &Y\ (\lambda fn.ISZERO\ n\ N1\ (MULT\ n\ (f\ (PRED\ n))))\\
-	=\ &(\lambda f.(\lambda x.f(xx))\lambda x.f(xx))\\
-	&\qquad(\lambda fn.(\lambda m.m(KF)T)\\
-	&\qquad\qquad n\\
-	&\qquad\qquad(\lambda ga.ga)\\
-	&\qquad\qquad((\lambda mkg.m(kg))\\
-	&\qquad\qquad\qquad n\\
-	&\qquad\qquad\qquad(f((\lambda m.FST\ (m\ NEXT\ (PAIR\ N0\ N0)))n))))
+	FAC:=\ &Y\\
+	&(\lambda fn.ISZERO\ n\ N1\\
+	&\quad(MULT\ n\\
+	&\quad\quad(f\\
+	&\quad\quad\quad(PRED\ n))))\\
+	=\ &Y\\
+	&(\lambda fn.ISZERO\ n\ N1\\
+	&\quad(MULT\ n\\
+	&\quad\quad(f\\
+	&\quad\quad\quad(FST\\
+	&\quad\quad\quad\quad(n\ NEXT\\
+	&\quad\quad\quad\quad\quad(PAIR\ N0\ N0))))))\\
+	=\ &Y\\
+	&(\lambda fn.ISZERO\ n\ N1\\
+	&\quad(MULT\ n\\
+	&\quad\quad(f\\
+	&\quad\quad\quad(FST\\
+	&\quad\quad\quad\quad(n\\
+	&\quad\quad\quad\quad\quad(\lambda p.PAIR\ (SND\ p)\ (SUCC\ (SND\ p)))\\
+	&\quad\quad\quad\quad\quad(PAIR\ N0\ N0))))))\\
+	=\ &Y\\
+	&(\lambda fn.n(KF)T\ N1\\
+	&\quad(MULT\ n\\
+	&\quad\quad(f\\
+	&\quad\quad\quad(n\\
+	&\quad\quad\quad\quad(\lambda p.V\ (p\ KI)\ (SUCC\ (p\ KI)))\\
+	&\quad\quad\quad\quad(V\ N0\ N0)\\
+	&\quad\quad\quad\quad K))))\\
+	=\ &(\lambda f.(\lambda x.f(xx))(\lambda x.f(xx)))\\
+	&(\lambda fn.n((\lambda ab.a)(\lambda ab.b))(\lambda ab.a)(\lambda ga.ga)\\
+	&\quad((\lambda klg.k(lg))n\\
+	&\quad\quad(f\\
+	&\quad\quad\quad(n\\
+	&\quad\quad\quad\quad(\lambda p.(\lambda abg.gab)(p(\lambda ab.b))((\lambda kga.g(kga))(p(\lambda ab.b))))\\
+	&\quad\quad\quad\quad((\lambda abg.gab)(\lambda ga.a)(\lambda ga.a))\\
+	&\quad\quad\quad\quad(\lambda ab.a)))))\\
+	=\ &(\lambda f.(\lambda x.f(xx))(\lambda x.f(xx)))\\
+	&(\lambda fn.n(\lambda abc.c)(\lambda ab.a)(\lambda ga.ga)\\
+	&\quad((\lambda kg.n(kg))\\
+	&\quad\quad(f\\
+	&\quad\quad\quad(n\\
+	&\quad\quad\quad\quad(\lambda p.(\lambda abg.gab)(p(\lambda ab.b))(\lambda ga.g(p(\lambda bc.c)ga)))\\
+	&\quad\quad\quad\quad(\lambda g.g(\lambda ab.b)(\lambda ab.b))\\
+	&\quad\quad\quad\quad(\lambda ab.a)))))\\
+	=\ &(\lambda f.(\lambda x.f(xx))(\lambda x.f(xx)))\\
+	&(\lambda fn.n(\lambda abc.c)(\lambda ab.a)(\lambda ga.ga)\\
+	&\quad((\lambda kg.n(kg))\\
+	&\quad\quad(f\\
+	&\quad\quad\quad(n\\
+	&\quad\quad\quad\quad(\lambda pg.g(p(\lambda ab.b))(\lambda ha.h(p(\lambda bc.c)ha)))\\
+	&\quad\quad\quad\quad(\lambda g.g(\lambda ab.b)(\lambda ab.b))\\
+	&\quad\quad\quad\quad(\lambda ab.a)))))\\
+	=\ &(\lambda f.(\lambda x.f(xx))(\lambda x.f(xx)))\\
+	&(\lambda fn.n(\lambda abc.c)(\lambda ab.a)(\lambda ga.ga)\\
+	&\quad((\lambda kg.n(kg))\\
+	&\quad\quad(f\\
+	&\quad\quad\quad(n\\
+	&\quad\quad\quad\quad(\lambda g.g((\lambda h.h(\lambda ab.b)(\lambda ab.b))(\lambda ab.b))
+		(\lambda ha.h((\lambda i.i(\lambda bc.c)(\lambda bc.c))(\lambda bc.c)ha)))\\
+	&\quad\quad\quad\quad(\lambda ab.a)))))\\
+	=\ &(\lambda f.(\lambda x.f(xx))(\lambda x.f(xx)))\\
+	&(\lambda fn.n(\lambda abc.c)(\lambda ab.a)(\lambda ga.ga)\\
+	&\quad((\lambda kg.n(kg))\\
+	&\quad\quad(f\\
+	&\quad\quad\quad(n\\
+	&\quad\quad\quad\quad(\lambda g.g((\lambda ab.b)(\lambda ab.b)(\lambda ab.b))
+		(\lambda ha.h((\lambda bc.c)(\lambda bc.c)(\lambda bc.c)ha)))\\
+	&\quad\quad\quad\quad(\lambda ab.a)))))\\
+	=\ &(\lambda f.(\lambda x.f(xx))(\lambda x.f(xx)))\\
+	&(\lambda fn.n(\lambda abc.c)(\lambda ab.a)(\lambda ga.ga)\\
+	&\quad((\lambda kg.n(kg))\\
+	&\quad\quad(f\\
+	&\quad\quad\quad(n\\
+	&\quad\quad\quad\quad(\lambda g.g(\lambda ab.b)(\lambda ha.h((\lambda bc.c)ha)))\\
+	&\quad\quad\quad\quad(\lambda ab.a)))))\\
+	=\ &(\lambda f.(\lambda x.f(xx))(\lambda x.f(xx)))\\
+	&(\lambda fn.n(\lambda abc.c)(\lambda ab.a)(\lambda ga.ga)\\
+	&\quad((\lambda kg.n(kg))\\
+	&\quad\quad(f(n(\lambda g.g(\lambda ab.b)(\lambda ha.ha))(\lambda ab.a)))))\\
+	=\ &(\lambda f.(\lambda x.f(xx))(\lambda x.f(xx)))\\
+	&(\lambda fn.n(\lambda abc.c)(\lambda ab.a)(\lambda ga.ga)\\
+	&\quad(\lambda g.n(f(n(\lambda h.h(\lambda ab.b)(\lambda ab.ab))(\lambda ab.a))g)))\\
 \end{align*}
+\endgroup
+
+I've suffered through many painful hours reducing this lambda function, so out
+of pure evil, I'll deliberately not give an example of this reduced lambda
+function in action, but leave it as an exercise to the reader so as to make him
+suffer through many painful hours like I have\footnote{Because fuck you.}.
 
 % todo: reduce fib function
 
@@ -1508,7 +1595,9 @@ our \(FAC\) function in lambda calculus.
 
 \subsection{Haskell}\label{haskell}
 
-\subsection{Monads}
+\subsubsection{Basic syntax}
+
+\subsubsection{Monads}
 
 \subsection{Comparison to other paradigms}\label{comparison}
 
@@ -1542,7 +1631,7 @@ read this. This section tries to paint a picture of what is said in section
 
 \subsection{Iterators}
 
-\subsection{A look at Rust, C\# and modern C++ standards}
+\subsection{A look at Rust and modern C++ standards}
 
 \section{Possibilities for the future}
 
