@@ -5,12 +5,11 @@
 \usepackage[backend=biber, style=numeric-comp]{biblatex}
 \usepackage{amsmath}
 \usepackage{listings}
+\usepackage{tikz-cd}
 
 \addbibresource{bibliography.bib}
 
-%\usepackage{tabularx,booktabs}
-
-\title{Lambda Calculus and its Impact on Computer Science}
+\title{Lambda Calculus and its Implementation in Computer Science}
 \author{Joris Klaasse Bos\\ Zaanlands Lyceum}
 
 \begin{document}
@@ -1307,7 +1306,7 @@ pair \((k,a)\), where \(k\) is an integer and \(a\) a natural number such that
 We already know how to do some control flow using conditionals, but how about
 looping? We can achieve this using \emph{recursion}.
 
-\subsubsection{What is recursion?}
+\subsubsection{Understanding recursion}
 
 To understand recursion, we must first understand recursion. Recursion is when
 we make use of self-reference, usually through defining something in terms of
@@ -1579,11 +1578,13 @@ suffer through many painful hours like I have\footnote{Because fuck you.}.
 
 % todo: why it's useful
 
-\subsection{Desireable and interesting properties}
+\subsection{Interesting and useful properties}
 
-\subsubsection{Statelessness}
+\subsubsection{Statelessness}\label{statelessness}
 
-\subsubsection{Lambda functions}
+\subsubsection{First class and higher order functions}
+
+\subsubsection{Function currying}
 
 \subsubsection{Laziness}\label{laziness}
 
@@ -1591,7 +1592,142 @@ suffer through many painful hours like I have\footnote{Because fuck you.}.
 
 \subsubsection{Simply typed lambda calculus}
 
-\subsubsection{System F}
+\subsubsection{Strongly typed lambda calculus (System F)}
+
+\subsection{Catagory theory}
+
+\emph{Catagory theory} is very important to functional programming. It really
+should have a section of its own. The ideas of catagory theory fit really well
+with lambda calculus. Some ideas, like function composition, we've talked about
+extensively already. The concepts of catagory theory may be a little too
+abstract and mathematical for some readers, but it is worth to have some
+understanding of catagory theory if you want to learn functional programming
+(although it is not strictly necessary of course). In short, catagory theory is
+a general theory of functions that fit perfectly with the ideas behind lambda
+functions. It is usually represented visually in two dimensions, which may
+remind of Frege's \emph{Begriffsschrift}, which we mentioned in section
+\ref{history}.
+
+% TODO: ref frege
+
+\subsubsection{A quick look at set theory}
+
+Mathematicians should be familiar with \emph{set theory}. Set theory is a way
+of describing things as members of sets of things that share one or more
+qualities. These things can be members of multiple sets simultaniously and can
+represent anything, even other sets. Common examples of sets often found in
+mathematics are the sets of natural numbers, integers, rational numbers, real
+numbers, imaginary numbers, complex numbers, etc. If something is in the set of
+natural numbers, it has all the qualities of a natural number, but hasn't have
+to be limited to those qualities. Sets have some similarities to types, but
+quite unlike types, something can be part of multiple sets, but always has to
+have just one type.
+
+It is very possible for paradoxes to come up in set theory. The most common
+example would be Russell's paradox. It reads as follows: if you define \(R\) to
+be the set of all things not containing themselves, then you can't say wether
+\(R\) is or isn't in \(R\). If \(R\) \emph{isn't} in \(R\), it should be in
+\(R\), but if \(R\) \emph{is} in \(R\), then it shouldn't be in \(R\). There
+are only two possibilities, but both lead to contradiction.
+
+% TODO: reference Russell's paradox
+
+\[Let\ R = \{x\ |\ x \notin x \},\ then\ R \in R \iff R \notin R\]
+
+The above equation is Russell's paradox in basic set notation. You should read
+it as: \emph{``Let \(R\) be the set of all things \(x\) not containing \(x\),
+then \(R\) is in \(R\) if, and only if \(R\) is not in \(R\).''} Don't worry
+about the notation too much, it isn't important right now.
+
+This is also where our good friend Gödel comes in. We have talked about him in
+section \ref{history}. There are many parallels between Russell's paradox and
+so called Gödel sentences. A basic example of such a sentence would be the
+following:
+
+\begin{center}
+This sentence is false.
+\end{center}
+
+If you try to figure out the truth value of the sentence, you end up with the
+same contradiction as with Russell's paradox. This problem arises from
+self-reference. Self reference is interesting enough in itself, there have been
+entire books written on it. A very popular example being \emph{Gödel, Escher,
+Bach}.
+
+% TODO: reference GEB
+
+Because it is so easy for paradoxes to come up in set theory, this simpelest
+form of set theory is often called \emph{naïve set theory}. Russell, who we
+have talked about extensively in section \ref{history}, designed the
+\emph{theory of types} (not to be confused with \emph{type theory}) to avoid
+these paradoxes from happening in formal systems such as set theory (as
+mentioned in section \ref{history}). I will not go into it, but it is quite
+interesting to look at.  There exist many variations of set theory besides
+naïve set theory and set theory using Russell's theory of types.
+
+% TODO: reference type theory
+
+\subsubsection{The jist (of catagory theory)}
+
+Catagory theory is similar to set theory. It has the same concept of sets,
+except they're called \emph{catagories}. The emphasis in catagory theory is not
+the catagories things belong to, but the relationships between things.  We'll
+call these relationships \emph{maps}, but other names are also commonly used to
+indicate these relationships. Maps can exist between simple objects, catagories
+or even other maps. Maps are often visually represented as arrows between
+things.
+
+A map between two catagories could be understood as a function where the first
+catagory is the catagory of possible inputs, and the second catagory being the
+set of possible outputs. A map \emph{maps} between these two catagories in some
+formally defined way. This idea of functions is very similar to that in lambda
+calculus, where there are no side effects and the output is only dependent on
+the input. This basically means that every function could be written as a
+(altough be it possibly an infinitely long) lookup table. This also reflects
+the idea of functionality and data being equivalent, which is strongly present
+in both lambda calculus and catagory theory. There can exist multiple maps
+between catagories; every arithmetic operation would be a map from numbers to
+numbers. We can also have maps between maps, which are called \emph{functors}.
+I will discuss them in section \ref{functors}, but first I should talk about
+composition.
+
+\subsubsection{Composition}
+
+Probably the most fundamental idea in catagory theory is that of composition.
+We know what function composition is from lambda calculus. In catagory theory
+is described as follows: You have two maps, one mapping \(A\) to \(B\) and
+another mapping \(B\) to \(C\) then the composition of those maps maps \(A\) to
+\(C\) just as if you were to apply those maps consecutively. The following
+image, which is one of the first things you'll see when learning catagory
+theory, is the following image, which represents function composition and which
+is almost the \emph{``Hello, world!''} \footnote{A \emph{``Hello, world!''}
+program is the program you usually first write when learning a new language. In
+most languages it would just output the string ``Hello, world!''.} of catagory
+theory:
+
+\begin{center}
+	\begin{tikzcd}[row sep=huge, column sep=huge]
+		A \arrow[r, "f"] \arrow[rd, "f \circ g"] & B \arrow[d, "g"]\\
+		& C
+	\end{tikzcd}
+\end{center}
+
+\subsubsection{Functors}\label{functors}
+
+As I hinted at earlier, we can have maps between maps, since maps are also just
+"things". These maps are called \emph{functors}.
+
+\subsubsection{Monoids}
+
+A major problem with pure functional programming, which I also talk about in
+sections \ref{statelessness} and \ref{usefulness}, is that it is completely
+useless. There has to be some way to do side effects to write a useful program.
+You don't want to accidentally fire the rockets when you are just doing
+arithmetic, but you also want to still be able to fire the rockets when you
+have to. The solution is monads (see the next section \ref{monads}), but we
+need to first understand monoids.
+
+\subsubsection{Monads}\label{monads}
 
 \subsection{Haskell}\label{haskell}
 
@@ -1603,7 +1739,7 @@ suffer through many painful hours like I have\footnote{Because fuck you.}.
 
 \subsubsection{Declarative vs imperative}
 
-\subsubsection{Usefulness vs conceptual purity}
+\subsubsection{Usefulness vs conceptual purity}\label{usefulness}
 
 \subsubsection{Meta programming}\label{metaprogramming}
 
@@ -1625,19 +1761,19 @@ read this. This section tries to paint a picture of what is said in section
 
 \subsection{Scheme interpreter in Haskell}
 
-\section{Functional programming in other paradigms}
-
-\subsection{Lambda functions}
-
-\subsection{Iterators}
-
-\subsection{A look at Rust and modern C++ standards}
-
-\section{Possibilities for the future}
-
-\subsection{Conceptual \emph{and} useful}
-
-\subsection{Programming language trends}
+%\section{Functional programming in other paradigms}
+%
+%\subsection{Lambda functions}
+%
+%\subsection{Iterators}
+%
+%\subsection{A look at Rust and modern C++ standards}
+%
+%\section{Possibilities for the future}
+%
+%\subsection{Conceptual \emph{and} useful}
+%
+%\subsection{Programming language trends}
 
 \newpage
 \section*{Afterword}
