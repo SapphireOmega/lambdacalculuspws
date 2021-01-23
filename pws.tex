@@ -5,7 +5,7 @@
 \usepackage[backend=biber, style=numeric-comp]{biblatex}
 \usepackage{amssymb}
 \usepackage{amsmath}
-\usepackage{listings}
+\usepackage{listings, listings-rust}
 \usepackage{tikz-cd}
 
 \addbibresource{bibliography.bib}
@@ -90,13 +90,13 @@ so in the future.
 \section{Introduction to lambda calculus}
 
 Lambda calculus is, as its name suggests, a calculus. A calculus is a system of
-manipulating symbols, which by themselves don't have any semantic meaning, in a
-way that is somehow meaningful. We all know algebra. Algebra itself doesn't
-have an innate meaning, but we can use it to represent and solve real world
-problems. Algebra, however, is limited. Not every problem can be represented in
-algebra. There are many branches of mathematics that use different systems.
-One example would be formal logic, which is used for logical operations on
-booleans. Another such example is lambda calculus.
+manipulating symbols, which by themselves don't have any meaning, in a way that
+is somehow meaningful. We all know algebra. Algebra itself doesn't have an
+innate meaning, but we can use it to represent and solve real world problems.
+Algebra, however, is limited. Not every problem can be represented in algebra.
+There are many branches of mathematics that use different systems. One example
+would be formal logic, which is used for logical operations on booleans.
+Another such example is lambda calculus.
 
 \subsection{A short history\label{history}}
 
@@ -605,7 +605,7 @@ This is exactly what Church did.
 
 % todo citation needed
 
-\subsubsection{Simple boolean operations}
+\subsubsection{Simple boolean operations}\label{boolops}
 
 Let's look at a simple form of computation before jumping into arithmetic.
 We'll start with binary logic. In it's simplest form, binary logic is really
@@ -1519,12 +1519,12 @@ from mathematical disciplines such as set theory, category theory and type
 theory. The notions of types in functional programming are a bit more like
 those found in mathematics rather than in mainstream programming languages,
 where types are often just a way of telling the computer how certain data
-should be interpreted.  Most of the more abstract ideas in functional
+should be interpreted. Most of the more abstract ideas in functional
 programming come from category theory, which was created as a sort of general
 language for abstractions. I will cover the concepts most important to us, in
 the context of functional programming, as we need them.
 
-I would have liked to talked about these other disciplines seperately too,
+I would have liked to talk about these other disciplines seperately too,
 because a lot of interesting stuff (some of which we have mentioned in section
 \ref{history}) comes into play. All of the mathematical ideas that were
 developed in the historical context of the formalisation of mathematical logic
@@ -1597,12 +1597,151 @@ has its benifits. Laziness was probably even the biggest driving force behind
 the earlier research into functional programming.
 
 One of the most obvious benefits of laziness is that it means we don't compute
-what we don't have to, obviously resulting in a performace boost, but this
-isn't always the case. The real benefit with laziness is the ability to work
+what we don't have to, which is called \emph{short-circuit computation},
+obviously resulting in a performace boost, but this isn't always the case (as
+we'll look into later). The real benefit with laziness is the ability to work
 with infinities. The most common example probably being working infinite sets.
-We can create define infinite sets, but only use parts of it when we need it.
-When we create the set, it doesn't store the entire, infinite thing in memory,
-but only evaluates the part we need when we need it.
+We can define infinite sets, but only use parts of it when we need it.  When we
+create the set, it doesn't store the entire, infinite thing in memory, but only
+evaluates the part we need when we need it.
+
+I will give some examples of how we can achieve laziness in non-functional
+languages (in this case Rust) and why we would want to do so.
+
+We can achieve laziness by wrapping everything in lambda functions. Let's look
+at a simple example. We'll add two numbers lazily by wrapping everything in
+lambda functions.
+
+\begin{lstlisting}[language=Rust]
+fn lazy_add<A, B>(a: A, b: B) -> Box<dyn Fn() -> i32>
+where
+    A: Fn() -> i32 + 'static,
+    B: Fn() -> i32 + 'static,
+{
+    Box::new(move ||a() + b())
+}
+
+fn main() {
+    println!("5 + 6 = {}", lazy_add(|| 5, || 6)());
+}
+\end{lstlisting}
+
+There's a lot going on here. Don't worry about all the syntax, conceptually
+we're just wrapping everything in lambda functions. Instead of parsing and
+returning integers, we use lambda functions that evaluate to integers, but only
+when we want them to instead of immedialtely. There's some stuff going on with
+the trait system, lifetimes, etc. which you should just ignore. The reason I'm
+using Rust and not C++ is that C++ doesn't play nicely with converting lambda
+functions that capture certain values to other types. Other reasons are that
+Rust lambda syntax is a bit simpler and the type system is more intuitive and
+clear\footnote{When I was experimenting with C++, I very quickly ran into this
+convoluted mess: \texttt{Lazy<T>::Lazy<int>::<lambda()>}}.
+
+As you can see, lambda functions in Rust have a different syntax. In Rust,
+lambda functions are denoted with the arguments between pipes ('\texttt{|}')
+followed by the return expression. In this case our lambda functions don't have
+any arguments, so we parse the lambda functions \texttt{||5} and \texttt{||6}.
+These get parsed as the arguments \texttt{a} and \texttt{b}. We return the
+lambda function \texttt{||a() + b()}. The types of these lambda functions are
+\texttt{Fn()\ ->\ i32}. The \texttt{i32} is just a 32-bit integer. I'll talk
+more about types in section \ref{types}.
+
+Conceptually, we're basically doing
+\begin{lstlisting}[language=Rust]
+fn lazy_add(a: Fn() -> i32, b: Fn() -> i32) -> Fn() -> i32 {
+    ||a() + b()
+}
+
+fn main() {
+    println!("5 + 6 = {}", lazy_add(||5, ||6)());
+}
+\end{lstlisting}
+
+but that's not how Rust works sadly. You should read the definition of
+\texttt{lazy\_add} as: "\texttt{lazy\_add} is a function that takes an
+\texttt{a} of type \texttt{Fn() -> i32} and a \texttt{b} of type \texttt{Fn()
+-> i32}, which returns a lambda function which returns the sum of the
+evaluations of \texttt{a} and \texttt{b}. This returned lambda function is also
+of type \texttt{Fn() -> i32}, which makes \texttt{lazy\_add} also of type
+\texttt{Fn() -> i32}." A \texttt{Fn() -> i32} is just a function without
+arguments that returns a 32-bit integer. We define it as such, because this
+way, \texttt{lazy\_add} doesn't just return an integer, but a function that
+evaluates to an integer, which we can decide when to evaluate by calling it.
+That's why we have the extra parentheses at the end when we call it and print
+out the result.
+
+I said that concepts such as functions as first-class citizens and lambda
+functions are a functional concept, yet here we're doing the same thing in
+Rust. That's because functional concepts are seeping into other paradigms. Most
+modern programming languages have lambda functions, or at least some way of
+parsing functions as arguments. This already shows how useful these concepts
+are if every other language is copying it.
+
+In this example, laziness is pretty useless. We only evaluate things later, but
+still do. A slightly more useful example would be the following.
+\begin{lstlisting}[language=Rust]
+fn hang() -> i32 {
+    hang()
+}
+
+fn first<A, B>(a: A, b: B) -> Box<dyn Fn() -> i32>
+where
+    A: Fn() -> i32 + 'static,
+    B: Fn() -> i32 + 'static,
+{
+    Box::new(a)
+}
+
+fn main() {
+    println!("first 5 hang: {}", first(||5, hang)());
+}
+\end{lstlisting}
+Again, this is what we really mean with our definition of \texttt{first}.
+\begin{lstlisting}[language=Rust]
+fn first(a: Fn() -> i32, b: Fn() -> i32) -> Fn() -> i32
+{
+    a
+}
+\end{lstlisting}
+
+In this case, laziness is preventing us from getting stuck in an infinite
+recursive loop when trying to evaluate \texttt{hang}. This is still a very
+silly example though. Here is an actually useful example. We'll define our own
+logical and, but lazy, very similar to how we did it in lambda calculus
+(section \ref{boolops}).
+
+\begin{lstlisting}[language=Rust]
+fn and<A, B>(a: A, b: B) -> Box<dyn Fn() -> bool>
+where
+    A: Fn() -> bool + 'static,
+    B: Fn() -> bool + 'static,
+{
+    if a() { Box::new(b) } else { Box::new(a) }
+}
+
+fn main() {
+    println!("T && T: {}", and(||true, ||true)());
+    println!("T && F: {}", and(||true, ||false)());
+    println!("F && T: {}", and(||false, ||true)());
+    println!("F && F: {}", and(||false, ||false)());
+}
+\end{lstlisting}
+Again the more conceptual pseudo-Rust.
+\begin{lstlisting}[language=Rust]
+fn and(a: Fn() -> bool, b: Fn() -> bool) -> Fn() -> bool
+{
+    if a() { b } else { a }
+}
+\end{lstlisting}
+
+The reason this is a better example, is because we don't evaluate \texttt{b} if
+\texttt{a} is already false. If we didn't define this to be lazily, any
+expression we would parse in for \texttt{b} would have to be evaluated before
+the call to the function, but this is useless when \texttt{a} is already known
+to be false.
+
+But this is still child's play. The real magic is when we start using infinite
+data structures as I hinted at earlier in this section.
 
 % TODO comparison between laziness and non laziness
 
@@ -1615,7 +1754,7 @@ Haskell.
 
 \subsubsection{Basic syntax}
 
-\subsubsection{Haskell's type system}
+\subsubsection{Haskell's type system}\label{types}
 
 \subsubsection{Monads}
 
