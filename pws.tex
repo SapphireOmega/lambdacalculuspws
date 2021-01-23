@@ -1662,8 +1662,8 @@ but that's not how Rust works sadly. You should read the definition of
 \texttt{a} of type \texttt{Fn() -> i32} and a \texttt{b} of type \texttt{Fn()
 -> i32}, which returns a lambda function which returns the sum of the
 evaluations of \texttt{a} and \texttt{b}. This returned lambda function is also
-of type \texttt{Fn() -> i32}, which makes \texttt{lazy\_add} also of type
-\texttt{Fn() -> i32}." A \texttt{Fn() -> i32} is just a function without
+of type \texttt{Fn() -> i32}, which makes the return type of \texttt{lazy\_add}
+also \texttt{Fn() -> i32}." A \texttt{Fn() -> i32} is just a function without
 arguments that returns a 32-bit integer. We define it as such, because this
 way, \texttt{lazy\_add} doesn't just return an integer, but a function that
 evaluates to an integer, which we can decide when to evaluate by calling it.
@@ -1741,7 +1741,85 @@ the call to the function, but this is useless when \texttt{a} is already known
 to be false.
 
 But this is still child's play. The real magic is when we start using infinite
-data structures as I hinted at earlier in this section.
+data structures as I hinted at earlier in this section. Now this gets very
+complicated with all the extra Rust syntax that we don't care about, so you'll
+have to bare with me.
+
+\begin{lstlisting}[language=Rust]
+use std::fmt::Display;
+
+struct List<T> {
+    head: Option<Box<dyn Fn() -> T>>,
+    tail: Option<Box<dyn Fn() -> List<T>>>,
+}
+
+impl<T: Copy + Display> List<T> {
+    fn new() -> Box<dyn Fn() -> Self> {
+        Box::new(move || List { head: None, tail: None })
+    }
+
+    fn from_slice(slice: &'static[T]) -> Box<dyn Fn() -> Self> {
+        if slice.len() == 0 {
+            List::new()
+        } else {
+            let index: T = slice[0];
+            Box::new(
+                move || List {
+                    head: Some(Box::new(move || index)),
+                    tail: Some(List::from_slice(&slice[1..])),
+                }
+            )
+        }
+    }
+
+    fn print(&self) {
+        if let Some(head) = &self.head {
+            print!("{} ", head());
+        } else {
+            println!();
+        }
+
+        if let Some(tail) = &self.tail {
+            tail().print();
+        }
+    }
+
+    fn print_n(&self, n: usize) {
+        if n == 0 {
+            println!();
+            return;
+        }
+
+        if let Some(head) = &self.head {
+            print!("{} ", head());
+        }
+
+        if let Some(tail) = &self.tail {
+            tail().print_n(n - 1);
+        }
+    }
+}
+
+fn range_from(begin: i32) -> Box<dyn Fn() -> List<i32>> {
+    Box::new(
+        move || List {
+            head: Some(Box::new(move || begin)),
+            tail: Some(range_from(begin + 1)),
+        }
+    )
+}
+
+fn main() {
+    let test = range_from(0)().print_n(10);
+}
+\end{lstlisting}
+
+I don't expect you to understand everyting. You just need to know that we are
+making a lazy linked list, just like how I explained it in lambda calculus in
+section \ref{pairs}. I added functions for converting slices to our lazy list,
+printing our list and printing the first n values of our list. I also added a
+\texttt{range\_from} function which makes an infinite list starting from a
+given number to infinity.
 
 % TODO comparison between laziness and non laziness
 
