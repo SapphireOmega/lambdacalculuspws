@@ -2113,7 +2113,7 @@ through the function and returning the final world.
 
 The next step is to make the world inaccessible to the user, we're going to
 hide it, because the user doesn't need to know about it. What we're going to do
-is create a world transformer, which is just an type synonym for a function
+is create a world transformation, which is just an type synonym for a function
 taking a world and returning a pair of some result and the new world.
 
 \begin{lstlisting}[language=Haskell]
@@ -2140,25 +2140,26 @@ We have abstracted away our world and can now reason in terms of world
 transformations instead.
 
 We want to be able to do operations sequentially. In other words, we want to be
-able to compose world transforms. We can't just compose them as we normally
-would. I'd like to very quickly look at a small snippet in category theory.
-Don't worry too much about what it means, I just want to represent visually the
-fact that regular function composition and composition with these world
-transforms is different.
+able to compose world transformations. We can't just compose them as we
+normally would. I'd like to very quickly look at a small snippet in category
+theory.  Don't worry too much about what it means, I just want to represent
+visually the fact that regular function composition and composition with these
+world transformations is different.
 
 In category theory, two arrows must have a composition if they follow
 each other.
 \begin{center}
 	\begin{tikzcd}[row sep=huge, column sep=huge]
-		A \arrow[r, "f"] \arrow[rd, "g \circ f"] & B \arrow[d, "g"]\\
+		A \arrow[r, "f"] \arrow[rd, "g\ \circ\ f"] & B \arrow[d, "g"]\\
 		& C
 	\end{tikzcd}
 \end{center}
 In this case, the objects A and B represent types and the arrows represent
 functions.
 
-But our world transforms don't follow each other, but we want to still be able
-to compose them like this. (I will represent \texttt{WorldT} as T instead.)
+But our world transformations don't follow each other, but we want to still be
+able to compose them like this. (I will represent \texttt{WorldT} as T
+instead.)
 \begin{center}
 	\begin{tikzcd}[column sep=huge]
 		A \arrow[r, "f"] & T(B) && \\
@@ -2168,6 +2169,116 @@ to compose them like this. (I will represent \texttt{WorldT} as T instead.)
 \end{center}
 This is where the idea of monads comes from. The basic idea behind a monad in
 category theory is a way of composing these types of arrows.
+
+We'll invent a new operator to do composition with world transformations. This
+operator is known by different names, the official name in Haskell is
+\emph{bind}, but I've heard it called \emph{shove} too, which I like because it
+fires off my imagination and sounds a bit comical to me. Haskell already has
+such an operator, of course, but we'll define our own version.
+
+The first argument will be a world transformation which returns some type
+\texttt{a}. The next argument will be our first transformation which takes our
+type \texttt{a} and returns a new world transformation which returns some type
+\texttt{b}. Then we return the result of this last world transformation which
+returns \texttt{b}. The following is what we have thus far.
+
+\begin{lstlisting}[language=Haskell]
+(>>>=) :: WorldT a
+       -> (a -> WorldT b)
+       -> WorldT b
+wt >>>= f = undefined
+\end{lstlisting}
+
+Remember that our \texttt{WorldT} is just a type alias for \texttt{World -> (a,
+World)}, where \texttt{a} is some given type. It's just an alias, it's the same
+thing, they're interchangeable. This means that our new operator's type can
+also be written as the following.
+\begin{lstlisting}[language=Haskell]
+(>>>=) :: World -> (a, World)
+       -> (a -> World -> (b, World))
+       -> World -> (b, World)
+\end{lstlisting}
+
+We know what function currying is, but we also have uncurried functions in
+functional programming. An uncurried function doesn't feed in the arguments
+seperately, but takes everything in at once in a pair. We can see that the
+function on the second line (\texttt{wt}) of our fully expanded type of our new
+operator is curried, but the function on the first line (\texttt{wt}) returns a
+pair. This means that if we uncurry this second function, we can just apply it
+to the pair directly.  Luckily for us, Haskell provides a function that can
+uncurry functions.
+
+The type of \texttt{uncurry} is as follows.
+\begin{lstlisting}[language=Haskell]
+uncurry :: (a -> b -> c) -> (a, b) -> c
+\end{lstlisting}
+It's quite obvious what it does from it's type alone.
+
+This means we can uncurry \texttt{f} and compose that with \texttt{wt}. Thus,
+we can implement our operator as follows.
+\begin{lstlisting}[language=Haskell]
+(>>>=) :: WorldT a
+       -> (a -> WorldT b)
+       -> WorldT b
+wt >>>= f = uncurry f . wt
+\end{lstlisting}
+
+In short, to do function composition with two world transformations that don't
+normally compose, you uncurry the first function and then, as if it were magic,
+they suddenly do.
+
+We can use this to reimplement \texttt{whatIsYourName} again.
+\begin{lstlisting}[language=Haskell]
+whatIsYourPureNameT :: WorldT ()
+whatIsYourPureNameT =
+    printStrT "What is your name?" >>>= \_ ->
+    readStrT                       >>>= \name ->
+    printStrT ("Hello " ++ name)
+\end{lstlisting}
+We can compose a world transformation with a lambda function that takes the result
+and feeds it as an argument to the next function. You might be confused,
+because composition happens from right to left, so we don't yet know what name
+is when we call the last function, but we don't have to because of lazy
+evaluation. Name gets evaluated before the function gets called.
+
+What we have done so far is create effectful pure functions which don't modify
+global state directly, but get fed in the world state and produce a new world
+state. We succeeded in abstracting away this world behind world
+transformations. We have then successfully invented a way of sequencing these
+effectful functions by defining a new operator to do a special kind of function
+composition. We have effectively emulated a procedural programming paradigm in
+a pure functional language.
+
+If you want to use this as an actual monad, there are a few things I need to
+note. Right now, we have no way of printing our world to the screen. We need to
+define our \texttt{printStr} and \texttt{readStr} too. This will be left as an
+exercise to the reader. We also need to derive \texttt{Show} for a few things
+for this to work so we can actually look at our states. But what about do
+notation?
+
+Since we've already achieved monads, there is no real point in me going indepth
+with explaining how to enable do notation for our monad, since it's just a
+nicety and doesn't improve our understanding. I will tell you how to do it in
+broad terms, but if you really want to know, you should look at the Tscoding
+video.
+
+%todo ref tscoding vid
+
+To enable do notation, we need to prove to the Haskell compiler that
+\texttt{WorldT} is in fact a monad. There is a difficulty with this.
+\texttt{WorldT} is just a type synonym, which makes this very hard. We should
+wrap it in a new \texttt{WorldM} type and prove that \emph{that} is a monad. To
+prove this, we must prove that our new operator for composition of world
+transformations is equivalent to Haskell's operator for monadic composition
+(bind/shove). I'll refer you to the video again if you want to see how.
+
+%todo ref tscoding vid
+
+To reiterate, to do side effects, we do operations on world that encaptulates
+all outside state. We then abstract away our world behind world
+transformations. We then invent a way of doing function composition with those
+world transformations so you can run these effectful functions sequentially,
+and Bob's your uncle.
 
 \subsection{Comparison to other paradigms}\label{comparison}
 
