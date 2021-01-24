@@ -7,10 +7,13 @@
 \usepackage{amsmath}
 \usepackage{listings, listings-rust}
 \usepackage{tikz-cd}
+\usepackage{graphicx}
 
 \addbibresource{bibliography.bib}
 
-\title{Lambda Calculus and its Implementation in Computer Science}
+\graphicspath{./}
+
+\title{Lambda Calculus and its Implications in Computer Science}
 \author{Joris Klaasse Bos\\ Zaanlands Lyceum}
 
 \begin{document}
@@ -21,7 +24,7 @@
 \section*{Preface}
 \addcontentsline{toc}{section}{Preface}
 
-% TODO: Something about PWS
+% todo: Something about PWS
 
 The reason I chose to write about this subject, is that it combines two things
 I enjoy: abstract mathematics and computer science. I have been programming for
@@ -494,7 +497,9 @@ It applies \(f\) to \(a\) and its result to the result of the application of
 As I've said, every combinator can be defined as a combination of other
 combinators. The question arises: how many combinators do we need to define
 every other combinator? It turns out you need just two. You can define every
-other combinator using just \(S\) and \(K\).
+other combinator using just \(S\) and \(K\). I will not go over it now, but
+it's interesting to look into. What's also interesting is that you can define
+all formal logical operations with just two operators.
 
 \subsubsection{To Mock a Mockingbird}
 
@@ -930,8 +935,6 @@ lambda calculus. What happens when we compose two numbers, say \(N3\) with
 	=&\enspace N9
 \end{align*}
 
-%todo ref composition associativity
-
 We can tell that composition with natural numbers is the same as
 multiplication, which makes a lot of sense, because function composition is
 associative. The ninefold composition of \(f\) is the same as the threefold
@@ -1143,8 +1146,6 @@ and it's really out of the scope of this text to cover all of arithmetic in
 lambda calculus. I just wanted to show that it's possible and that lambda
 calculus is Turing complete.
 
-% todo scope
-
 Just like we defined a successor function before defining addition, we'll
 define a predecessor function before defining subtraction.
 
@@ -1308,7 +1309,7 @@ a pair of integers to define rationals. You define a rational number \(q\) as a
 pair \((k,a)\), where \(k\) is an integer and \(a\) a natural number such that
 \(q=k/(1+a)\).
 
-% TODO: reals, complex numbers
+% todo: reals, complex numbers
 
 \subsection{Recursion}\label{recursion}
 
@@ -1810,9 +1811,13 @@ fn range_from(begin: i32) -> Box<dyn Fn() -> List<i32>> {
 }
 
 fn main() {
-    let test = range_from(0)().print_n(10);
+    List::from_slice(&[3, 5, 4, 6, 9, 2])().print();
+    range_from(0)().print_n(10);
 }
 \end{lstlisting}
+
+If you want to play with the code, you can find it in the accompanying code
+folder.
 
 I don't expect you to understand everyting. You just need to know that we are
 making a lazy linked list, just like how I explained it in lambda calculus in
@@ -1821,7 +1826,33 @@ printing our list and printing the first n values of our list. I also added a
 \texttt{range\_from} function which makes an infinite list starting from a
 given number to infinity.
 
-% TODO comparison between laziness and non laziness
+Laziness allows us to describe a list as a recursive function that only
+evaluates the elements we need. We are basically defining a list mathematically
+and evaluating only the part we need.
+
+This is just one example of an infinite list. This one may be a bit pointless,
+but they can be quite usefull. You could make a list of all possible outputs of
+a functions and graph it or turn it into a binary string. You basically just do
+set theory.
+
+% todo: ref infinite lists in haskell
+
+You may be asking yourself why \texttt{range\_from} takes a regular integer
+rather than a lazy integer. Well, the real reason is that I wasn't able to get
+it to work using lazy integers, but there's actually a good reason why you
+wouldn't want it to be lazy. If it were lazy, then \texttt{begin} would only be
+evaluated for an element when you evaluate that element, but it has to be
+reevaluated for every element. If \texttt{begin} is immediately forced, you
+only have to calculate it once, resulting in a significant performace boost.
+
+Laziness is a double edged sword. It allows you to get more performance in some
+places and do cool things like infinite data structures, but it may also have
+significant performance drawbacks. In this case, we were able to decide what to
+make lazy, but in functional programming everything is lazy and we don't have
+this luxury. Laziness is just a different approach, it doesn't solve all
+problems.
+
+% todo comparison between laziness and non laziness
 
 \subsection{Introduction to Haskell}
 
@@ -1832,17 +1863,418 @@ Haskell.
 
 \subsubsection{Basic syntax}
 
+The basic syntax of Haskell is relatively simple and intuitive. There is not
+much point in explaining everything. I'll explain the most basic and important
+things. I'll reference you to a book called \emph{Learn You a Haskell for Great
+Good!} for a full guide to the Haskell programming language. I think that most
+syntax is simple and intuitive enough that, if you know the basics, should be
+self explanatory when I introduce it.
+
+%todo: ref learn you a haskell
+
 \subsubsection{Haskell's type system}\label{types}
 
-\subsubsection{Monads}
+\subsubsection{Example program}
+
+%todo: ref tscoding video
+
+This example program was me experimenting with Haskell. I watched a video by
+Tscoding where he implemented a simple program that could produce melodies. I
+played with it a bit more and was able to very quickly introduce new things and
+make it able to also play chords. I can take this further still, but I don't
+have the time right now, and I'm not sure if I'm going to expand on this
+anyway; there're probably more interesting projects I'd want to invest my time
+in. That said, it might be interesting to add overtones and timbre, and maybe a
+system in which you pick a key and can easily pick notes withing the key, so
+you don't have to denote every note as number of half-steps from A\(_1\).
+
+I'm not going to explain the code, there really is no point. The video explains
+it well, so why would I still do it? I just wanted to show the result of my
+playing with Haskell and the ability to introduce your own ideas very
+naturally.
+
+I'm already making use of monads (section \ref{monads}). Don't worry about
+them, just think of them as a way of writing necessary procedural code.
+
+I'm sorry the font has to be so small. It had to be like this because the code
+wouldn't fit otherwise. I'm also going to admit that the melody sounds quite
+wrong. I was trying to recreate part of a song I made a while back, but I just
+couldn't figure out a certain part of the melody. I kept trying different
+things and gave up in the end. Now it's probably worse than it started of as.
+Just in case anyone ends up running this program (although I consider the
+chance small), don't say I didn't warn you.
+
+You should be able to find the program in the accompanying code folder. I
+figured that it was small enough to put it striaght in here so you can just
+quickly glance at it, but if you want to play with it, you can find the code
+seperately.
+
+\begin{lstlisting}[language=Haskell, basicstyle=\tiny]
+import qualified Data.ByteString.Lazy as B
+import qualified Data.ByteString.Builder as B
+import Data.Foldable
+import Data.List
+import System.Process
+import Text.Printf
+
+type Pulse      = Float
+type Seconds    = Float
+type SampleRate = Float
+type Hertz      = Float
+type Semitones  = Float
+type TET        = Float
+type Volume     = Float
+type Sound      = [Pulse]
+type Chord      = Sound
+
+outputFilePath :: FilePath
+outputFilePath = "output.bin"
+
+volume :: Volume
+volume = 0.1
+
+sampleRate :: SampleRate
+sampleRate = 48000.0
+
+pitchStandard :: Hertz
+pitchStandard = 440.0
+
+temperament :: TET
+temperament = 12.0
+
+noteFreq :: Semitones -> Hertz
+noteFreq n = pitchStandard * (2 ** (1.0 / temperament)) ** n
+
+freqSound :: Seconds -> Float -> Float -> Hertz -> Sound
+freqSound duration attack release freq = map (* volume) $ zipWith3 (\x y z -> x * y * z)
+                                                          attackMultipliers releaseMultipliers pureFreqSound
+    where
+        step = (freq * 2 * pi) / sampleRate
+        pureFreqSound :: Sound
+        pureFreqSound = map sin $ map (* step) [0.0 .. sampleRate * duration]
+        attackMultipliers :: [Volume]
+        attackMultipliers = map (min 1.0) [0.0, attack ..]
+        releaseMultipliers :: [Volume]
+        releaseMultipliers = reverse $ take (length pureFreqSound) $ map (min 1.0) [0.0, release ..]
+
+note :: Semitones -> Seconds -> Float -> Float -> Sound
+note duration attack release n = freqSound duration attack release $ noteFreq n
+
+combineSounds :: [Sound] -> Sound
+combineSounds = map sum . transpose
+
+chord :: Seconds -> [Semitones] -> Chord
+chord duration ns = combineSounds [note duration 0.0001 0.001 n | n <- ns]
+
+chords :: Sound
+chords = concat $ take 16 $ repeat $ concat $ [ chord 1.500 [-7,-4,0,3]
+                                              , chord 1.125 [-2,2,-7,-4]
+                                              , chord 2.625 [-9,-5,-2,2]
+                                              , chord 0.750 [-9,-5,-2,2]
+                                              ]
+
+melody :: Sound
+melody = concat $ take 4 $ repeat $ concat [ note 0.3750 0.001 0.001 17
+                                           , note 0.3750 0.001 0.001 20
+                                           , note 0.3750 0.001 0.001 24
+                                           , note 0.3750 0.001 0.001 27
+                                           , note 0.3750 0.001 0.001 10
+                                           , note 0.3750 0.001 0.001 22
+                                           , note 0.3750 0.001 0.001 17
+                                           , note 2.6250 0.001 0.001 14
+                                           , note 0.7500 0.001 0.001 12
+
+                                           , note 0.3750 0.001 0.001 17
+                                           , note 0.3750 0.001 0.001 20
+                                           , note 0.3750 0.001 0.001 24
+                                           , note 0.3750 0.001 0.001 27
+                                           , note 0.3750 0.001 0.001 10
+                                           , note 0.3750 0.001 0.001 22
+                                           , note 0.3750 0.001 0.001 17
+                                           , note 2.6250 0.001 0.001 12
+                                           , note 0.7500 0.001 0.001 10
+
+                                           , note 0.3750 0.001 0.001 17
+                                           , note 0.3750 0.001 0.001 20
+                                           , note 0.3750 0.001 0.001 24
+                                           , note 0.7500 0.001 0.001 27
+                                           , note 0.3750 0.001 0.001 24
+                                           , note 0.7500 0.001 0.001 20
+                                           , note 0.3750 0.001 0.001 15
+                                           , note 0.3750 0.001 0.001 19
+                                           , note 0.3750 0.001 0.001 20
+                                           , note 0.9375 0.001 0.001 24
+                                           , note 0.1875 0.001 0.001 22
+                                           , note 0.7500 0.001 0.001 26
+
+                                           , note 0.3750 0.001 0.001 17
+                                           , note 0.3750 0.001 0.001 20
+                                           , note 0.3750 0.001 0.001 24
+                                           , note 0.3750 0.001 0.001 27
+                                           , note 0.7500 0.001 0.001 22
+                                           , note 0.7500 0.001 0.001 31
+                                           , note 3.0000 0.001 0.001 27
+                                           ]
+
+song :: Sound
+song = combineSounds [chords, melody]
+
+save :: FilePath -> IO ()
+save filePath = B.writeFile filePath $ B.toLazyByteString $ fold $ map B.floatLE song
+
+play :: IO ()
+play = do
+    save outputFilePath
+    _ <- runCommand $ printf "ffplay -showmode 1 -f f32le -ar %f %s" sampleRate outputFilePath
+    return ()
+\end{lstlisting}
+
+\subsubsection{Monads}\label{monads}
+
+For the longest time there was a problem in functional programming that
+programmers just couldn't figure out. How do you do side effects in a language
+that doesn't allow side effects? The ideas of functional programming are cool
+and all, but what's the point if it's completely useless? The whole point of a
+program is for it to do side effects, it needs to have an effect on the world
+around it. Well, there actually \emph{is} a way of doing side effects in
+functional programming with monads. The idea of monads was developed in
+category theory and turned out to be very useful for functional programmers.
+
+Haskell has this magic thing called monad. Haskell also has this magical do
+notation. When we make a function that returns a monad, we can use this do
+notation to basically write in a procedural and effectful style. One example of
+this would be this simple program that does input and output using an
+\texttt{IO} monad.
+
+\begin{lstlisting}[language=Haskell]
+whatIsYourName :: IO ()
+whatIsYourName = do
+    putStrLn "What is your name?"
+    name <- getLine
+    putStrLn ("Hello, " ++ name)
+\end{lstlisting}
+
+This looks just like a procedural program, but there's a lot of things going on
+in the background. I'll explain how monads work and will be defining my own
+\texttt{IO} monad in the process. This section is largely inspired by a video
+by Tscoding, my code examples will be from this, although be it maybe with some
+modifications. I'll go over it relatively quickly, so if you want to understand
+this better, I recommend you to watch the video. There is also a computerphile
+video about monads, but I don't think that video really explains what monads
+are and it introduces a bunch of things without much thought or explanation,
+but it may be useful. Lastly, there is a very useful video by Brian Beckman
+called \emph{Don't fear the Monad}. It really goes indepth and explains things
+very precisely and clearly.
+
+%todo: ref tscoding, computerphile and brian beckman videos
+
+The basic idea behind a monad is very simple. We want to change the state of
+the outside world, but we aren't able to do that, because all our functions are
+pure, so we're not allowed to change global state. The thing is, we don't have
+to. Functions are just mappings between things. We can create a world type that
+encapsulates the world's state and map it to a new state where our effect was
+performed. This way we're we can have an effect on the world, while still
+programming with pure functions. Let's look at this in code.
+
+\begin{lstlisting}[language=Haskell]
+data World = World
+
+printStr :: String -> World -> World
+printStr = undefined
+
+readStr :: World -> (String, World)
+readStr = undefined
+\end{lstlisting}
+
+I've defined the function \texttt{printStr} to take a string and a world and
+produce a new world where the string has been printed to the screen. I also
+define a function \texttt{readStr} which takes a world and produces a pair of
+the read string and the new world where the string has been read. I will not
+yet go over the implementations of these functions, because there is some other
+stuff we need to talk about first.
+
+Imagine for now that these functions are in fact implemented. We can use them
+to write a new version of \texttt{whatIsYourName}.
+
+\begin{lstlisting}[language=Haskell]
+whatIsYourPureName :: World -> World
+whatIsYourPureName w1 = w4
+    where w2         = printStr "What is your name?" w1
+          (name, w3) = readStr w2
+          w4         = printStr ("Hello" ++ name) w3
+\end{lstlisting}
+
+Our new function manipulates the world, so of course it should take a world and
+produce a world. We take our input world and run it through our
+\texttt{printStr} function and save the new world. We then run that world
+through the \texttt{readStr} function and save the resulting new world and
+name, and lastly we print out our message, again running our old new world
+through the function and returning the final world.
+
+The next step is to make the world inaccessible to the user, we're going to
+hide it, because the user doesn't need to know about it. What we're going to do
+is create a world transformer, which is just an type synonym for a function
+taking a world and returning a pair of some result and the new world.
+
+\begin{lstlisting}[language=Haskell]
+type WorldT a = World -> (a, World)
+\end{lstlisting}
+
+Using this, we can quite easily wrap our \texttt{readStr} in a new function
+returning \texttt{WorldT}. The return type of \texttt{readStr} is already a
+\texttt{WorldT}, i.e. it's already compatible.
+
+Adapting \texttt{printStr} isn't too hard either. Since it doesn't return
+anything, we can make our wrapper return a pair of nothing and a call to our
+regular \texttt{printStr} resulting in our new world.
+
+\begin{lstlisting}[language=Haskell]
+readStrT :: WorldT String
+readStrT = readStr
+
+printStrT :: String -> WorldT ()
+printStrT s w = ((), printStr s w)
+\end{lstlisting}
+
+We have abstracted away our world and can now reason in terms of world
+transformations instead.
+
+We want to be able to do operations sequentially. In other words, we want to be
+able to compose world transforms. We can't just compose them as we normally
+would. I'd like to very quickly look at a small snippet in category theory.
+Don't worry too much about what it means, I just want to represent visually the
+fact that regular function composition and composition with these world
+transforms is different.
+
+In category theory, two arrows must have a composition if they follow
+each other.
+\begin{center}
+	\begin{tikzcd}[row sep=huge, column sep=huge]
+		A \arrow[r, "f"] \arrow[rd, "g \circ f"] & B \arrow[d, "g"]\\
+		& C
+	\end{tikzcd}
+\end{center}
+In this case, the objects A and B represent types and the arrows represent
+functions.
+
+But our world transforms don't follow each other, but we want to still be able
+to compose them like this. (I will represent \texttt{WorldT} as T instead.)
+\begin{center}
+	\begin{tikzcd}[column sep=huge]
+		A \arrow[r, "f"] & T(B) && \\
+		&& A \arrow[r, "g\ \circ\ f"] & T(C) \\
+		B \arrow[r, "g"] & T(C) &&
+	\end{tikzcd}
+\end{center}
+This is where the idea of monads comes from. The basic idea behind a monad in
+category theory is a way of composing these types of arrows.
 
 \subsection{Comparison to other paradigms}\label{comparison}
 
+Every programming language has its pros and cons (although sometimes
+disproportionally). Functional programming has many pros, but also some cons.
+We've looked at laziness extensively already (section \ref{laziness}), so I
+won't need to go over that again. We will be looking at a few differences
+between functional programming and your usual procedural/imperative languages.
+
 \subsubsection{Declarative vs imperative}
+
+Functional programming is \emph{declarative}. Most languages are
+\emph{imperative} in nature. Declarative programming provides a more expressive
+style of programming at the cost of being able to optimise the underlying
+technicalities.
+
+Imperative means you have to explain to the computer what to do. You don't talk
+about abstract ideas. Rather, you tell the computer to read some bytes at one
+memory adress and write some bytes at another. You tell it to load certain
+things into registers, compare values, jump to code at certain adresses. Most
+languages aren't completely imperative. Machine language is really the only
+"pure" impertive language, all other languages provide some abstraction. C has
+functions, loops and variables, which are already some higher level
+abstractions, but they translate almost directly to machine code, so it's still
+considered imperative. Even higher level languages such as Java, C\#, C++,
+Rust, etc. are still considered imperative, because there is still a lot of
+sequentiality and commands rather that descriptive code, although some is
+present.
+
+Declarative programming is when you describe how things are. You don't think
+about the internals of your computer, but about abstract mathematical ideas.
+This provides a level of expressiveness which is very powerful. Haskell code is
+notoriously short and packs a lot of ideas in just a few lines of code. You can
+easily add new ideas and change relationships between thing. It is very easy to
+reason about your code, while in imperative programming, you may have made a
+small typo somewhere, significantly altering the state of your programming and
+breaking everything. Such a mistake can be very hard to find, because you have
+to go through your code line by line and check all state to see what is as
+expected and what not.
 
 \subsubsection{Usefulness vs conceptual purity}\label{usefulness}
 
+There is, however, a drawback to this. We can't write very useful programs.
+We've talked about how to solve this in section \ref{monads}. Basically, we
+need to modify state to be able to do things. If we want do draw something on
+the screen, we need to modify its state, which we normally can't. This was a
+problem that took programmers an mathematicians long to solve. They came up
+with monads, which allowed the programmer to write a function with side
+effects. The basic idea is that you have some "dirty" functions that interface
+with the outside world, which you can then use in a "pure" program. We seperate
+the dirty things from the pure things, and try to minimise the dirty things as
+much as possible. We can use these two different types of functions without
+them polluting eachother. The type system keeps them apart.
+
+Ultimately we would have a pure and useful language. Functional programming
+starts very pure and tries to be more useful by inventing things like monads,
+while other languages start very useful and try to be more pure by inventing
+abstractions.
+
+Simon Peyton Jones, the creator of Haskell, did a very well known and funny
+video called \emph{Haskell is useless}. In there he talks about these two
+groups trying to be both useful and safe and draws a little graph and talks and
+makes jokes. The graph is something like the following.
+
+% todo: ref haskell is useless
+
+\begin{center}
+	\includegraphics[scale=1.3]{useless}
+\end{center}
+
+He talks about how both paradigms want to be safe, expressive and useful, but
+they take two different approaches. Although they take two different
+approaches, they borrorw a lot of ideas from eachother.
+
+I personally quite like Rust. It's a low level language, but with a lot of
+cheap abstractions. In the laziness examples I used Rust (section
+\ref{laziness}). It was quite clear in those examples that there was more going
+on then what I was explaining. All this extra was technical details the Rust
+compiler requires, but Rust also provides a vocabulary for more abstract ideas.
+Rust takes a middle way, it tries to have expressiveness and abstraction
+without losing out on speed and technical details. This does make Rust quite a
+complicated and large language---it's not as elegant as C or Haskell. Haskell
+is relatively simple and elegant, and so is C. C is very nice if you have to
+perform relatively simple tasks where speed and optimisation is important,
+while Haskell is very nice when you have to write very complicated systems
+where performance isn't an issue. Rust provides a vocabulary to solve big and
+complicated where performance is an issue. It tries to fill the same gap C++
+does, but C++ has been hacked on and added to for what feels like centuries. It
+is becoming a convoluted monster. Rust starts with a clean slate and new ideas
+and experience from C++.
+
 \subsubsection{Meta programming}\label{metaprogramming}
+
+There is another paradigm I want to have a quick look at. This is \emph{meta
+programming}. Most programmers are probably familiar with meta programming.
+It's when you write code that generates code. Most languages have macro's and
+something along the lines of C++'s template system. These are all forms of meta
+programming, but there are languages that have \emph{only} meta programming.
+Meta programming allows for a lot of abstraction. You can easily abstract
+repetative code.
+
+Probably the biggest meta programming language (family) is Lisp. Lisp is very
+simple, just like the lambda calculus. It only has lists. Your program is
+entierly made up of lists. Lists can be evaluated. The resulting language has
+some similarities to lambda calculus and functional programming. Namely, in
+lambda calculus everything is a function that can be evaluated, while in Lisp,
+everything is a list that can be evaluated.
 
 \section{A practical example of functional programming}
 
@@ -1858,9 +2290,24 @@ continuation of section \ref{comparison}, so I recommend you read it before you
 read this. This section tries to paint a picture of what is said in section
 \ref{comparison}.
 
-\subsection{Scheme interpreter in C}
+I sadly didn't have the time to completely finish the interpreters, but I have
+written some code that already shows what I'm trying to get at. I'll go over
+what an interpreter should do and how you would go about implementing that in C
+and Haskell. I got pretty far with the C interpreter, though.
 
-\subsection{Scheme interpreter in Haskell}
+\subsection{How an interpreter works}
+
+We first have to understand how an interpreter actually works before we start
+writing one. An interpreter should perform a few steps.
+
+\subsection{Lisp interpreter in C}
+
+I can't just paste all the code in here, that would be stupid, so you can find
+it in the accompanying code folder. You're not going to understand most of the
+code, but that's the point. I'm trying to show that the semantics of code is
+much more obvious in Haskell than in C.
+
+\subsection{Lisp interpreter in Haskell}
 
 \newpage
 \section*{Afterword}
