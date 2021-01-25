@@ -11,6 +11,8 @@
 
 \addbibresource{bibliography.bib}
 
+\date{25th January 2021}
+
 \graphicspath{./}
 
 \title{Lambda Calculus and its Implications in Computer Science}
@@ -19,6 +21,12 @@
 \begin{document}
 
 \maketitle
+\thispagestyle{empty}
+\newpage
+
+\newpage
+\thispagestyle{empty}
+\mbox{}
 \newpage
 
 \section*{Preface}
@@ -54,11 +62,9 @@ The final few sections are smaller; they really just meant to illustrate what
 is said in the preceding sections.
 
 Secondly, every reference will be denoted with a number in braces which
-corresponds with a work found in the back on the references page. Many of my
-sources, however, aren't on there, because I didn't directly refer to them.
-Those sources will be displayed on the page after the references, the
-bibliography (as of now, I haven't yet compiled those sources and created that
-page).
+corresponds with a work found in the back on the bibliography page. Many of my
+sources, however, aren't directly referenced, so it will also contain all the
+sources I used that weren't referenced.
 
 As for the style in which I explain lambda calculus, I may differ in it from
 how other literature usually approaches the topic. Lambda calculus is often
@@ -72,12 +78,29 @@ to explain the lambda calculus, thus this work is written in a more prose-like
 style, rather than a strictly mathematical one. I think that lambda calculus is
 simple enough that, when explained well, most people should be able to follow
 it. On a similar note, I think that the way this work is written, most people
-who are not familiar with mathematical literature should be able to follow it.
+who are not familiar with mathematical literature should be able to follow it
+(except for maybe part of functional programming section).
 
+Lastly, I want to thank Daan Hoogcarspel for reading this work and giving
+feedback and making suggestions along the way. We discuss similar topics in our
+PWS's (profielwerkstuk). He talks about formal logic and covers many similar
+topics. I recommend you read it \parencite{daanbanaan}.
+
+\newpage
+
+\newpage
+\thispagestyle{empty}
+\mbox{}
 \newpage
 
 \tableofcontents
 \newpage
+
+\newpage
+\thispagestyle{empty}
+\mbox{}
+\newpage
+
 
 \section{Introduction}
 
@@ -130,14 +153,15 @@ attempt defining natural numbers, but he was the most successful.
 rediscovered and improved on by \textcite{curry1930}, as a way to remove the
 need for quantified variables in logic.
 
-One major attempt to define all of mathematics was done by
-\textcite{russell1997}. They wrote a book that would become well know in all of
-mathematics and logic. This book is called \emph{Principia Mathematica}. They
-did, however, run into a few problems, which arose from self-reference. To
-solve these problems that this paradoxical self-reference brought with it, they
-invented an elaborate system, the theory of types, to circumvent/eliminate it.
-It was a very carefully crafted bastion against self-reference ever coming up
-in their system, which was not very simple, clean or intuitive.
+One major attempt to define all of mathematics was done by Russell and
+Whitehead \parencite{pm1, pm2, pm3}. They wrote a book that would become well
+know in all of mathematics and logic. This book is called \emph{Principia
+Mathematica}. They did, however, run into a few problems, which arose from
+self-reference. To solve these problems that this paradoxical self-reference
+brought with it, they invented an elaborate system, the theory of types, to
+circumvent/eliminate it.  It was a very carefully crafted bastion against
+self-reference ever coming up in their system, which was not very simple, clean
+or intuitive.
 
 People praised \emph{PM} as they thought they had finally done it; they had
 formalised all of mathematical logic, they had realised the dream of grounding
@@ -1080,6 +1104,12 @@ Here is an example for if it is not yet clear to you why we use the constant
 combinator:
 \[ISZERO\enspace N3=(\lambda n.n(KF)T)N3=N3(KF)T=K\enspace F\enspace (KF(KF\enspace T))=F\]
 
+Using this in combination with previously defined arithmetic operations, we can
+quite easily define other numerical comparisons. I consider it futile to go
+over all of them, because they're easy enough to figure out for yourself,
+besides I'm not using them in later sections, so I don't feel the need to
+define them when I don't use them.
+
 \subsubsection{Data structures}\label{pairs}
 
 A fundamental concept in programming is that of data structures. Data
@@ -1309,6 +1339,10 @@ a pair of integers to define rationals. You define a rational number \(q\) as a
 pair \((k,a)\), where \(k\) is an integer and \(a\) a natural number such that
 \(q=k/(1+a)\).
 
+For encoding real numbers I will refer you to \parencite{stack1}. This and
+\parencite{stack2} is where I got most information for encodings of other kinds
+of numbers from.
+
 % todo: reals, complex numbers
 
 \subsection{Recursion}\label{recursion}
@@ -1498,16 +1532,16 @@ sense. We have already seen the reduction of the \(PRED\) function in section
 	=\ &Y(\lambda fn.n(KF)T\ N1\ (\lambda g.n\ (f\ (PRED\ n)\ g)))\\
 	=\ &(\lambda f.(\lambda x.f(xx)(\lambda x.f(xx))))\\
 	&(\lambda fn.n((\lambda ab.a)(\lambda ab.b))(\lambda ab.a)(\lambda ab.ab)\\
-	&\quad(\lambda g.n\ (f\ (PRED\ n)\ g)))\\
+	&\qquad(\lambda g.n\ (f\ (PRED\ n)\ g)))\\
 	=\ &(\lambda f.(\lambda x.f(xx)(\lambda x.f(xx))))\\
 	&(\lambda fn.n(\lambda abc.c)(\lambda ab.a)(\lambda ab.ab)\\
-	&\quad(\lambda g.n\\
-	&\quad\quad(f\\
-	&\quad\quad(n(\lambda ph.h(p.(\lambda ab.b))(\lambda ia.i(p(\lambda bc.c)ia)))(\lambda h.h(\lambda ab.b)(\lambda ab.b))(\lambda ab.a))\\
-	&\quad\quad g)))
+	&\qquad(\lambda g.n\\
+	&\qquad\qquad(f\\
+	&\qquad\qquad(n(\lambda ph.h(p.(\lambda ab.b))(\lambda ia.i(p(\lambda bc.c)ia)))(\lambda h.h(\lambda ab.b)(\lambda ab.b))(\lambda ab.a))\\
+	&\qquad\qquad g)))
 \end{align*}
 
-\section{Functional programming (applied lambda calculus)}
+\section{Functional programming (applied lambda calculus)}\label{functional_programming}
 
 Functional programming is really just lambda calculus as a programming
 paradigm. The fundamental ideas and properties of lambda calculus are also the
@@ -1533,12 +1567,25 @@ is interconnected and very important to logic, mathematics and computer science
 as a whole. Ultimately, I'd have liked to talk about all of these, but sadly I
 couldn't.
 
+I spent an entire section (section \ref{computation}) to show you that lambda
+calculus is turing complete. The reason I did this was to show you that lambda
+calculus and machine language are formally equivalent, while taking two wildly
+different approaches. Lambda calculus is very simple and has some desirable
+properties which allow us to make expressive code which is easy to reason
+about. The idea behind functional programming is programming in a lambda
+calculus inspired style and translating it to machine code. We can do this,
+because lambda calculus is turing complete, thus formally equivalent with
+machine code. The difficulty is with optimising the translation process.
+
 \subsection{Fundamental ideas from lambda calculus}
 
 Throughout this work, I have mentioned some of the desirable properties of
 lambda calculus. This will be a more indepth look at these properties and why
 we care for them. Namely statelessness, functions and data being practically
-the same, and laziness.
+the same, and laziness. These properties are very useful. I'll compare
+functional programming with other paradigms at the end of this section (section
+\ref{functional_programming}), which really tries to illustrate the power of
+this paradigm and also some of its weaknesses.
 
 \subsubsection{Statelessness}\label{statelessness}
 
@@ -1561,6 +1608,8 @@ able to create anything at all. The thing is that there is no manipulation of
 global data, which might have an impact on some completely different part of
 your program. You don't have any unexpected behaviour happening, because you
 forgot about some variable.
+
+I talk more about the benefits of statelessness in section \ref{comparison}.
 
 \subsubsection{Functions as data}
 
@@ -1861,32 +1910,276 @@ functional programming language. It is the mother of functional programming
 language. When people talk about functional programming, they often talk about
 Haskell.
 
-\subsubsection{Basic syntax}
+\subsubsection{Basic syntax}\label{syntax}
 
 The basic syntax of Haskell is relatively simple and intuitive. There is not
 much point in explaining everything. I'll explain the most basic and important
 things. I'll reference you to a book called \emph{Learn You a Haskell for Great
-Good!} for a full guide to the Haskell programming language. I think that most
-syntax is simple and intuitive enough that, if you know the basics, should be
-self explanatory when I introduce it.
+Good!} by \textcite{miran2011} for a full guide to the Haskell programming
+language. I think that most syntax is simple and intuitive enough that, if you
+know the basics, should be self explanatory when I introduce it. My goal is not
+to teach you Haskell, but the ideas behind functional programming. For a quick
+cheatsheet of the Haskell syntax, I'll refer you to \parencite{haskell}. I'll
+be going over the basic syntax from a bird's eye view.
 
-%todo: ref learn you a haskell
+In haskell, everything is constant. Once you bind an identifier to somethings,
+it will be forever bound to it. In haskell, everything has a type. We denote
+the type of something with the \texttt{::} operator, followed by it's type
+(section \ref{types}). We can define a new identifier with the \texttt{=}
+operator. We follow it with the definition of our identifier. This can be a
+function or a value (it's all the same to us functional programmers), as long
+as it has the right type. You don't have to explicitly denote the type of
+something when it can be inferred from your definition by the compiler, but
+it's good practice to still do.
+
+You have your normal types as you'd expect them. Haskell types usually use
+upper camel case or Pascal case, while functions use lower camel case.
+
+There are different kinds of literals like whole numbers, floating point
+numbers, characters, booleans, lists, strings and the whole lot. They're pretty
+much as how you'd expect. I won't show them here, because they're pretty
+obvious when you see them. Boolean values are capitalised.
+
+You have your normal arithmetic operators and boolean operators which work just
+like they do in pretty much every other language. The only thing to note is
+that not equal to, \texttt{!=} in most languages, is \texttt{\\=} in Haskell,
+which is supposed to look like \(\neq\). Negation isn't done with a \texttt{!}
+operator like in most languages, but with a \texttt{not} function.
+
+Arithmetic operators have function counterparts. These functions are words
+rather than symbols and are prefix rather than suffix, just like any other
+function. You can turn functions into infix functions by surrounding them with
+back ticks (\texttt{\`}). As an example:
+\begin{lstlisting}[language=Haskell]
+11 `div` 8
+\end{lstlisting}
+as opposed to
+\begin{lstlisting}[language=Haskell]
+div 11 8
+\end{lstlisting}
+\texttt{div} is operates on integers, so these expressions return \texttt{1}.
+
+There are some string manipulation operators. The one you'll use most is
+concatination (\texttt{++}), which is an infix operator.
+
+Regular functions are defined by writing their name, followed by their
+arguments, followed by the \texttt{=} sign, followed by the return expression.
+An example, explicitly denoting the type (section \ref{types}), would be the
+following.
+\begin{lstlisting}[language=Haskell]
+concatenate3 :: String -> String -> String -> String
+concatenate3 x y z = x ++ y ++ z
+\end{lstlisting}
+
+Haskell has lambda functions of course. Lambda function in haskell look very
+much like regular lambda functions, but instead of a lambda we use a backslash
+(\texttt{\\})\footnote{Who has a lambda on his keyboard, right?}. The argument
+names are seperated by spaces. Instead of a dot we use an arrow (\texttt{->}).
+Thus, a lambda expression in Haskell would look like the following.
+\begin{lstlisting}[language=Haskell]
+(\x y -> x + y) 2 3
+\end{lstlisting}
+which reduces to
+\begin{lstlisting}[language=Haskell]
+(\y -> 2 + y) 3
+\end{lstlisting}
+and in turn to
+\begin{lstlisting}[language=Haskell]
+2 + 3
+\end{lstlisting}
+which just result in \texttt{5}.
+
+We can of course define a function as a lambda function.
+\begin{lstlisting}[language=Haskell]
+concatenate3 :: String -> String -> String -> String
+concatenate3 = \x y z -> x ++ y ++ z
+\end{lstlisting}
+
+Function composition is done with a dot. There is also a \texttt{\$} operator,
+which basically puts parentheses around anything right of it. It can be used in
+place of the dot operator when the argument is know, else you would need to put
+parentheses around the function composition. So the next two expressions are
+the same.
+\begin{lstlisting}[language=Haskell]
+(f . g) x
+f $ g x
+\end{lstlisting}
+
+When we define a function, we may want to define some identifiers and use them
+in the return expression. We can do this with \emph{where notation}.
+\begin{lstlisting}[language=Haskell]
+addFour w x y z = z + b
+    where a = w + x
+          b = y + a
+\end{lstlisting}
+
+We have different kind of conditionals like this.
+\begin{lstlisting}[language=Haskell]
+fib n
+  | n < 2 = 1
+  | otherwise = fib (n - 1) + fib (n - 2)
+
+fib n = 
+  case n of
+    0 -> 1
+    1 -> 1
+    _ -> fib (n - 1) + fib (n - 2)
+
+fib n =
+  if n < 2
+   then 1
+   else fib (n - 1) + fib (n - 2)
+\end{lstlisting}
+They speak for themselves.
+
+We can create type synonyms
+\begin{lstlisting}[language=Haskell]
+type Email = String
+type Name = String
+type BigFunction = (c -> d) -> (b -> c) -> (a -> b) -> (a -> d)
+\end{lstlisting}
+
+We can create enumeration types.
+\begin{lstlisting}[language=Haskell]
+data Bool = True | False
+\end{lstlisting}
+
+We can create monadic functions and use \emph{do notation} to basically write
+in a procedural style when this is necessary (section \ref{monads}).
+
+There is range notation which works as you'd expect.
+\begin{lstlisting}[language=Haskell]
+[1..10]
+\end{lstlisting}
+Which evaluates to the following.
+\begin{lstlisting}[language=Haskell]
+[1,2,3,4,5,6,7,8,9,10]
+\end{lstlisting}
+It's inclusive.
+
+Last but not least, there are list comprehensions. They basically allow us to
+create infinite lists (section \ref{laziness}) and use notation that is very
+similar to set notation in set theory. One example would be the following.
+\begin{lstlisting}[language=Haskell]
+[ x | x <- [50..100], x `mod` 7 == 3]
+\end{lstlisting}
+Which evaluates to the following.
+\begin{lstlisting}[language=Haskell]
+[52,59,66,73,80,87,94]
+\end{lstlisting}
+This is really powerful, lists in haskell are in general. I recommend you read
+the chapters about it in \ref{miran2011}, I couldn't explain it better.
 
 \subsubsection{Haskell's type system}\label{types}
 
+The concept of types originates in mathematics. Types were originally invented
+as a way of preventing paradoxes in set theory (section \ref{history}). Many
+type theories have been invented, some of the most notable ones being Russell's
+\emph{Theory of Types} \parencite{russell1903}, Löf's \emph{Type Theory}
+\parencite{lof1984} and Church's \emph{Typed Lambda Calculus}
+\parencite{church1940} and other typed lambda calculi.
+
+In most programming languages, types are just a way of denoting how data in
+memory should be interpreted. In functional programming, however, types are
+much closer to their mathematical meaning. Ideas about types in functional
+programming come from typed lambda calculi I just mentioned.
+
+Since all functions are first class citizens---i.e. there is no real
+distinction between data and functionality---and everything has a type,
+functions must also have types. I'm not talking about return types found in
+other languages, but the type of the function itself.
+
+In functional programming, you have compound types. There are different types
+of compound types. I won't go over all of them, because only a few are
+important to us. You have a pair type, which has the form \texttt{(A, B)},
+where \texttt{A} and \texttt{B} are any other type. We also have a list, which
+just has the form \texttt{[A]}, where \texttt{A} is again any other type. But
+probably the most interesting type is the function type, which has the form
+\texttt{A -> B}. A function of this type takes an \texttt{A} and returns a
+\texttt{B}.
+
+In functional programming, all functions are curried, so types of multivariable
+functions look like the following.
+\begin{lstlisting}[language=Haskell]
+A -> B -> C -> D
+\end{lstlisting}
+You can read this a a function that takes an \texttt{A}, then a \texttt{B},
+then a \texttt{C} and finally returns a \texttt{D}. But functions are first
+class citizens, so what would the type of a function that takes an \texttt{A ->
+B} and a \texttt{C} and returns a \texttt{D} look like? Well, it looks as
+follows.
+\begin{lstlisting}[language=Haskell]
+A -> B -> C -> D
+\end{lstlisting}
+What about a function that takes an \texttt{A} and a \texttt{B -> C} and
+returns a \texttt{D}? It looks as follows.
+\begin{lstlisting}[language=Haskell]
+A -> B -> C -> D
+\end{lstlisting}
+What about a function that takes an \texttt{A} and a \texttt{B} and returns a
+\texttt{C -> D}? It looks as follows.
+\begin{lstlisting}[language=Haskell]
+A -> B -> C -> D
+\end{lstlisting}
+What about a function that takes an \texttt{A -> B -> C} and returns a
+\texttt{D}?
+\begin{lstlisting}[language=Haskell]
+A -> B -> C -> D
+\end{lstlisting}
+What about a function that takes an \texttt{A} and returns a \texttt{B -> C ->
+D}?
+\begin{lstlisting}[language=Haskell]
+A -> B -> C -> D
+\end{lstlisting}
+What about a function that returns a \texttt{A -> B -> C -> D}?
+\begin{lstlisting}[language=Haskell]
+A -> B -> C -> D
+\end{lstlisting}
+But it's all the same? Well of course, it's all the same because of function
+currying!
+
+But what if we want to force the user to parse in a function? We could do the following.
+\begin{lstlisting}[language=Haskell]
+(A -> B) -> C -> D
+\end{lstlisting}
+This way, we can't parse an \texttt{A} and then a \texttt{B}, but \emph{must}
+provide a function with the type \texttt{A -> B} as a first argument. It
+explicitly states that the first argument must be a function.
+
+Haskell is \emph{statically typed}, which means types of things don't change.
+This may not be true for other languages, but in Haskell, this isn't just a
+design choice, it has to be like this. Everything is a constant, so if things
+don't change, how would their types change?
+
+Haskell's type system is very powerful and deserves a section of its own to do
+it justice. We can see what functions require and guess what they do based on
+it. It makes it possible to reason about programming problems from just the
+types.
+
+I may be the only one who does this, but if I don't know a formula in some
+physics problem, I usually look at all the different units of values and figure
+out how I get a value of the right unit. This makes it easy to get a basic idea
+of what you should do with each given. You can reason about the semantics of
+certain calculations later, maybe you need to multiply with some unitless
+constant to calculate something correctly, but you know which given should be
+used in what way.
+
+The same is true for writing functional programs. You can look at just the
+types to get an idea how functions relate. We'll see some good examples of this
+in section \ref{monads}.
+
 \subsubsection{Example program}
 
-%todo: ref tscoding video
-
 This example program was me experimenting with Haskell. I watched a video by
-Tscoding where he implemented a simple program that could produce melodies. I
-played with it a bit more and was able to very quickly introduce new things and
-make it able to also play chords. I can take this further still, but I don't
-have the time right now, and I'm not sure if I'm going to expand on this
-anyway; there're probably more interesting projects I'd want to invest my time
-in. That said, it might be interesting to add overtones and timbre, and maybe a
-system in which you pick a key and can easily pick notes withing the key, so
-you don't have to denote every note as number of half-steps from A\(_1\).
+\textcite{tsmusic} where he implemented a simple program that could produce
+melodies. I played with it a bit more and was able to very quickly introduce
+new things and make it able to also play chords. I can take this further still,
+but I don't have the time right now, and I'm not sure if I'm going to expand on
+this anyway; there're probably more interesting projects I'd want to invest my
+time in. That said, it might be interesting to add overtones and timbre, and
+maybe a system in which you pick a key and can easily pick notes withing the
+key, so you don't have to denote every note as number of half-steps from
+A\(_1\).
 
 I'm not going to explain the code, there really is no point. The video explains
 it well, so why would I still do it? I just wanted to show the result of my
@@ -2057,14 +2350,14 @@ whatIsYourName = do
 This looks just like a procedural program, but there's a lot of things going on
 in the background. I'll explain how monads work and will be defining my own
 \texttt{IO} monad in the process. This section is largely inspired by a video
-by Tscoding, my code examples will be from this, although be it maybe with some
-modifications. I'll go over it relatively quickly, so if you want to understand
-this better, I recommend you to watch the video. There is also a computerphile
-video about monads, but I don't think that video really explains what monads
-are and it introduces a bunch of things without much thought or explanation,
-but it may be useful. Lastly, there is a very useful video by Brian Beckman
-called \emph{Don't fear the Monad}. It really goes indepth and explains things
-very precisely and clearly.
+by \textcite{tsmonad}, my code examples will be from this, although be it maybe
+with some modifications. I'll go over it relatively quickly, so if you want to
+understand this better, I recommend you to watch the video. There is also a
+\textcite{cpmonad} video about monads, but I don't think that video really
+explains what monads are and it introduces a bunch of things without much
+thought or explanation, but it may be useful. Lastly, there is a very useful
+video by \textcite{beckman2012} called \emph{Don't fear the Monad}. It really
+goes indepth and explains things very precisely and clearly.
 
 %todo: ref tscoding, computerphile and brian beckman videos
 
@@ -2312,14 +2605,41 @@ Declarative programming is when you describe how things are. You don't think
 about the internals of your computer, but about abstract mathematical ideas.
 This provides a level of expressiveness which is very powerful. Haskell code is
 notoriously short and packs a lot of ideas in just a few lines of code. You can
-easily add new ideas and change relationships between thing. It is very easy to
-reason about your code, while in imperative programming, you may have made a
+easily add new ideas and change relationships between things. It is very easy
+to reason about your code, while in imperative programming, you may have made a
 small typo somewhere, significantly altering the state of your programming and
 breaking everything. Such a mistake can be very hard to find, because you have
 to go through your code line by line and check all state to see what is as
 expected and what not.
 
-\subsubsection{Usefulness vs conceptual purity}\label{usefulness}
+Let's take trees as an example. Say we want our computer to be able to
+recognise trees. In a declarative paradigm, we try to define what trees are. We
+say that trees have branches and leaves, they're made wood and other organic
+material, they're tall. We may also define branches and leaves. Eventually our
+definitions must be somehow connected to terms the computer understands. The
+difference is, we hide it behind abstractions. We can build abstractions upon
+abstractions. We do need to be careful to explain things right. We can usually
+build upon already existing abstractions, so we don't have to think about the
+computer at all. Once we've explained branches and leaves and colours in terms
+of things the computer understands, we can reason in terms these abstractions
+rather than terms the computer understands.  We can mix and match different
+kinds of branches, leaves and colours to create all sorts of trees.
+
+In a procedural/imperative paradigm, we don't have this luxury of abstraction.
+We must always speak to the computer in computer terms. We don't think about
+trees in computer terms, so we need to constantly translate our ideas into
+computer speech. This can be quite difficult. We'd much rather create layers of
+abstractions and just write our ideas how we mean them, not in computer terms.
+When we think of trees, we don't think of reading some memory adress into a cpu
+register, then copying some number of bytes at that register to some other
+place and compare numbers and jump to different adresses of our code based on
+those comparisons. No, we think of branches and leaves and bark and wood.
+
+In section \ref{laziness} and section \ref{syntax}, I also talk about
+describing things with infinities, which is perfectly fine, as long as you
+don't try to evaluate an infinity.
+
+\subsubsection{Usefulness vs conceptual purity and safety}\label{usefulness}
 
 There is, however, a drawback to this. We can't write very useful programs.
 We've talked about how to solve this in section \ref{monads}. Basically, we
@@ -2370,6 +2690,22 @@ does, but C++ has been hacked on and added to for what feels like centuries. It
 is becoming a convoluted monster. Rust starts with a clean slate and new ideas
 and experience from C++.
 
+One place where the safty---which lambda calculus and functional provide by
+statelessness---is increasingly important, is in \emph{parallel programming}.
+Parallell programming is when you run code on multiple cpu threads, so you can
+speed up your code by running multiple things at the same time, rather than
+sequentially, when sequetiality doesn't matter (i.e. Some things are not
+dependent on eachother and can run seperately). Parallel programing adds extra
+complexity to keeping track of state, because you don't only have to wory who
+owns what, but also what thread or instance owns what. It's very hard to avoid
+so called \emph{data races}, where multiple threads try to modify and/or read
+the same data, meaning they end up messing up eachother's states. When our
+programs are stateless, we can safely perform any operation, because it can't
+perform side effects which alter the state of our program, and with that the
+state of other threads. It may be limiting when you actually \emph{want} to
+change state in parallel, but it also means you don't have to worry when you
+just want to perform some big computation in parallel.
+
 \subsubsection{Meta programming}\label{metaprogramming}
 
 There is another paradigm I want to have a quick look at. This is \emph{meta
@@ -2382,10 +2718,70 @@ repetative code.
 
 Probably the biggest meta programming language (family) is Lisp. Lisp is very
 simple, just like the lambda calculus. It only has lists. Your program is
-entierly made up of lists. Lists can be evaluated. The resulting language has
-some similarities to lambda calculus and functional programming. Namely, in
-lambda calculus everything is a function that can be evaluated, while in Lisp,
+entirely made up of linked lists, just like we defined them in section
+\ref{pairs}. Lists can be evaluated. The resulting language has quite some
+similarities to lambda calculus and functional programming. Namely, in lambda
+calculus everything is a function that can be evaluated, while in Lisp,
 everything is a list that can be evaluated.
+
+Lisp is also a declarative language. Sometimes people call Lisp a functional
+programming language, but Lisp itself really isn't. There are Lisp dialects
+that are functional, such as Scheme, which add concepts like function currying
+and laziness.
+
+Lisp was originally developed to be able to program AI. The idea was that meta
+programming allows for easy abstraction, and abstraction would be necessary to
+write good AI, because it needs to be able to reason abstractly. There are many
+parallels between Lisp and functional programming languages. Lisp even uses the
+prefix notation\footnote{Lists have to start with a function to be able to
+evaluate it.}, which much resembles lambda calculus and combinatory logic
+(although be it only in a visual way).
+
+Another funny coincidence is that Lisp, just like lambda calculus, is notorious
+for having a lot of convoluted parentheses, because your programs are entirely
+made up of lists, which are denoted with parentheses.
+
+There is an infamous book called \emph{Structure and Interpretation of Computer
+Programs}\footnote{In hacker culture also known as the \emph{Wizard Book}}
+\parencite{sicp}, or SICP for short, which explains ideas of program structure
+from both functional programming and Lisp in the context of Scheme. It has been
+very influential in the way we think about programming. Lispers often joke that
+everyone else does programming wrong.
+
+A very basic Scheme program (or any Lisp program for that matter) that does
+some calculations looks as follows.
+
+\begin{lstlisting}[language=Lisp]
+(+ 2 3)
+(abs -4)
+(+ (* 2 3) 8)
+(+ 3 4 5 1)
+\end{lstlisting}
+
+I will show you a slightly larger Scheme program, which I didn't write, because
+I'm not an epic Lisper (yet?), but got from a random online Scheme course from
+some random university by a unknown author, to give you an idea how it looks.
+
+\begin{lstlisting}[language=Lisp]
+(if (= 5 (+ 2 3)) 10 20)     => 10 
+(if (= 0 1) (/ 1 0) (+ 2 3)) => 5  
+; note that the (/ 1 0) is not evaluated
+
+(define (my-max x y)     
+   (if (> x y) x y))    
+
+(my-max 10 20)                   => 20 
+
+(define (my-max3 x y z)
+   (if (and (> x y) (> x z))
+       x
+       (if (> y z) 
+            y
+            z)))
+\end{lstlisting}
+
+You can see that conditional work very similarly to those in lambda calculus,
+where the different branches are arguments parsed after the condition itself.
 
 \section{A practical example of functional programming}
 
@@ -2409,27 +2805,234 @@ and Haskell. I got pretty far with the C interpreter, though.
 \subsection{How an interpreter works}
 
 We first have to understand how an interpreter actually works before we start
-writing one. An interpreter should perform a few steps.
+writing one. I will quickly and globally explain the basic steps an interpreter
+should perform.
+
+Firstly, we need to recognise the atoms our program is made up of. We perform a
+\emph{lexical analysis} which recognises \emph{tokens}. This is also called the
+\emph{tokenisation} step. We recognise special characters and words and we
+recognise other words as identifiers. We make some sort of list of all the
+tokens in our program. We then need to do \emph{syntactic analysis}.
+
+In the \emph{syntactical analysis} phase, we structure our tokens in what is
+called an \emph{abstract syntax tree} or \emph{parse tree}. We recognise the
+order in which things should be performed and what is an argument to what. We
+put all our expressions in a hierarchical structures, the most inner
+expressions are at the ends of branches, and the outer expressions are closer
+to the root. This tells our next phase in what order things should be evaluated
+and what depends on what.
+
+We then perform a \emph{semantic analysis}. We look at our \emph{parse tree}
+and try to perform the operations our program is supposed to do. We need to
+keep track of some state, for example the identifiers that are defined. This
+state is sometimes called an \emph{environment}. In short, this is the fase
+where the interpreter tries to perform the commands of the code.
+
+This is the general idea of what an interpreter does. There may be some more
+steps in other interpreters, such as optimisations, but we're keeping it as
+simple as possible.
 
 \subsection{Lisp interpreter in C}
 
+With my C version, I was able to get pretty far and write a functioning
+program. I was already at the sementic analysis phase, I'd started with
+implementing an \emph{environment}.
+
 I can't just paste all the code in here, that would be stupid, so you can find
 it in the accompanying code folder. You're not going to understand most of the
-code, but that's the point. I'm trying to show that the semantics of code is
-much more obvious in Haskell than in C.
+code, but that's the point. I'm trying to show that the semantics of code are
+much more obvious in Haskell than in C. I will take some snippets of code from
+it and show it when I feel it's useful.
+
+I've refrained from using a grammar library like Yacc. Yacc provides a way of
+writing a grammar for your programming language in a way that resembles formal
+grammar. Such a grammar has a declarative style, because you're defining what
+your grammar is, rather than programming procedurally. The whole point of
+writing this program was to show off the procedural/imperative paradigm, so it
+wouldn't make sense to use a declarative grammar library.
+
+When we don't use a grammar, it immediately becomes obvious that
+procedural/imperative programming is very hard to follow in the lexical
+analysis phase alone. In our Haskell counterpart, we can just define what are
+the possibilities of a token or keyword and that words are split by spaces or
+tokens. This gives the compiler enough information to perform our tasks, but in
+our C code, we must go through the code character by character. If a character
+is unimportant, like unnecessary whitespace, we should ignore it. We then need
+to test our character against every token. If it's one of our tokens, we save
+it in our list of tokens and restart the process. Otherwise, need to recognise
+that it's the start of a new identifier. Things start getting more difficult
+when there're multi-character keywords or identifiers involved. We need to be
+aware when we're still reading a multi-character word and check whether we
+finally ran into some character that signifies the end of the word. We need to
+store all the characters into a string, one by one, and check that string
+against all keywords in our program. This is a very painful process. We need to
+write very large conditionals and think of every possible meaning of each
+character and its context. Whenever we read a single character, we need to
+think of it in the context of characters past to know what this character is
+supposed to be.
+
+Luckely for us, Lisp is very simple and doesn't have many tokens, so the
+complexity is quite limited, but it's still enough to serve as an example in
+our comparison. My Lisp interpreter, in it's current state, reads in a single
+list input by the user. I will show the main function, which contains the main
+conditional structures of the lexical and syntactical analyses. I then run the
+function \texttt{eval\_list}, which contains the semantic analysis, for as far
+it's finished. This main functions branches out to many other functions, many
+of which just have to do with memory management, but if you truly want to
+understand the program, you should look at the entire code. This main function
+just contains the basic control flow.
+
+You can see from the function names and comments that I'm thinking of what the
+program does in abstract terms, but I still have to explain everything in
+computer terms in the actual code.
+
+You can also see I'm already doing things with the environment, but it doesn't
+really function yet.
+
+I apologise for the tiny font size.
+
+\begin{lstlisting}[language=C, basicstyle=\tiny]
+int main(int argc, char *argv[])
+{
+    struct env env;
+    struct env_index env_add = { .id = "+", .type = ENV_FUNC, .data = &add };
+
+    init_env(&env, 64);
+    push_env(&env, env_add);
+
+    puts("Lispy Version 0.0.1\n");
+
+    /* Main loop */
+    for (;;) {
+        struct token_stack token_stack;
+        char input[2048];
+
+        init_token_stack(&token_stack, 1024); // initialise new token stack
+
+        /* Get input from user */
+        fputs("Lispy> ", stdout);
+        try(fgets(input, 2048, stdin), "Error reading input from stdin: %s.\n", strerror(errno));
+        input[strcspn(input, "\n")] = '\0';
+        input[strcspn(input, "\t")] = ' ';
+
+        /* Split input up into tokens */
+        for (uint i = 0; i < strlen(input);) {
+            uint token_len = 1;
+            struct token new_token;
+
+            switch (input[i]) {
+            case '(':
+                new_token.type = OPENING_PAREN_TOKEN;
+                new_token.str = (char *)allocate(2, "token string"); // two including null byte
+                strcpy(new_token.str, "(");
+                push_token_stack(&token_stack, new_token);
+                break;
+            case ')':
+                new_token.type = CLOSING_PAREN_TOKEN;
+                new_token.str = (char *)allocate(2, "token string"); // two including null byte
+                strcpy(new_token.str, ")");
+                push_token_stack(&token_stack, new_token);
+                break;
+            case ' ':
+                break;
+            default:
+                new_token.type = ID_TOKEN;
+                for (bool breakl = false; i + token_len < strlen(input) && !breakl; token_len++) {
+                    if (input[i + token_len] == ' ')
+                        break;
+                    for (uint j = 0; j < sizeof(tokens) / sizeof(tokens[0]) && !breakl; j++)
+                        if (input[i + token_len] == tokens[j][0])
+                            breakl = true;
+                    if (breakl)
+                        break;
+                }
+                new_token.str = (char *)allocate(token_len + 1, "token string");
+                strncpy(new_token.str, input+i, token_len);
+                push_token_stack(&token_stack, new_token);
+            }
+
+            i += token_len;
+        }
+		
+        /* Create lists from the token stack and add them to a program */
+        struct program program;
+        init_program(&program, 1);
+        for (uint i = 0; i < token_stack.n; i++) {
+            struct list new_list;
+            switch (token_stack.ts[i].type) {
+            case OPENING_PAREN_TOKEN:
+                new_list = list_from_token_stack(token_stack, i + 1, &i);
+                push_program(&program, new_list);
+                break;
+            case CLOSING_PAREN_TOKEN:
+                fputs("Error parsing program: unexpected end of list.\n", stderr);
+            default:
+                fputs("Error parsing program: not a list.\n", stderr);
+            }
+        }
+
+        /* Print out program */
+        for (uint i = 0; i < program.n; i++) {
+            print_list(program.lists[i], 0);
+        }
+
+        /* Run program */
+        for (uint i = 0; i < program.n; i++) {
+            eval_list(program.lists[i], env);
+        }
+
+        /* Free memory */
+        free(token_stack.ts);
+        for (uint i = 0; i < program.n; i++) {
+            free_list(program.lists[i]);
+        }
+        free(program.lists);
+    }
+
+    return EXIT_SUCCESS;
+}
+\end{lstlisting}
 
 \subsection{Lisp interpreter in Haskell}
+
+Sadly I didn't have time to create one. I don't have the time to create and
+show you some code snippets, so you have to imagine some. Our interpreter does
+the exact same as the one in C, of course, but instead of procedural, it would
+be imperative. We would describe our grammar and different types representing
+different abstract ideas instead of reading each character one by one.
+
+\newpage
+\thispagestyle{empty}
+\mbox{}
+\newpage
 
 \newpage
 \section*{Afterword}
 
-\newpage
-\section*{Unreferenced resources}
+There are a lot of other things I would have liked to talk about more like type
+theory and category theory. Sadly, this would take a lot of time. I also wrote
+a few sections very last minute. Most of these weren't too important anyway,
+but it would have been nice to spend a little more time on them and streamline
+them a bit more.
+
+The biggest bummer of all was probably that I wasn't able to get any code for
+the Lisp interpreter in Haskell done. I do have some other code examples in
+Haskell that make up for it though.
 
 \addcontentsline{toc}{section}{Afterword}
-\addcontentsline{toc}{section}{Unreferenced resources}
 
 \newpage
-\printbibliography[heading=bibintoc, title={References}]
+\thispagestyle{empty}
+\mbox{}
+\newpage
+
+\newpage
+\nocite{*}
+\printbibliography[heading=bibintoc, title={Bibliography}]
+
+\newpage
+\thispagestyle{empty}
+\mbox{}
+\newpage
 
 \end{document}
