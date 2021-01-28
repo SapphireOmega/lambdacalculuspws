@@ -79,7 +79,7 @@ style, rather than a strictly mathematical one. I think that lambda calculus is
 simple enough that, when explained well, most people should be able to follow
 it. On a similar note, I think that the way this work is written, most people
 who are not familiar with mathematical literature should be able to follow it
-(except for maybe part of functional programming section).
+(except for maybe part of the functional programming section).
 
 Lastly, I want to thank Daan Hoogcarspel for reading this work and giving
 feedback and making suggestions along the way. We discuss similar topics in our
@@ -110,8 +110,7 @@ programming. Functional programming is fundamentally based on lambda calculus
 and it has been seeping into other paradigms and into mainstream languages.
 Most of the popular languages now implement lambda functions and have ways to
 write in a more declarative style of programming. In this work I will look at
-all the ways lambda calculus has influenced computer science and how it may do
-so in the future.
+all the ways lambda calculus has influenced computer science.
 
 \section{Introduction to lambda calculus}
 
@@ -552,9 +551,7 @@ because it explains it very simply and clearly.
 
 In Smullyan's world, there is a forest with birds. These birds represent
 combinators. If you call out a bird name to a bird, it will give you the name
-of another bird. If you give a bird a bird name of a bird that is present, it
-will give you back a name of a bird that is present. Calling out bird names to
-birds represents application.
+of another bird. Calling out bird names to birds represents application.
 
 I think it would be fun if we had a look at one of the puzzles to see if we can
 solve it using our newfound knowledge of combinatory logic. I think the first
@@ -1191,7 +1188,7 @@ is this: you don't remove an application, you reapply all the functions from
 the start, until you get to the number you want the predecessor of. In other
 words, you reapply all the functions, except for the last.
 
-How do we know when to stop? If we create an algoritm that just reapplies our
+How do we know when to stop? If we create an algorithm that just reapplies our
 function until we get to the number we want to know the predecessor of, we will
 have already overshot the predecessor when we get to that number. What we
 actually want to do, is not to create an algorithm that returns a number after
@@ -1280,7 +1277,7 @@ on those for natural numbers, to take into account the sign of the number
 \[(sign,n)\]
 
 This makes multiplication very straightforward; you just perform a regular
-multiplication on the natural numbers in the pairs, and xor the signs.
+multiplication on the natural numbers in the pairs, and XOR the signs.
 \[MULT_s:=\lambda ab.PAIR\ (XOR\ (FST\ a)\ (FST\ b))\ (MULT\ (SND\ a)\ (SND\ b))\]
 
 Addition is a bit more complicated, since it requires a lot of conditionals
@@ -1447,7 +1444,7 @@ or the factorial of 3
 We don't need to evaluate the recursive branch if our input is 0, so we don't.
 In most languages, like C, every expression gets evaluated
 immediately\footnote{In this case it doesn't matter, because in C functions
-don't get evaluated but called}.
+don't get evaluated, but called.}.
 
 The way we are achieving recursion in this example is by defining an identifier
 in terms of itself, which doesn't work in pure lambda calculus, since it
@@ -1476,7 +1473,7 @@ a slightly more useful function as
 which would be
 \[REC:=\lambda f.f\ (REC\ f)\]
 in pseudo lambda calculus. It can apply any function \(f\) recursively. This is
-called \emph{general recursion} in computer science---it is the simpelest way to
+called \emph{general recursion} in computer science---it is the simplest way to
 perform an operation recursively.
 
 We can use this new function to redefine our \(LOOP\) combinator.
@@ -1501,7 +1498,7 @@ which reduces to our previous definition as you can see.
 We have now defined \(FAC\) not in terms of itself using a specialised
 recursion combinator. This combinator \emph{is} still defined in terms of
 itself though. If we succeed to define general recursion in lambda calculus
-without the use of self-refering identifiers, we can finally write our
+without the use of self-referring identifiers, we can finally write our
 recursive functions in pure lambda calculus.
 
 Luckily for us, this combinator exists, it's called the \emph{Y-combinator}.
@@ -1559,7 +1556,7 @@ programming come from category theory, which was created as a sort of general
 language for abstractions. I will cover the concepts most important to us, in
 the context of functional programming, as we need them.
 
-I would have liked to talk about these other disciplines seperately too,
+I would have liked to talk about these other disciplines separately too,
 because a lot of interesting stuff (some of which we have mentioned in section
 \ref{history}) comes into play. All of the mathematical ideas that were
 developed in the historical context of the formalisation of mathematical logic
@@ -1568,19 +1565,19 @@ as a whole. Ultimately, I'd have liked to talk about all of these, but sadly I
 couldn't.
 
 I spent an entire section (section \ref{computation}) to show you that lambda
-calculus is turing complete. The reason I did this was to show you that lambda
+calculus is Turing complete. The reason I did this was to show you that lambda
 calculus and machine language are formally equivalent, while taking two wildly
 different approaches. Lambda calculus is very simple and has some desirable
 properties which allow us to make expressive code which is easy to reason
 about. The idea behind functional programming is programming in a lambda
 calculus inspired style and translating it to machine code. We can do this,
-because lambda calculus is turing complete, thus formally equivalent with
+because lambda calculus is Turing complete, thus formally equivalent with
 machine code. The difficulty is with optimising the translation process.
 
 \subsection{Fundamental ideas from lambda calculus}
 
 Throughout this work, I have mentioned some of the desirable properties of
-lambda calculus. This will be a more indepth look at these properties and why
+lambda calculus. This will be a more in-depth look at these properties and why
 we care for them. Namely statelessness, functions and data being practically
 the same, and laziness. These properties are very useful. I'll compare
 functional programming with other paradigms at the end of this section (section
@@ -1595,8 +1592,8 @@ can't always imagine all the relationships between parts and who owns what data
 at what time. It is hard to keep track of constantly changing context.
 
 The nice thing about lambda calculus is that it doesn't have state. Every
-function is dependent and \emph{only} dependent of its inputs. The notion of
-functions in lambda calculus and functional programming are much closer to the
+function is dependent and \emph{only} dependent on its inputs. The notion of
+functions in lambda calculus and functional programming is much closer to the
 mathematical one this way. In procedural/imperative languages, you never know
 for sure what a function does besides the output it gives. A common example is
 calling a function to do arithmetic, but accidentally firing the missiles,
@@ -1632,35 +1629,34 @@ arguments by parsing another function as its first argument.
 
 The functional programming concept of functions is so powerful in fact, that
 most modern programming language offer lambda functions. You see them used
-quite a bit in languages such as C and Rust now.
+quite a bit in languages such as C++ and Rust now.
 
 \subsubsection{Laziness}\label{laziness}
 
 Laziness isn't an idea from lambda calculus per se, but it is one of the
 fundamental ideas of functional programming and it has at least some connection
 to lambda calculus. The idea of laziness is that expressions aren't evaluated
-untill it is required. A good example would be the Y-combinator we saw in
+until it is required. A good example would be the Y-combinator we saw in
 section \ref{recursion}. If the Y-combinator were always evaluated immediately,
-we would never be able to use it in a program, because exccution would never
+we would never be able to use it in a program, because execution would never
 terminate. Laziness is a necessity in functional programming, really, but it
-has its benifits. Laziness was probably even the biggest driving force behind
+has its benefits. Laziness was probably even the biggest driving force behind
 the earlier research into functional programming.
 
 One of the most obvious benefits of laziness is that it means we don't compute
 what we don't have to, which is called \emph{short-circuit computation},
-obviously resulting in a performace boost, but this isn't always the case (as
+obviously resulting in a performance boost, but this isn't always the case (as
 we'll look into later). The real benefit with laziness is the ability to work
-with infinities. The most common example probably being working infinite sets.
-We can define infinite sets, but only use parts of it when we need it.  When we
-create the set, it doesn't store the entire, infinite thing in memory, but only
-evaluates the part we need when we need it.
+with infinities. The most common example probably being working with infinite
+sets. We can define infinite sets, but only use parts of it when we need it.
+When we create the set, it doesn't store the entire, infinite thing in memory,
+but only evaluates the part we need when we need it.
 
 I will give some examples of how we can achieve laziness in non-functional
 languages (in this case Rust) and why we would want to do so.
 
 We can achieve laziness by wrapping everything in lambda functions. Let's look
-at a simple example. We'll add two numbers lazily by wrapping everything in
-lambda functions.
+at a simple example. We'll add two numbers lazily first.
 
 \begin{lstlisting}[language=Rust]
 fn lazy_add<A, B>(a: A, b: B) -> Box<dyn Fn() -> i32>
@@ -1679,7 +1675,7 @@ fn main() {
 There's a lot going on here. Don't worry about all the syntax, conceptually
 we're just wrapping everything in lambda functions. Instead of parsing and
 returning integers, we use lambda functions that evaluate to integers, but only
-when we want them to instead of immedialtely. There's some stuff going on with
+when we want them to instead of immediately. There's some stuff going on with
 the trait system, lifetimes, etc. which you should just ignore. The reason I'm
 using Rust and not C++ is that C++ doesn't play nicely with converting lambda
 functions that capture certain values to other types. Other reasons are that
@@ -1707,7 +1703,7 @@ fn main() {
 }
 \end{lstlisting}
 
-but that's not how Rust works sadly. You should read the definition of
+but that's not how Rust works, sadly. You should read the definition of
 \texttt{lazy\_add} as: "\texttt{lazy\_add} is a function that takes an
 \texttt{a} of type \texttt{Fn() -> i32} and a \texttt{b} of type \texttt{Fn()
 -> i32}, which returns a lambda function which returns the sum of the
@@ -1881,7 +1877,7 @@ and evaluating only the part we need.
 
 This is just one example of an infinite list. This one may be a bit pointless,
 but they can be quite usefull. You could make a list of all possible outputs of
-a functions and graph it or turn it into a binary string. You basically just do
+a functions and graph it or turn it into a binary string. You can basically do
 set theory.
 
 % todo: ref infinite lists in haskell
@@ -1919,12 +1915,12 @@ Good!} by \textcite{miran2011} for a full guide to the Haskell programming
 language. I think that most syntax is simple and intuitive enough that, if you
 know the basics, should be self explanatory when I introduce it. My goal is not
 to teach you Haskell, but the ideas behind functional programming. For a quick
-cheatsheet of the Haskell syntax, I'll refer you to \parencite{haskell}. I'll
+cheat sheet of the Haskell syntax, I'll refer you to \parencite{haskell}. I'll
 be going over the basic syntax from a bird's eye view.
 
-In haskell, everything is constant. Once you bind an identifier to somethings,
-it will be forever bound to it. In haskell, everything has a type. We denote
-the type of something with the \texttt{::} operator, followed by it's type
+In Haskell, everything is constant. Once you bind an identifier to something,
+it will be forever bound to it. In Haskell, everything has a type. We denote
+the type of something with the \texttt{::} operator, followed by its type
 (section \ref{types}). We can define a new identifier with the \texttt{=}
 operator. We follow it with the definition of our identifier. This can be a
 function or a value (it's all the same to us functional programmers), as long
@@ -1942,7 +1938,7 @@ obvious when you see them. Boolean values are capitalised.
 
 You have your normal arithmetic operators and boolean operators which work just
 like they do in pretty much every other language. The only thing to note is
-that not equal to, \texttt{!=} in most languages, is \texttt{\\=} in Haskell,
+that not equal to, \texttt{!=} in most languages, is \texttt{/=} in Haskell,
 which is supposed to look like \(\neq\). Negation isn't done with a \texttt{!}
 operator like in most languages, but with a \texttt{not} function.
 
@@ -1971,11 +1967,12 @@ concatenate3 :: String -> String -> String -> String
 concatenate3 x y z = x ++ y ++ z
 \end{lstlisting}
 
-Haskell has lambda functions of course. Lambda function in haskell look very
+Haskell has lambda functions of course. Lambda function in Haskell look very
 much like regular lambda functions, but instead of a lambda we use a backslash
-(\texttt{\\})\footnote{Who has a lambda on his keyboard, right?}. The argument
-names are seperated by spaces. Instead of a dot we use an arrow (\texttt{->}).
-Thus, a lambda expression in Haskell would look like the following.
+(\texttt{$\backslash$})\footnote{Who has a lambda on his keyboard, right?}. The
+argument names are separated by spaces. Instead of a dot we use an arrow
+(\texttt{->}).  Thus, a lambda expression in Haskell would look like the
+following.
 \begin{lstlisting}[language=Haskell]
 (\x y -> x + y) 2 3
 \end{lstlisting}
@@ -1987,7 +1984,7 @@ and in turn to
 \begin{lstlisting}[language=Haskell]
 2 + 3
 \end{lstlisting}
-which just result in \texttt{5}.
+which just results in \texttt{5}.
 
 We can of course define a function as a lambda function.
 \begin{lstlisting}[language=Haskell]
@@ -1997,9 +1994,9 @@ concatenate3 = \x y z -> x ++ y ++ z
 
 Function composition is done with a dot. There is also a \texttt{\$} operator,
 which basically puts parentheses around anything right of it. It can be used in
-place of the dot operator when the argument is know, else you would need to put
-parentheses around the function composition. So the next two expressions are
-the same.
+place of the dot operator when the argument is known, else you would need to
+put parentheses around the function composition. So the next two expressions
+are the same.
 \begin{lstlisting}[language=Haskell]
 (f . g) x
 f $ g x
@@ -2068,7 +2065,7 @@ Which evaluates to the following.
 [52,59,66,73,80,87,94]
 \end{lstlisting}
 This is really powerful, lists in haskell are in general. I recommend you read
-the chapters about it in \ref{miran2011}, I couldn't explain it better.
+the chapters about it in \parencite{miran2011}, I couldn't explain it better.
 
 \subsubsection{Haskell's type system}\label{types}
 
@@ -2098,8 +2095,8 @@ probably the most interesting type is the function type, which has the form
 \texttt{A -> B}. A function of this type takes an \texttt{A} and returns a
 \texttt{B}.
 
-In functional programming, all functions are curried, so types of multivariable
-functions look like the following.
+In functional programming, all functions are curried, so types of multi
+variable functions look like the following.
 \begin{lstlisting}[language=Haskell]
 A -> B -> C -> D
 \end{lstlisting}
@@ -2175,9 +2172,9 @@ This example program was me experimenting with Haskell. I watched a video by
 melodies. I played with it a bit more and was able to very quickly introduce
 new things and make it able to also play chords. I can take this further still,
 but I don't have the time right now, and I'm not sure if I'm going to expand on
-this anyway; there're probably more interesting projects I'd want to invest my
+this anyway; there are probably more interesting projects I'd want to invest my
 time in. That said, it might be interesting to add overtones and timbre, and
-maybe a system in which you pick a key and can easily pick notes withing the
+maybe a system in which you pick a key and can easily pick notes within the
 key, so you don't have to denote every note as number of half-steps from
 A\(_1\).
 
@@ -2198,9 +2195,9 @@ Just in case anyone ends up running this program (although I consider the
 chance small), don't say I didn't warn you.
 
 You should be able to find the program in the accompanying code folder. I
-figured that it was small enough to put it striaght in here so you can just
+figured that it was small enough to put it straight in here so you can just
 quickly glance at it, but if you want to play with it, you can find the code
-seperately.
+separately.
 
 \begin{lstlisting}[language=Haskell, basicstyle=\tiny]
 import qualified Data.ByteString.Lazy as B
@@ -2333,7 +2330,7 @@ around it. Well, there actually \emph{is} a way of doing side effects in
 functional programming with monads. The idea of monads was developed in
 category theory and turned out to be very useful for functional programmers.
 
-Haskell has this magic thing called monad. Haskell also has this magical do
+Haskell has this magical thing called monad. Haskell also has this magical do
 notation. When we make a function that returns a monad, we can use this do
 notation to basically write in a procedural and effectful style. One example of
 this would be this simple program that does input and output using an
@@ -2357,7 +2354,7 @@ understand this better, I recommend you to watch the video. There is also a
 explains what monads are and it introduces a bunch of things without much
 thought or explanation, but it may be useful. Lastly, there is a very useful
 video by \textcite{beckman2012} called \emph{Don't fear the Monad}. It really
-goes indepth and explains things very precisely and clearly.
+goes in-depth and explains things very precisely and clearly.
 
 %todo: ref tscoding, computerphile and brian beckman videos
 
@@ -2552,10 +2549,8 @@ notation?
 Since we've already achieved monads, there is no real point in me going indepth
 with explaining how to enable do notation for our monad, since it's just a
 nicety and doesn't improve our understanding. I will tell you how to do it in
-broad terms, but if you really want to know, you should look at the Tscoding
-video.
-
-%todo ref tscoding vid
+broad terms, but if you really want to know, you should look at the
+\textcite{tsmonad} video.
 
 To enable do notation, we need to prove to the Haskell compiler that
 \texttt{WorldT} is in fact a monad. There is a difficulty with this.
@@ -2564,8 +2559,6 @@ wrap it in a new \texttt{WorldM} type and prove that \emph{that} is a monad. To
 prove this, we must prove that our new operator for composition of world
 transformations is equivalent to Haskell's operator for monadic composition
 (bind/shove). I'll refer you to the video again if you want to see how.
-
-%todo ref tscoding vid
 
 To reiterate, to do side effects, we do operations on world that encaptulates
 all outside state. We then abstract away our world behind world
@@ -2590,10 +2583,10 @@ technicalities.
 
 Imperative means you have to explain to the computer what to do. You don't talk
 about abstract ideas. Rather, you tell the computer to read some bytes at one
-memory adress and write some bytes at another. You tell it to load certain
-things into registers, compare values, jump to code at certain adresses. Most
+memory address and write some bytes at another. You tell it to load certain
+things into registers, compare values, jump to code at certain addresses. Most
 languages aren't completely imperative. Machine language is really the only
-"pure" impertive language, all other languages provide some abstraction. C has
+"pure" imperative language, all other languages provide some abstraction. C has
 functions, loops and variables, which are already some higher level
 abstractions, but they translate almost directly to machine code, so it's still
 considered imperative. Even higher level languages such as Java, C\#, C++,
@@ -2621,19 +2614,19 @@ difference is, we hide it behind abstractions. We can build abstractions upon
 abstractions. We do need to be careful to explain things right. We can usually
 build upon already existing abstractions, so we don't have to think about the
 computer at all. Once we've explained branches and leaves and colours in terms
-of things the computer understands, we can reason in terms these abstractions
-rather than terms the computer understands.  We can mix and match different
-kinds of branches, leaves and colours to create all sorts of trees.
+of things the computer understands, we can reason in terms of these
+abstractions rather than terms the computer understands. We can mix and match
+different kinds of branches, leaves and colours to create all sorts of trees.
 
 In a procedural/imperative paradigm, we don't have this luxury of abstraction.
 We must always speak to the computer in computer terms. We don't think about
 trees in computer terms, so we need to constantly translate our ideas into
 computer speech. This can be quite difficult. We'd much rather create layers of
 abstractions and just write our ideas how we mean them, not in computer terms.
-When we think of trees, we don't think of reading some memory adress into a cpu
-register, then copying some number of bytes at that register to some other
-place and compare numbers and jump to different adresses of our code based on
-those comparisons. No, we think of branches and leaves and bark and wood.
+When we think of trees, we don't think of reading some memory address into a
+CPU register, then copying some number of bytes at that register to some other
+place and compare numbers and jumping to different addresses of our code based
+on those comparisons. No, we think of branches and leaves and bark and wood.
 
 In section \ref{laziness} and section \ref{syntax}, I also talk about
 describing things with infinities, which is perfectly fine, as long as you
@@ -2648,10 +2641,10 @@ the screen, we need to modify its state, which we normally can't. This was a
 problem that took programmers an mathematicians long to solve. They came up
 with monads, which allowed the programmer to write a function with side
 effects. The basic idea is that you have some "dirty" functions that interface
-with the outside world, which you can then use in a "pure" program. We seperate
+with the outside world, which you can then use in a "pure" program. We separate
 the dirty things from the pure things, and try to minimise the dirty things as
 much as possible. We can use these two different types of functions without
-them polluting eachother. The type system keeps them apart.
+them polluting each other. The type system keeps them apart.
 
 Ultimately we would have a pure and useful language. Functional programming
 starts very pure and tries to be more useful by inventing things like monads,
@@ -2671,7 +2664,7 @@ makes jokes. The graph is something like the following.
 
 He talks about how both paradigms want to be safe, expressive and useful, but
 they take two different approaches. Although they take two different
-approaches, they borrorw a lot of ideas from eachother.
+approaches, they borrow a lot of ideas from each other.
 
 I personally quite like Rust. It's a low level language, but with a lot of
 cheap abstractions. In the laziness examples I used Rust (section
@@ -2685,26 +2678,26 @@ is relatively simple and elegant, and so is C. C is very nice if you have to
 perform relatively simple tasks where speed and optimisation is important,
 while Haskell is very nice when you have to write very complicated systems
 where performance isn't an issue. Rust provides a vocabulary to solve big and
-complicated where performance is an issue. It tries to fill the same gap C++
-does, but C++ has been hacked on and added to for what feels like centuries. It
-is becoming a convoluted monster. Rust starts with a clean slate and new ideas
-and experience from C++.
+complicated problems where performance is an issue. It tries to fill the same
+gap C++ does, but C++ has been hacked on and added to for what feels like
+centuries. It is becoming a convoluted monster. Rust starts with a clean slate
+and new ideas and experience from C++.
 
-One place where the safty---which lambda calculus and functional provide by
+One place where the safety---which lambda calculus and functional provide by
 statelessness---is increasingly important, is in \emph{parallel programming}.
-Parallell programming is when you run code on multiple cpu threads, so you can
+Parallel programming is when you run code on multiple CPU threads, so you can
 speed up your code by running multiple things at the same time, rather than
-sequentially, when sequetiality doesn't matter (i.e. Some things are not
-dependent on eachother and can run seperately). Parallel programing adds extra
-complexity to keeping track of state, because you don't only have to wory who
-owns what, but also what thread or instance owns what. It's very hard to avoid
-so called \emph{data races}, where multiple threads try to modify and/or read
-the same data, meaning they end up messing up eachother's states. When our
-programs are stateless, we can safely perform any operation, because it can't
-perform side effects which alter the state of our program, and with that the
-state of other threads. It may be limiting when you actually \emph{want} to
-change state in parallel, but it also means you don't have to worry when you
-just want to perform some big computation in parallel.
+sequentially, when sequentiality doesn't matter (i.e. Some things are not
+dependent on each other and can run separately). Parallel programming adds
+extra complexity to keeping track of state, because you don't only have to
+worry who owns what, but also what thread or instance owns what. It's very hard
+to avoid so called \emph{data races}, where multiple threads try to modify
+and/or read the same data, meaning they end up messing up each other's states.
+When our programs are stateless, we can safely perform any operation, because
+it can't perform side effects which alter the state of our program, and with
+that the state of other threads. It may be limiting when you actually
+\emph{want} to change state in parallel, but it also means you don't have to
+worry when you just want to perform some big computation in parallel.
 
 \subsubsection{Meta programming}\label{metaprogramming}
 
@@ -2714,7 +2707,7 @@ It's when you write code that generates code. Most languages have macro's and
 something along the lines of C++'s template system. These are all forms of meta
 programming, but there are languages that have \emph{only} meta programming.
 Meta programming allows for a lot of abstraction. You can easily abstract
-repetative code.
+repetitive code.
 
 Probably the biggest meta programming language (family) is Lisp. Lisp is very
 simple, just like the lambda calculus. It only has lists. Your program is
@@ -2760,7 +2753,7 @@ some calculations looks as follows.
 
 I will show you a slightly larger Scheme program, which I didn't write, because
 I'm not an epic Lisper (yet?), but got from a random online Scheme course from
-some random university by a unknown author, to give you an idea how it looks.
+some random university by an unknown author, to give you an idea how it looks.
 
 \begin{lstlisting}[language=Lisp]
 (if (= 5 (+ 2 3)) 10 20)     => 10 
@@ -2780,7 +2773,7 @@ some random university by a unknown author, to give you an idea how it looks.
             z)))
 \end{lstlisting}
 
-You can see that conditional work very similarly to those in lambda calculus,
+You can see that conditionals work very similarly to those in lambda calculus,
 where the different branches are arguments parsed after the condition itself.
 
 \section{A practical example of functional programming}
@@ -2825,7 +2818,7 @@ and what depends on what.
 We then perform a \emph{semantic analysis}. We look at our \emph{parse tree}
 and try to perform the operations our program is supposed to do. We need to
 keep track of some state, for example the identifiers that are defined. This
-state is sometimes called an \emph{environment}. In short, this is the fase
+state is sometimes called an \emph{environment}. In short, this is the phase
 where the interpreter tries to perform the commands of the code.
 
 This is the general idea of what an interpreter does. There may be some more
@@ -2835,7 +2828,7 @@ simple as possible.
 \subsection{Lisp interpreter in C}
 
 With my C version, I was able to get pretty far and write a functioning
-program. I was already at the sementic analysis phase, I'd started with
+program. I was already at the semantic analysis phase, I'd started with
 implementing an \emph{environment}.
 
 I can't just paste all the code in here, that would be stupid, so you can find
@@ -2857,11 +2850,11 @@ analysis phase alone. In our Haskell counterpart, we can just define what are
 the possibilities of a token or keyword and that words are split by spaces or
 tokens. This gives the compiler enough information to perform our tasks, but in
 our C code, we must go through the code character by character. If a character
-is unimportant, like unnecessary whitespace, we should ignore it. We then need
+is unimportant, like unnecessary white space, we should ignore it. We then need
 to test our character against every token. If it's one of our tokens, we save
 it in our list of tokens and restart the process. Otherwise, need to recognise
 that it's the start of a new identifier. Things start getting more difficult
-when there're multi-character keywords or identifiers involved. We need to be
+when there are multi-character keywords or identifiers involved. We need to be
 aware when we're still reading a multi-character word and check whether we
 finally ran into some character that signifies the end of the word. We need to
 store all the characters into a string, one by one, and check that string
@@ -2871,7 +2864,7 @@ character and its context. Whenever we read a single character, we need to
 think of it in the context of characters past to know what this character is
 supposed to be.
 
-Luckely for us, Lisp is very simple and doesn't have many tokens, so the
+Luckily for us, Lisp is very simple and doesn't have many tokens, so the
 complexity is quite limited, but it's still enough to serve as an example in
 our comparison. My Lisp interpreter, in it's current state, reads in a single
 list input by the user. I will show the main function, which contains the main
@@ -2998,7 +2991,7 @@ int main(int argc, char *argv[])
 Sadly I didn't have time to create one. I don't have the time to create and
 show you some code snippets, so you have to imagine some. Our interpreter does
 the exact same as the one in C, of course, but instead of procedural, it would
-be imperative. We would describe our grammar and different types representing
+be functional. We would describe our grammar and different types representing
 different abstract ideas instead of reading each character one by one.
 
 \newpage
